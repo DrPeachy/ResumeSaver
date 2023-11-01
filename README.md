@@ -53,10 +53,12 @@ The application will **Resume, User, Workspace, Experience, Duration, Education,
 **Experience:**
 ```javascript
 {
-  name: // string for the name of experience, e.g. Software Enginnering Intern
+  title: // string for the name of experience, e.g. Software Enginnering Intern
   type: // working/research/volunteer
+  organization: 
   location: // string for location
   duration: // a duration obj
+  descriptions: // an array of string of description
 }
 
 ```
@@ -73,6 +75,7 @@ The application will **Resume, User, Workspace, Experience, Duration, Education,
 {
   name: "employeeFoo",
   phone: "123-4567-8910"
+  email: // email
   links: // an array of links(personal website)
   experiences: // an array of Experience
   skills: // an array of skill
@@ -98,17 +101,19 @@ The application will **Resume, User, Workspace, Experience, Duration, Education,
       ]
       outputResume: {
           name: "employeeFoo",
-          phone: "123-4567-8910"
-          links: // an array of links(personal website)
+          phone: "123-4567-8910",
+          links: ["123@github.com"],
+          email: "123@nyu.edu"
           experiences: 
           [
             {
-              name: "Software Engineering Intern"
-              type: "working"
-              location: "Amazon"
+              title: "Software Engineering Intern",
+              type: "working",
+              organization: "Amazon",
+              location: "US",
               duration: 
               {
-                startDate: "May 2021"
+                startDate: "May 2021",
                 endDate: "Sep 2021"
               }
             },
@@ -168,7 +173,8 @@ Here's a [complex example from wikipedia](https://upload.wikimedia.org/wikipedia
 * (3 points) dotenv
   * for Configuration Management
 
-
+* (1 points) React-Router-DOM
+  * for frontend routing
 * (5 points) NLP.js
   * external lib that used to recognizing content and fit them into schema class(since I am not good at AI or ML stuff, this might be challenging for me)
 * (3 points) PDF.js
@@ -176,10 +182,10 @@ Here's a [complex example from wikipedia](https://upload.wikimedia.org/wikipedia
 
 
 
-19 points total out of 10 required points (addtional points will __not__ count for extra credit)
+20 points total out of 10 required points (addtional points will __not__ count for extra credit)
 
 
-## [Link to Initial Main Project File](app.mjs) 
+## [Link to Initial Main Project File](./backend/src/app.mjs) 
 
 (__TODO__: create a skeleton Express application with a package.json, app.mjs, views folder, etc. ... and link to your initial app.mjs)
 
