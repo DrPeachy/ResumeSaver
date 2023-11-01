@@ -77,9 +77,9 @@ The application will **Resume, User, Workspace, Experience, Duration, Education,
   phone: "123-4567-8910"
   email: // email
   links: // an array of links(personal website)
+  educations: // an array of Education
   experiences: // an array of Experience
   skills: // an array of skill
-  softwares: // an array of software
 }
 ```
 
