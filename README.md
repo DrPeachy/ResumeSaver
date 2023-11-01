@@ -1,50 +1,133 @@
-The content below is an example project proposal / requirements document. Replace the text below the lines marked "__TODO__" with details specific to your project. Remove the "TODO" lines.
-
-(__TODO__: your project name)
-
-# Shoppy Shoperson 
+# Resume Saver
 
 ## Overview
+Preparing difference resume for difference purpose is troublesome when you just want to change a specific content or style. Formating with Microsoft Word is annoying as you need to manually type in every spacing
 
-(__TODO__: a brief one or two paragraph, high-level description of your project)
-
-Remembering what to buy at the grocery store is waaaaay too difficult. Also, shopping for groceries when you're hungry leads to regrettable purchases. Sooo... that's where Shoppy Shoperson comes in!
-
-Shoppy Shoperson is a web app that will allow users to keep track of multiple grocery lists. Users can register and login. Once they're logged in, they can create or view their grocery list. For every list that they have, they can add items to the list or cross off items.
-
+Resume Maker is a webapp allow users to keep track and manipulate their resume's content, styling, layout easily, and to export brand new resume in desired format. They will be able to editing text or upload existed materials for convenience, and the web app can automatically decide the content for specific space.
 
 ## Data Model
 
-(__TODO__: a description of your application's data and their relationships to each other) 
+The application will **Resume, User, Workspace, Experience, Duration, Education, SkillSlot**
 
-The application will store Users, Lists and Items
+* users can have multiple workspace
+* each workspace can have at most three resume uploaded
+* each resume can have multiple experience
+* for more details, see the example class below
 
-* users can have multiple lists (via references)
-* each list can have multiple items (by embedding)
-
-(__TODO__: sample documents)
-
-An Example User:
+**User:**
 
 ```javascript
 {
-  username: "shannonshopper",
+  username: "employeeFoo",
   hash: // a password hash,
-  lists: // an array of references to List documents
+  workspaces: // an array of references to List documents
+}
+```
+**Workspace:**
+```javascript
+{
+  name: // name of workspace
+  uploadedResumes: // an array of resume obj
+  outputResume: // a single resume obj that will be exported
+}
+```
+**Duration:**
+```javascript
+{
+  startDate: 
+  endDate:
+}
+```
+**Education:**
+```javascript
+{
+  institution: // string for institution
+  duration: // a duration obj
+  gpa: // gpa
+  major: // major
+  minor: // minor
+  duration: // a duration obj
+}
+
+```
+**Experience:**
+```javascript
+{
+  name: // string for the name of experience, e.g. Software Enginnering Intern
+  type: // working/research/volunteer
+  location: // string for location
+  duration: // a duration obj
+}
+
+```
+**SkillSlot:**
+```javascript
+{
+  name: // type of skill, e.g. Coding Language/Software
+  list: // array of this skill
+}
+
+```
+**Resume:**
+```javascript
+{
+  name: "employeeFoo",
+  phone: "123-4567-8910"
+  links: // an array of links(personal website)
+  experiences: // an array of Experience
+  skills: // an array of skill
+  softwares: // an array of software
 }
 ```
 
-An Example List with Embedded Items:
+**An Example User:**
 
 ```javascript
 {
-  user: // a reference to a User object
-  name: "Breakfast foods",
-  items: [
-    { name: "pancakes", quantity: "9876", checked: false},
-    { name: "ramen", quantity: "2", checked: true},
-  ],
-  createdAt: // timestamp
+  username: "employeeFoo",
+  hash: // a password hash,
+  workspaces: 
+  [
+    {
+      name: // name of workspace
+      uploadedResumes: 
+      [
+        {...}, // uploaded resume#1
+        {...}, // uploaded resume#2
+        {...} // uploaded resume#3
+      ]
+      outputResume: {
+          name: "employeeFoo",
+          phone: "123-4567-8910"
+          links: // an array of links(personal website)
+          experiences: 
+          [
+            {
+              name: "Software Engineering Intern"
+              type: "working"
+              location: "Amazon"
+              duration: 
+              {
+                startDate: "May 2021"
+                endDate: "Sep 2021"
+              }
+            },
+            {...},
+            {...}
+          ]
+          skills: 
+          [
+            { name: "Coding Language", list: ["C++", "Python", "Javascript"]},
+            { name: "Software", list: ["VSCode", "Photoshop", "Sourcetree"]}
+          ]
+          
+      }
+    },
+    {...}, // workspace#2
+    ...
+  ]
+    
+  
 }
 ```
 
@@ -57,17 +140,7 @@ An Example List with Embedded Items:
 
 (__TODO__: wireframes for all of the pages on your site; they can be as simple as photos of drawings or you can use a tool like Balsamiq, Omnigraffle, etc.)
 
-/list/create - page for creating a new shopping list
 
-![list create](documentation/list-create.png)
-
-/list - page for showing all shopping lists
-
-![list](documentation/list.png)
-
-/list/slug - page for showing specific shopping list
-
-![list](documentation/list-slug.png)
 
 ## Site map
 
@@ -77,31 +150,33 @@ Here's a [complex example from wikipedia](https://upload.wikimedia.org/wikipedia
 
 ## User Stories or Use Cases
 
-(__TODO__: write out how your application will be used through [user stories](http://en.wikipedia.org/wiki/User_story#Format) and / or [use cases](https://en.wikipedia.org/wiki/Use_case))
 
 1. as non-registered user, I can register a new account with the site
 2. as a user, I can log in to the site
-3. as a user, I can create a new grocery list
-4. as a user, I can view all of the grocery lists I've created in a single list
-5. as a user, I can add items to an existing grocery list
-6. as a user, I can cross off items in an existing grocery list
+3. as a user, I can create a new workspace
+4. as a user, I can either 1. upload existed resume into workspace for content extraction, or 2. directly add content to workspace
+5. as a user, I can export resume in desired format and style after finishing
 
 ## Research Topics
 
-(__TODO__: the research topics that you're planning on working on along with their point values... and the total points of research topics listed)
+* (6 points) React.js
+  * use React.js as the frontend framework
+* (2 points) Material UI
+  * instead of bootstrap, I am willing to learn MUI for the finest look(tho it might be low performanced)
+  * I heard it has a steeper learning curve than bootstrap. So, 4 points for it
+  * it will include the front-end form validation
+* (3 points) dotenv
+  * for Configuration Management
 
-* (5 points) Integrate user authentication
-    * I'm going to be using passport for user authentication
-    * And account has been made for testing; I'll email you the password
-    * see <code>cs.nyu.edu/~jversoza/ait-final/register</code> for register page
-    * see <code>cs.nyu.edu/~jversoza/ait-final/login</code> for login page
-* (4 points) Perform client side form validation using a JavaScript library
-    * see <code>cs.nyu.edu/~jversoza/ait-final/my-form</code>
-    * if you put in a number that's greater than 5, an error message will appear in the dom
-* (5 points) vue.js
-    * used vue.js as the frontend framework; it's a challenging library to learn, so I've assigned it 5 points
 
-10 points total out of 8 required points (___TODO__: addtional points will __not__ count for extra credit)
+* (5 points) NLP.js
+  * external lib that used to recognizing content and fit them into schema class(since I am not good at AI or ML stuff, this might be challenging for me)
+* (3 points) PDF.js
+  * external lib that used to extract the content of PDF, which should be very hard to use
+
+
+
+19 points total out of 10 required points (addtional points will __not__ count for extra credit)
 
 
 ## [Link to Initial Main Project File](app.mjs) 
@@ -112,6 +187,10 @@ Here's a [complex example from wikipedia](https://upload.wikimedia.org/wikipedia
 
 (__TODO__: list any tutorials/references/etc. that you've based your code off of)
 
-1. [passport.js authentication docs](http://passportjs.org/docs) - (add link to source code that was based on this)
-2. [tutorial on vue.js](https://vuejs.org/v2/guide/) - (add link to source code that was based on this)
+1. [Resume Guide & Samples from NYU](https://docs.google.com/document/d/1XTGT4QmCwtRcgVhbKvQVajm_YA3MMo5uGsR_PqRAZqo/edit#heading=h.u8r00mk3z5ab)
+2. [Material UI Wiki](https://mui.com/material-ui/getting-started/)
+3. [PDF.js](https://stackoverflow.com/questions/1554280/how-to-extract-text-from-a-pdf-in-javascript)
+4. [React Wiki](https://react.dev/learn)
+5. [NLP.js](https://github.com/axa-group/nlp.js/blob/master/docs/v3/README.md)
+
 
