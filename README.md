@@ -9,9 +9,9 @@ Resume Maker is a webapp allow users to keep track and manipulate their resume's
 
 The application will **Resume, User, Workspace, Experience, Duration, Education, SkillSlot**
 
-* users can have multiple workspace
-* each workspace can have at most three resume uploaded
-* each resume can have multiple experience
+* users can have multiple workspaces
+* Each workspace can have at most three resumes uploaded
+* each resume can have multiple experiences
 * for more details, see the example class below
 
 **User:**
@@ -161,19 +161,28 @@ The application will **Resume, User, Workspace, Experience, Duration, Education,
 
 * (6 points) React.js
   * use React.js as the frontend framework
+  * use it to create dynamic frontend interaction
+  * 6 points as indicated in the handout
 * (2 points) Material UI
-  * instead of bootstrap, I am willing to learn MUI for the finest look(tho it might be low performanced)
-  * I heard it has a steeper learning curve than bootstrap. So, 4 points for it
+  * use Material UI as the CSS framework
+  * instead of Bootstrap, I am willing to learn MUI for the finest look as it has more freedom for customization compared to Bootstrap
+  * 2 points as indicated in the handout
   * it will include the front-end form validation
 * (3 points) dotenv
   * for Configuration Management
-
+  * so that the DB URL won't be exposed
 * (1 points) React-Router-DOM
   * for frontend routing
+  * in order to cooperate with the react component
+  * 1 point as it is easy to learn
 * (5 points) NLP.js
-  * external lib that used to recognizing content and fit them into schema class(since I am not good at AI or ML stuff, this might be challenging for me)
+  * for natural language processing
+  * external lib that is used to recognize content and fit them into schema class(since I am not good at AI or ML stuff, this might be challenging for me)
+  * e.g. after the user uploads a PDF resume, I will extract its content and use NLP to fit them inside different sections
 * (3 points) PDF.js
-  * external lib that used to extract the content of PDF, which should be very hard to use
+  * library for pdf content extraction
+  * external lib that is used to extract the content of PDF, which should not be very hard to use
+  * so 3 points assigned
 
 
 
@@ -181,12 +190,10 @@ The application will **Resume, User, Workspace, Experience, Duration, Education,
 
 
 ## [Link to Initial Main Project File](./backend/src/app.mjs) 
-
-(__TODO__: create a skeleton Express application with a package.json, app.mjs, views folder, etc. ... and link to your initial app.mjs)
+[backend](./backend/src/app.mjs)
+[frontend](./frontend/src/App.js)
 
 ## Annotations / References Used
-
-(__TODO__: list any tutorials/references/etc. that you've based your code off of)
 
 1. [Resume Guide & Samples from NYU](https://docs.google.com/document/d/1XTGT4QmCwtRcgVhbKvQVajm_YA3MMo5uGsR_PqRAZqo/edit#heading=h.u8r00mk3z5ab)
 2. [Material UI Wiki](https://mui.com/material-ui/getting-started/)
