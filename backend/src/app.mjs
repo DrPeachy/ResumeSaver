@@ -3,6 +3,8 @@ import express from "express";
 import session from "express-session";
 import cors from "cors";
 import path from "path";
+import passport from "passport";
+import passportConfig from "./passportConfig.mjs";
 import { fileURLToPath } from "url";
 import mongoose from "mongoose";
 const app = express();
@@ -24,14 +26,24 @@ app.use(cors());
 
 // body parser (req.body)
 app.use(express.urlencoded({ extended: false }));
-
+app.use(express.json());
 // session
 const sessionOptions = {
-  secret: "secret for signing session id",
+  secret: process.env.SESSION_SECRET,
   saveUninitialized: false,
   resave: false,
+  cookie: {
+    maxAge: 1000 * 60 * 60
+  }
 };
 app.use(session(sessionOptions));
+
+// passport
+app.use(passport.initialize());
+app.use(passport.session());
+
+// passport config
+passportConfig();
 
 // log requests
 function logRequest(req, res, next) {
@@ -46,21 +58,18 @@ function logRequest(req, res, next) {
 app.use(logRequest);
 
 // routes
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
-app.use("/dashboard", dashboardRoutes);
-app.use("/login", loginRoutes);
-app.use("/signup", registrationRoutes);
+app.use(dashboardRoutes);
+app.use(loginRoutes);
+app.use(registrationRoutes);
 
-//
-mongoose
-  .connect(process.env.DSN)
-  .then(() => {
-    console.log("Successfully connected to MongoDB.");
-    // connect to server
-    app.listen(process.env.PORT || 8080);
-  })
-  .catch((error) => {
-    console.error("Connection error: ", error);
-  });
+
+app.listen(process.env.PORT || 8080, () => {
+  mongoose
+    .connect(process.env.DSN)
+    .then(() => {
+      console.log("Successfully connected to MongoDB.");
+    })
+    .catch((error) => {
+      console.error("Connection error: ", error);
+    });
+});
