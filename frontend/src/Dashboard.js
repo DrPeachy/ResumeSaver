@@ -4,35 +4,22 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check JWT token
-    const checkAuth = async () => {
-      try {
-        await axios.get('/dashboard', {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
-        })
-        .then((response) => {
-          if(response.status === 200) {
-            console.log('User is logged in.');
-            setData(response.data);
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-          navigate('/login');
-        });
-      } catch (error) {
+    axios.get('/dashboard')
+    .then(response => {
+      if (response.status === 200) {
+        setData(response.data.message);
+      }
+    })
+    .catch(error => {
+      if (error.response.status === 401) {
         navigate('/login');
       }
-    };
-
-    checkAuth();
-  }, [navigate]);
+    });
+  }, []);
 
   return (
     <div>
