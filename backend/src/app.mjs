@@ -1,6 +1,7 @@
 import "./config.mjs";
 import express from "express";
 import session from "express-session";
+import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
 import mongoose from "mongoose";
@@ -8,8 +9,18 @@ const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+
+// import routes
+import dashboardRoutes from "./routes/DashboardRoutes.mjs";
+import registrationRoutes from "./routes/registrationRoutes.mjs";
+import loginRoutes from "./routes/loginRoutes.mjs";
+
+
 /// middleware
 app.use(express.static(path.join(__dirname, "public")));
+
+// cors
+app.use(cors());
 
 // body parser (req.body)
 app.use(express.urlencoded({ extended: false }));
@@ -26,15 +37,21 @@ app.use(session(sessionOptions));
 function logRequest(req, res, next) {
   console.log(
     `Method: ${req.method}\n` +
-      `Path: ${req.path}\n` +
-      `Query: ${JSON.stringify(req.query)}\n` +
-      `Body: ${JSON.stringify(req.body)}\n` +
-      `Session: ${JSON.stringify(req.session)}\n`
+    `Path: ${req.path}\n` +
+    `Query: ${JSON.stringify(req.query)}\n` +
+    `Body: ${JSON.stringify(req.body)}\n`
   );
   next();
 }
 app.use(logRequest);
 
+// routes
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
+app.use("/dashboard", dashboardRoutes);
+app.use("/login", loginRoutes);
+app.use("/signup", registrationRoutes);
 
 //
 mongoose
