@@ -1,10 +1,10 @@
 import logo from './logo.svg';
 import './App.css';
-import Dashboard from './Dashboard';
-import Template from './Template';
-import Registration from './Registration';
-import Login from './Login';
-import Logout from './Logout';
+import Dashboard from './component/Dashboard';
+import Template from './component/Template';
+import Registration from './component/Registration';
+import Login from './component/Login';
+import Logout from './component/Logout';
 import axios from 'axios';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { CssBaseline, ThemeProvider, useMediaQuery } from '@mui/material';

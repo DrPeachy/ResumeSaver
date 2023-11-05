@@ -1,4 +1,14 @@
 import "./config.mjs";
+import "./models/Resume.mjs";
+import "./models/Workspace.mjs";
+import "./models/User.mjs";
+import "./models/Duration.mjs";
+import "./models/Experience.mjs";
+import "./models/Education.mjs";
+import "./models/SkillSlot.mjs";
+
+
+
 import express from "express";
 import session from "express-session";
 import cors from "cors";

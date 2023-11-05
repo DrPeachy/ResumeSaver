@@ -1,5 +1,6 @@
 function checkAuthenticated(req, res, next) {
   if (req.isAuthenticated()) {
+    res.locals.currentUser = req.user.username;
     console.log("authenticated");
     next();
   }else{

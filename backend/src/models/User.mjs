@@ -1,9 +1,8 @@
 import mongoose from "mongoose";
-import { Workspace } from "./Workspace.mjs";
 import passportLocalMongoose from "passport-local-mongoose";
 
 const userSchema = new mongoose.Schema({
-    workspaces: { type: [Workspace.schema], required: false }
+    workspaces: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Workspace', required: false }]
 });
 
 userSchema.plugin(passportLocalMongoose);
