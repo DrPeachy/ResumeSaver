@@ -8,7 +8,7 @@ import { FormControlLabel } from "@mui/material";
 import { Checkbox } from "@mui/material";
 import { Avatar } from "@mui/material";
 import { Typography } from "@mui/material";
-
+import Link from "@mui/material/Link";
 import { useState, useEffect } from "react";
 
 
@@ -84,6 +84,15 @@ const Login = () => {
           type="password"
           id="password"
         />
+        <Grid
+          container
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <Link href="/signup" underline="none">Sign up</Link>
+          <Link href="/forgot-password" underline="none">Forgot password?</Link>
+        </Grid>
         <Button
           color="secondary"
           type="submit"
