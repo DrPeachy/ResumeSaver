@@ -47,6 +47,7 @@ const Registration = () => {
           id="password"
         />
         <Button
+          color="secondary"
           type="submit"
           fullWidth
           variant="contained"

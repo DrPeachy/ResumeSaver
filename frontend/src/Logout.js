@@ -18,10 +18,10 @@ const Logout = () => {
       console.log(error);
     });
   }, []);
-  
+
   return (
     <div>
-      <h1>Logout</h1>
+      <h1>Logout Successfully</h1>
     </div>
   );
 }
