@@ -190,7 +190,7 @@ const Template = () => {
           </Toolbar>
         </Container>
       </AppBar>
-      <Container maxWidth="xl" component="main" sx={{ pt: 4, pb: 6 }}>
+      <Container maxWidth="xl" component="main" sx={{ pt: 2, pb: 2 }}>
         <Outlet />
       </Container>
     </>
