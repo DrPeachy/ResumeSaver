@@ -16,6 +16,7 @@ const __dirname = path.dirname(__filename);
 import dashboardRoutes from "./routes/DashboardRoutes.mjs";
 import registrationRoutes from "./routes/registrationRoutes.mjs";
 import loginRoutes from "./routes/loginRoutes.mjs";
+import logoutRoutes from "./routes/logoutRoutes.mjs";
 
 
 /// middleware
@@ -59,8 +60,9 @@ app.use(logRequest);
 
 // routes
 app.use(dashboardRoutes);
-app.use(loginRoutes);
 app.use(registrationRoutes);
+app.use(loginRoutes);
+app.use(logoutRoutes);
 
 
 app.listen(process.env.PORT || 8080, () => {

@@ -12,6 +12,10 @@ import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import { Link } from 'react-router-dom';
 import { Outlet } from "react-router-dom";
+import axios from "axios";
+import { useNavigate , useLocation } from "react-router-dom";
+
+
 
 const pages = ['Home', 'Dashboard', 'Workspace'];
 const pagesLinks = {
@@ -19,13 +23,38 @@ const pagesLinks = {
   Dashboard: '/dashboard',
   Workspace: '/workspace',
   Profile: '/profile',
-  Logout: '/logout'
+  Logout: '/logout',
+  Login: '/login',
+  Signup: '/signup'
 };
-const settings = ['Profile', 'Logout'];
+const loginSettings = ['Profile', 'Logout'];
+const logoutSettings = ['Login', 'Signup'];
 
 const Template = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [settings, setSettings] = useState(logoutSettings);
+
+  useEffect(() => {
+    const checkAuthentication = async () => {
+      const isLoggedIn = await checkToken();
+      setIsAuthenticated(isLoggedIn);
+    };
+
+    checkAuthentication();
+  }, [location]);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      setSettings(loginSettings);
+    } else {
+      setSettings(logoutSettings);
+    }
+  }, [isAuthenticated]);
+
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -41,6 +70,33 @@ const Template = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+
+  const handleLogout = async() => {
+    try {
+      const response = await axios.get('/logout');
+      if (response.status === 200) {
+        navigate('/login');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const checkToken = async() => {
+    try {
+      const response = await axios.get('/checkToken');
+      if (response.status === 200) {
+        return true;
+      }
+    } catch (error) {
+      if (error.response.status === 401) {
+        return false;
+      }
+    }
+  }
+
+
 
   return (
     <>

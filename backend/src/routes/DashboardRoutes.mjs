@@ -5,7 +5,11 @@ const router = express.Router();
 
 
 router.get("/dashboard", auth.checkAuthenticated, (req, res) => {
-  res.status(200).json({ message: "You're authorized to see this secret message." });
+  res.status(200).json({ data: "dashboard info" });
+});
+
+router.get("/checkToken", auth.checkAuthenticated, (req, res) => {
+  res.sendStatus(200);
 });
 
 export default router;
