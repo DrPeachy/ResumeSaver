@@ -110,6 +110,8 @@ const Dashboard = () => {
         direction="row"
         justifyContent="flex-start"
         alignItems="flex-start"
+        pt={3}
+        gap={3}
       >
         {workspaces ? workspaces.map(workspace => (
           <WorkspaceCard
