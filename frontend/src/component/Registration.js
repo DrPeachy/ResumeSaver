@@ -18,7 +18,7 @@ const Registration = () => {
     const data = Object.fromEntries(formData);
     axios.post('/signup', data)
     .then(response => {
-      if (response.data.message === 'Login successful') {
+      if (response.status === 201) {
         navigate('/dashboard');
       }
     })

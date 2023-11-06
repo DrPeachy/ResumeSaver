@@ -35,7 +35,17 @@ const Dashboard = () => {
       });
   }, []);
 
-  const handleDelete = (id) => {
+  
+  const handleCreateOpen = () => {
+    setOpen(true);
+  }
+  
+  const handleCreateClose = () => {
+    setOpen(false);
+  }
+
+  // form control
+  const handleDeleteSubmit = (id) => {
     axios.post(`/dashboard/del`, { id: id })
       .then(response => {
         if (response.status === 200) {
@@ -46,14 +56,6 @@ const Dashboard = () => {
       .catch(error => {
         console.log(error);
       });
-  }
-
-  const handleCreateOpen = () => {
-    setOpen(true);
-  }
-
-  const handleCreateClose = () => {
-    setOpen(false);
   }
 
   const handleCreateSubmit = (e) => {
@@ -73,6 +75,30 @@ const Dashboard = () => {
       });
   }
 
+  const handleEditSubmit = (e, key) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const data = Object.fromEntries(formData);
+    data.id = key;
+    axios.post('/dashboard/edit', data)
+      .then(response => {
+        if (response.status === 200) {
+          const newWorkspaces = workspaces.map(workspace => {
+            if (workspace._id === response.data.workspace._id) {
+              return response.data.workspace;
+            } else {
+              return workspace;
+            }
+          });
+          setWorkspaces(newWorkspaces);
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
+
+
   return (
     <Container component="main" maxWidth="lg">
 
@@ -87,9 +113,9 @@ const Dashboard = () => {
       >
         {workspaces ? workspaces.map(workspace => (
           <WorkspaceCard
-            key={workspace._id}
             workspace={workspace}
-            handleDelete={handleDelete}
+            handleEdit={handleEditSubmit}
+            handleDelete={handleDeleteSubmit}
           />
         )) :
           <Typography component="h1" variant="h2">
@@ -116,6 +142,7 @@ const Dashboard = () => {
               label="Workspace Name"
               name="name"
               variant="standard"
+              inputProps={{ maxLength: 14 }}
               fullWidth
             />
             <TextField
@@ -124,6 +151,7 @@ const Dashboard = () => {
               label="Description"
               name="description"
               variant="standard"
+              inputProps={{ maxLength: 100 }}
               fullWidth
             />
           </DialogContent>
