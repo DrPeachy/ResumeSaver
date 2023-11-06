@@ -20,7 +20,7 @@ const Login = () => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const data = Object.fromEntries(formData);
-    axios.post('/login', data)
+    axios.post(`${process.env.REACT_APP_BASE_URL}/login`, data)
       .then(response => {
         if (response.data.message === 'Login successful') {
           navigate('/dashboard');
@@ -32,7 +32,7 @@ const Login = () => {
   };
 
   const handleUsernameChange = (event) => {
-    axios.post('/checkUsername', { username: event.target.value })
+    axios.post(`${process.env.REACT_APP_BASE_URL}/checkUsername`, { username: event.target.value })
       .then(response => {
         if (response.data.message) {
           setIsUsernameExisted(true);

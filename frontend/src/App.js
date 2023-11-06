@@ -17,7 +17,8 @@ const App = ({ getTheme }) => {
       getTheme(useLight? 'light' : 'dark'),
     [useLight],
   );
-
+  
+  axios.defaults.withCredentials = true;
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline>

@@ -16,10 +16,10 @@ const Registration = () => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const data = Object.fromEntries(formData);
-    axios.post('/signup', data)
+    axios.post(`${process.env.REACT_APP_BASE_URL}/signup`, data)
     .then(response => {
       if (response.status === 201) {
-        navigate('/dashboard');
+        navigate('/login');
       }
     })
     .catch(error => {

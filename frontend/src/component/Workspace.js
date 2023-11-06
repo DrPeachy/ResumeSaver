@@ -28,7 +28,7 @@ const Workspace = () => {
         <Grid item xs={3}>
           <Typography variant="h4">havent decided</Typography>
         </Grid>
-        <Grid item md={6}>
+        <Grid item lg={6}>
           <Typography variant="h4">Editor area</Typography>
         </Grid>
         <Grid item xs={3}>

@@ -8,7 +8,7 @@ const Logout = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get('/logout')
+    axios.get(`${process.env.REACT_APP_BASE_URL}/logout`)
     .then(response => {
       if (response.status === 200) {
         navigate('/');

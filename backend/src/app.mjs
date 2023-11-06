@@ -33,7 +33,13 @@ import logoutRoutes from "./routes/logoutRoutes.mjs";
 app.use(express.static(path.join(__dirname, "public")));
 
 // cors
-app.use(cors());
+app.use(cors(
+  {
+    origin: "http://localhost:3000",
+    credentials: true,
+    optionsSuccessStatus: 200
+  }
+));
 
 // body parser (req.body)
 app.use(express.urlencoded({ extended: false }));
@@ -44,7 +50,10 @@ const sessionOptions = {
   saveUninitialized: false,
   resave: false,
   cookie: {
-    maxAge: 1000 * 60 * 60
+    httpOnly: true,
+    maxAge: 1000 * 60 * 60,
+    secure: false,
+    sameSite: 'lax'
   }
 };
 app.use(session(sessionOptions));

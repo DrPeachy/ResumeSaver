@@ -74,7 +74,7 @@ const Template = () => {
 
   const handleLogout = async() => {
     try {
-      const response = await axios.get('/logout');
+      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/logout`);
       if (response.status === 200) {
         navigate('/login');
       }
@@ -85,7 +85,7 @@ const Template = () => {
 
   const checkToken = async() => {
     try {
-      const response = await axios.get('/checkToken');
+      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/checkToken`);
       if (response.status === 200) {
         return true;
       }

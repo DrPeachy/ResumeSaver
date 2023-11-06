@@ -20,7 +20,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get('/dashboard')
+    axios.get(`${process.env.REACT_APP_BASE_URL}/dashboard`)
       .then(response => {
         if (response.status === 200) {
           setWorkspaces(response.data.workspaces);
@@ -46,7 +46,7 @@ const Dashboard = () => {
 
   // form control
   const handleDeleteSubmit = (id) => {
-    axios.post(`/dashboard/del`, { id: id })
+    axios.post(`${process.env.REACT_APP_BASE_URL}/dashboard/del`, { id: id })
       .then(response => {
         if (response.status === 200) {
           const newWorkspaces = workspaces.filter(workspace => workspace._id !== id);
@@ -62,7 +62,7 @@ const Dashboard = () => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData);
-    axios.post('/dashboard/create', data)
+    axios.post(`${process.env.REACT_APP_BASE_URL}/dashboard/create`, data)
       .then(response => {
         if (response.status === 200) {
           const newWorkspaces = [...workspaces, response.data.workspace];
@@ -80,7 +80,7 @@ const Dashboard = () => {
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData);
     data.id = key;
-    axios.post('/dashboard/edit', data)
+    axios.post(`${process.env.REACT_APP_BASE_URL}/dashboard/edit`, data)
       .then(response => {
         if (response.status === 200) {
           const newWorkspaces = workspaces.map(workspace => {
