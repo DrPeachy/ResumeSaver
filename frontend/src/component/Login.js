@@ -15,12 +15,13 @@ import { useState, useEffect } from "react";
 const Login = () => {
   const navigate = useNavigate();
   const [isUsernameExisted, setIsUsernameExisted] = useState(false);
+  const baseUrl = (process.env.NODE_ENV === 'production') ? process.env.REACT_APP_PROD_URL : process.env.REACT_APP_DEV_URL;
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const data = Object.fromEntries(formData);
-    axios.post(`${process.env.REACT_APP_BASE_URL}/login`, data)
+    axios.post(`${baseUrl}/login`, data)
       .then(response => {
         if (response.data.message === 'Login successful') {
           navigate('/dashboard');
@@ -32,7 +33,7 @@ const Login = () => {
   };
 
   const handleUsernameChange = (event) => {
-    axios.post(`${process.env.REACT_APP_BASE_URL}/checkUsername`, { username: event.target.value })
+    axios.post(`${baseUrl}/checkUsername`, { username: event.target.value })
       .then(response => {
         if (response.data.message) {
           setIsUsernameExisted(true);

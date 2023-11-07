@@ -15,12 +15,13 @@ import DialogActions from '@mui/material/DialogActions';
 
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   const [workspaces, setWorkspaces] = useState(null);
   const [open, setOpen] = useState(false);
-  const navigate = useNavigate();
+  const baseUrl = (process.env.NODE_ENV === 'production') ? process.env.REACT_APP_PROD_URL : process.env.REACT_APP_DEV_URL;
 
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_BASE_URL}/dashboard`)
+    axios.get(`${baseUrl}/dashboard`)
       .then(response => {
         if (response.status === 200) {
           setWorkspaces(response.data.workspaces);
@@ -35,18 +36,18 @@ const Dashboard = () => {
       });
   }, []);
 
-  
+
   const handleCreateOpen = () => {
     setOpen(true);
   }
-  
+
   const handleCreateClose = () => {
     setOpen(false);
   }
 
   // form control
   const handleDeleteSubmit = (id) => {
-    axios.post(`${process.env.REACT_APP_BASE_URL}/dashboard/del`, { id: id })
+    axios.post(`${baseUrl}/dashboard/del`, { id: id })
       .then(response => {
         if (response.status === 200) {
           const newWorkspaces = workspaces.filter(workspace => workspace._id !== id);
@@ -62,7 +63,7 @@ const Dashboard = () => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData);
-    axios.post(`${process.env.REACT_APP_BASE_URL}/dashboard/create`, data)
+    axios.post(`${baseUrl}/dashboard/create`, data)
       .then(response => {
         if (response.status === 200) {
           const newWorkspaces = [...workspaces, response.data.workspace];
@@ -80,7 +81,7 @@ const Dashboard = () => {
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData);
     data.id = key;
-    axios.post(`${process.env.REACT_APP_BASE_URL}/dashboard/edit`, data)
+    axios.post(`${baseUrl}/dashboard/edit`, data)
       .then(response => {
         if (response.status === 200) {
           const newWorkspaces = workspaces.map(workspace => {

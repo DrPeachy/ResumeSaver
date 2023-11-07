@@ -35,7 +35,7 @@ app.use(express.static(path.join(__dirname, "public")));
 // cors
 app.use(cors(
   {
-    origin: process.env.FRONTEND_URL,
+    origin: (process.env.NODE_ENV === 'production') ? process.env.PROD_FRONTEND_URL : process.env.DEV_FRONTEND_URL,
     credentials: true,
     optionsSuccessStatus: 200
   }
@@ -84,9 +84,9 @@ app.use(loginRoutes);
 app.use(logoutRoutes);
 
 
-app.listen(process.env.PORT || 8080, () => {
+app.listen(((process.env.NODE_ENV === 'prodoction') ? process.env.PROD_PORT : process.env.DEV_PORT) || 8080, () => {
   mongoose
-    .connect(process.env.DSN)
+    .connect((process.env.NODE_ENV === 'production') ? process.env.PROD_DSN : process.env.DEV_DSN)
     .then(() => {
       console.log("Successfully connected to MongoDB.");
     })
