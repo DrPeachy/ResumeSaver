@@ -48,7 +48,7 @@ const WorkspaceCard = ({ workspace, handleEdit, handleDelete }) => {
 
   const handleEditSubmit = (event) => {
     event.preventDefault();
-    handleEdit(event, workspace._id);
+    handleEdit(event, workspace._id, handleEditClose);
   }
 
   const formatDate = (date) => {
@@ -84,35 +84,7 @@ const WorkspaceCard = ({ workspace, handleEdit, handleDelete }) => {
           title={workspace.name}
           subheader={workspace.dateOfCreation ? "Last Change by: " + formatDate(workspace.dateOfCreation) : "No Date"}
         />
-        <Dialog open={editOpen} onClose={handleEditClose}>
-          <form onSubmit={handleEditSubmit}>
-            <DialogTitle>Edit Workspace</DialogTitle>
-            <DialogContent>
-              <TextField
-                autoFocus
-                margin="dense"
-                id="name"
-                label="Workspace Name"
-                name="name"
-                variant="standard"
-                inputProps={{ maxLength: 14 }}
-                fullWidth
-              />
-              <TextField
-                margin="dense"
-                id="description"
-                label="Description"
-                name="description"
-                variant="standard"
-                fullWidth
-              />
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleEditClose}>Cancel</Button>
-              <Button type="submit">Save</Button>
-            </DialogActions>
-          </form>
-        </Dialog>
+
 
         <CardContent
           sx={{
@@ -124,9 +96,9 @@ const WorkspaceCard = ({ workspace, handleEdit, handleDelete }) => {
             variant="body2"
             color="text.secondary"
             sx={{
-              wordWrap: "break-word", 
-              overflowWrap: "break-word", 
-              hyphens: "auto", 
+              wordWrap: "break-word",
+              overflowWrap: "break-word",
+              hyphens: "auto",
             }}
 
           >
@@ -134,6 +106,35 @@ const WorkspaceCard = ({ workspace, handleEdit, handleDelete }) => {
           </Typography>
         </CardContent>
       </CardActionArea>
+      <Dialog open={editOpen} onClose={handleEditClose}>
+        <form onSubmit={handleEditSubmit}>
+          <DialogTitle>Edit Workspace</DialogTitle>
+          <DialogContent>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name"
+              label="Workspace Name"
+              name="name"
+              variant="standard"
+              inputProps={{ maxLength: 14 }}
+              fullWidth
+            />
+            <TextField
+              margin="dense"
+              id="description"
+              label="Description"
+              name="description"
+              variant="standard"
+              fullWidth
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleEditClose}>Cancel</Button>
+            <Button type="submit">Save</Button>
+          </DialogActions>
+        </form>
+      </Dialog>
       <IconButton
         aria-label="settings"
         aria-controls="workspace-menu-btn"

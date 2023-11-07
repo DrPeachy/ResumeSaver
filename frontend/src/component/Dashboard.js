@@ -76,22 +76,22 @@ const Dashboard = () => {
       });
   }
 
-  const handleEditSubmit = (e, key) => {
+  const handleEditSubmit = (e, key, cb) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData);
     data.id = key;
     axios.post(`${baseUrl}/dashboard/edit`, data)
       .then(response => {
-        if (response.status === 200) {
-          const newWorkspaces = workspaces.map(workspace => {
-            if (workspace._id === response.data.workspace._id) {
+        if (response.status === 200){
+          const updatedWorkspaces = workspaces.map(workspace => {
+            if (workspace._id === key){
               return response.data.workspace;
-            } else {
-              return workspace;
             }
+            return workspace;
           });
-          setWorkspaces(newWorkspaces);
+          setWorkspaces(updatedWorkspaces);
+          cb();
         }
       })
       .catch(error => {

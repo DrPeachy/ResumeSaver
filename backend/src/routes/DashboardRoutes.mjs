@@ -50,7 +50,7 @@ router.post("/dashboard/edit", auth.checkAuthenticated, async (req, res) => {
   workspace.description = description;
   workspace.dateOfCreation = Date.now();
   await workspace.save();
-  res.status(200).json({ message: "Workspace edited" });
+  res.status(200).json({ workspace: workspace });
 });
 
 
