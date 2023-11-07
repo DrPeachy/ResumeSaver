@@ -13,7 +13,7 @@ import Tooltip from '@mui/material/Tooltip';
 import { Link } from 'react-router-dom';
 import { Outlet } from "react-router-dom";
 import axios from "axios";
-import { useNavigate , useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 
 
@@ -37,6 +37,7 @@ const Template = () => {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [settings, setSettings] = useState(logoutSettings);
+  const baseUrl = (process.env.NODE_ENV === 'production') ? process.env.REACT_APP_PROD_URL : process.env.REACT_APP_DEV_URL;
 
   useEffect(() => {
     const checkAuthentication = async () => {
@@ -72,9 +73,9 @@ const Template = () => {
   };
 
 
-  const handleLogout = async() => {
+  const handleLogout = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/logout`);
+      const response = await axios.get(`${baseUrl}/logout`);
       if (response.status === 200) {
         navigate('/login');
       }
@@ -83,9 +84,9 @@ const Template = () => {
     }
   }
 
-  const checkToken = async() => {
+  const checkToken = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/checkToken`);
+      const response = await axios.get(`${baseUrl}/checkToken`);
       if (response.status === 200) {
         return true;
       }
@@ -100,7 +101,9 @@ const Template = () => {
 
   return (
     <>
-      <AppBar position="static">
+      <AppBar
+        position="static"
+      >
         <Container maxWidth="xl">
           <Toolbar disableGutters>
 
@@ -146,7 +149,9 @@ const Template = () => {
                   onClick={handleCloseNavMenu}
                   component={Link}
                   to={pagesLinks[page]}
-                  sx={{ my: 2, color: 'white', display: 'block' }}
+                  sx={{
+                    color: "black",
+                  }}
                 >
                   {page}
                 </Button>
@@ -156,7 +161,7 @@ const Template = () => {
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Remy Sharp" src={isAuthenticated?"/assets/logo.png":""} />
+                  <Avatar alt="Remy Sharp" src={isAuthenticated ? "/assets/logo.png" : ""} />
                 </IconButton>
               </Tooltip>
               <Menu
@@ -176,9 +181,9 @@ const Template = () => {
                 onClose={handleCloseUserMenu}
               >
                 {settings.map((setting) => (
-                  <MenuItem 
-                    key={setting} 
-                    onClick={handleCloseUserMenu} 
+                  <MenuItem
+                    key={setting}
+                    onClick={handleCloseUserMenu}
                     component={Link}
                     to={pagesLinks[setting]}
                   >

@@ -6,9 +6,9 @@ import { useState, useEffect } from "react";
 
 const Logout = () => {
   const navigate = useNavigate();
-
+  const baseUrl = (process.env.NODE_ENV === 'production') ? process.env.REACT_APP_PROD_URL : process.env.REACT_APP_DEV_URL;
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_BASE_URL}/logout`)
+    axios.get(`${baseUrl}/logout`)
     .then(response => {
       if (response.status === 200) {
         navigate('/');

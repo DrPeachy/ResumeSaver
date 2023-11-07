@@ -25,6 +25,7 @@ const WorkspaceCard = ({ workspace, handleEdit, handleDelete }) => {
     console.log(editOpen);
   }, [editOpen]);
   const handleCardClick = (event) => {
+    event.preventDefault();
     console.log("card clicked");
     navigate('/workspace', { state: { id: workspace._id } });
   };
