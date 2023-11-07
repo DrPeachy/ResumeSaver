@@ -58,7 +58,7 @@ const Login = () => {
         >
           <Avatar 
             sx={{ width: 80, height: 80, bgcolor: 'secondary.main' }}
-            src={isUsernameExisted?"./assets/logo.png":""}   
+            src={isUsernameExisted?`${baseUrl}/assets/logo.png`:""}   
             alt="n"
           >
           </Avatar>

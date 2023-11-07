@@ -161,7 +161,7 @@ const Template = () => {
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Remy Sharp" src={isAuthenticated ? "/assets/logo.png" : ""} />
+                  <Avatar alt="Remy Sharp" src={isAuthenticated ? `${baseUrl}/assets/logo.png` : ""} />
                 </IconButton>
               </Tooltip>
               <Menu
