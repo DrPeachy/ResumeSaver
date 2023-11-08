@@ -101,7 +101,7 @@ const Dashboard = () => {
 
 
   return (
-    <Container component="main" maxWidth="lg">
+    <Container component="main" maxWidth="xl">
 
       <Typography component="h1" variant="h4">
         Dashboard

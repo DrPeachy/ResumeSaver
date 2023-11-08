@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Container, Typography } from '@mui/material';
@@ -12,10 +12,10 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Box from '@mui/material/Box';
 import PDFViewer from './PDFViewer';
+import ResumeEditor from './ResumeEditor';
 
 
 const EleItem = styled(Paper)(({ theme }) => ({
-  elevation: 24,
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#f5f5f5',
   padding: theme.spacing(1),
   textAlign: 'center',
@@ -36,7 +36,7 @@ function TabItem(props) {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 3, ...sx}}>
+        <Box sx={{ p: 3, ...sx }}>
           <Typography>{children}</Typography>
         </Box>
       )
@@ -58,18 +58,30 @@ function allyProps(index) {
   };
 }
 
+
+
 const Workspace = () => {
+  const navigate = useNavigate();
   const location = useLocation();
-  const { _id } = location.state;
+  const _id = location.state ?? location.state.id ?? null;
   const [workspaceData, setWorkspaceData] = useState({});
+  const baseUrl = (process.env.NODE_ENV === 'production') ? process.env.REACT_APP_PROD_URL : process.env.REACT_APP_DEV_URL;
+
+  useEffect(() => {
+    if (!_id) {
+      fetchRecentWorkspace();
+    }
+  }, []);
 
   useEffect(() => {
     // fetch workspace data from backend
-    axios.get(`/workspace?id=${_id}`)
+    axios.get(`/workspace?id=${_id??''}`)
       .then(response => {
         if (response.status === 200) {
           // set workspace data
           setWorkspaceData(response.data);
+        }else if (response.status === 401) {
+          navigate('/login');
         }
       })
       .catch(error => {
@@ -78,6 +90,19 @@ const Workspace = () => {
   }, [_id]);
 
   const [tabValue, setTabValue] = React.useState(0);
+
+  const fetchRecentWorkspace = () => {
+    axios.get(`${baseUrl}/workspace/get-recent`)
+      .then(response => {
+        if (response.status === 200) {
+          setWorkspaceData(response.data.workspace);
+          _id = response.data.workspace._id;
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
 
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
@@ -102,7 +127,7 @@ const Workspace = () => {
         <EleItem
           elevation={3}
           sx={{
-            height: '7vh',
+            height: '14vh',
           }}
         >
           <Typography variant="h4">Insert Material</Typography>
@@ -135,13 +160,21 @@ const Workspace = () => {
               borderColor: 'divider',
             }}
           >
-            <Tabs value={tabValue} onChange={handleTabChange} aria-label="basic tabs example">
+            <Tabs variant="fullWidth" value={tabValue} onChange={handleTabChange} aria-label="basic tabs example">
               <Tab label="Editor" {...allyProps(0)} />
               <Tab label="Preview" {...allyProps(1)} />
             </Tabs>
           </Box>
-          <TabItem value={tabValue} index={0}>
-            Editor Area
+          <TabItem
+            value={tabValue}
+            index={0}
+            sx={{
+              height: '100vh',
+              padding: 0,
+              margin: 0,
+            }}
+          >
+            <ResumeEditor />
           </TabItem>
           <TabItem
             value={tabValue}

@@ -105,7 +105,7 @@ const Template = () => {
         position="static"
       >
         <Container maxWidth="xl">
-          <Toolbar disableGutters>
+          <Toolbar variant="dense" disableGutters>
 
             <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
               <IconButton
