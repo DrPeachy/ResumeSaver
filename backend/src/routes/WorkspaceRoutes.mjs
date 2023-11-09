@@ -4,6 +4,7 @@ const router = express.Router();
 import * as auth from '../utils/auth.mjs';
 
 import mongoose from 'mongoose';
+import exp from 'constants';
 const User = mongoose.model('User');
 const Workspace = mongoose.model('Workspace');
 
@@ -19,8 +20,9 @@ router.get('/workspace/get-recent', auth.checkAuthenticated, async (req, res) =>
   }
 });
 
-router.post('/workspace', auth.checkAuthenticated, async (req, res) => {
+router.get('/workspace', auth.checkAuthenticated, async (req, res) => {
   const id = req.query.id;
+  console.log(`id: ${id}`);
   const user = await User.findOne({ username: res.locals.currentUser });
   if (id != '') {
     user.recentWorspaceId = id;
@@ -33,4 +35,5 @@ router.post('/workspace', auth.checkAuthenticated, async (req, res) => {
     res.status(200).json({ workspace: recentWorkspace });
   }
 });
-router.get
+
+export default router;

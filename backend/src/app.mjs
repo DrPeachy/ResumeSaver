@@ -2,10 +2,10 @@ import "./config.mjs";
 import "./models/Resume.mjs";
 import "./models/Workspace.mjs";
 import "./models/User.mjs";
-import "./models/Duration.mjs";
-import "./models/Experience.mjs";
-import "./models/Education.mjs";
-import "./models/SkillSlot.mjs";
+// import "./models/Duration.mjs";
+// import "./models/Experience.mjs";
+// import "./models/Education.mjs";
+// import "./models/SkillSlot.mjs";
 
 
 
@@ -23,10 +23,11 @@ const __dirname = path.dirname(__filename);
 
 
 // import routes
-import dashboardRoutes from "./routes/DashboardRoutes.mjs";
+import dashboardRoutes from "./routes/dashboardRoutes.mjs";
 import registrationRoutes from "./routes/registrationRoutes.mjs";
 import loginRoutes from "./routes/loginRoutes.mjs";
 import logoutRoutes from "./routes/logoutRoutes.mjs";
+import workspaceRoutes from "./routes/workspaceRoutes.mjs";
 
 
 /// middleware
@@ -82,7 +83,7 @@ app.use(dashboardRoutes);
 app.use(registrationRoutes);
 app.use(loginRoutes);
 app.use(logoutRoutes);
-
+app.use(workspaceRoutes);
 
 app.listen(((process.env.NODE_ENV === 'prodoction') ? process.env.PROD_PORT : process.env.DEV_PORT) || 8080, () => {
   mongoose

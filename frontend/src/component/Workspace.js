@@ -63,31 +63,25 @@ function allyProps(index) {
 const Workspace = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const _id = location.state ?? location.state.id ?? null;
+  let _id = location.state ? location.state.id ?? null : null;
   const [workspaceData, setWorkspaceData] = useState({});
   const baseUrl = (process.env.NODE_ENV === 'production') ? process.env.REACT_APP_PROD_URL : process.env.REACT_APP_DEV_URL;
 
   useEffect(() => {
-    if (!_id) {
-      fetchRecentWorkspace();
-    }
-  }, []);
-
-  useEffect(() => {
     // fetch workspace data from backend
-    axios.get(`/workspace?id=${_id??''}`)
+    axios.get(`${baseUrl}/workspace?id=${_id ?? ''}`)
       .then(response => {
         if (response.status === 200) {
           // set workspace data
           setWorkspaceData(response.data);
-        }else if (response.status === 401) {
-          navigate('/login');
         }
       })
       .catch(error => {
-        console.log(error);
+        if(error.response.status === 401) {
+          navigate('/login', { state: { isWarning: "unauthorized" } });
+        }
       });
-  }, [_id]);
+  }, []);
 
   const [tabValue, setTabValue] = React.useState(0);
 

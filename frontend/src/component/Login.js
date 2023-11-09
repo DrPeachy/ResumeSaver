@@ -1,20 +1,28 @@
 import React from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { Container, Grid, TextField } from "@mui/material";
+import { useNavigate, useLocation } from "react-router-dom";
+import { Container, Grid, Snackbar, TextField } from "@mui/material";
 import { Button } from "@mui/material";
 import { Box } from "@mui/system";
 import { FormControlLabel } from "@mui/material";
 import { Checkbox } from "@mui/material";
 import { Avatar } from "@mui/material";
 import { Typography } from "@mui/material";
+import { Alert } from "@mui/material";
 import Link from "@mui/material/Link";
 import { useState, useEffect } from "react";
+
+const WarningString = {
+  unauthorized: "Please login first",
+  failedAuthentication: "Invalid username or password"
+};
 
 
 const Login = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [isUsernameExisted, setIsUsernameExisted] = useState(false);
+  const [isWarning, setIsWarning] = useState(location.state?.isWarning || 0);
   const baseUrl = (process.env.NODE_ENV === 'production') ? process.env.REACT_APP_PROD_URL : process.env.REACT_APP_DEV_URL;
 
   const handleSubmit = (event) => {
@@ -28,7 +36,7 @@ const Login = () => {
         }
       })
       .catch(error => {
-        console.log(error);
+        setIsWarning("failedAuthentication");
       });
   };
 
@@ -37,7 +45,7 @@ const Login = () => {
       .then(response => {
         if (response.data.message) {
           setIsUsernameExisted(true);
-        }else{
+        } else {
           setIsUsernameExisted(false);
         }
       })
@@ -56,9 +64,9 @@ const Login = () => {
           justifyContent="center"
           alignItems="center"
         >
-          <Avatar 
+          <Avatar
             sx={{ width: 80, height: 80, bgcolor: 'secondary.main' }}
-            src={isUsernameExisted?`${baseUrl}/assets/logo.png`:""}   
+            src={isUsernameExisted ? `${baseUrl}/assets/logo.png` : ""}
             alt="n"
           >
           </Avatar>
@@ -104,6 +112,14 @@ const Login = () => {
           Sign In
         </Button>
       </Box>
+      <Snackbar
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        open={isWarning}
+        autoHideDuration={3000}
+        onClose={() => setIsWarning(false)}
+      >
+        <Alert severity="error">{WarningString[isWarning]}</Alert>
+      </Snackbar>
     </Container>
   );
 }

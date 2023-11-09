@@ -8,11 +8,11 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/login-
 
 // Define the login success and failure routes as needed
 router.get('/login-success', (req, res) => {
-  res.json({ message: 'Login successful' });
+  res.status(200).json({ message: 'Login successful'});
 });
 
 router.get('/login-failure', (req, res) => {
-  res.json({ message: 'Login failed' });
+  res.status(401).json({ message: 'Login failed'});
 });
 
 
