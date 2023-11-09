@@ -19,45 +19,89 @@ const EleItem = styled(Paper)(({ theme }) => ({
   justifyContent: 'center',
 }));
 
-const EduSlotsToForm = ({ educationSlots, handleEducationSlotChange, removeEducationSlot }) => {
-  console.log(educationSlots);
-  const Inputs = (educationSlot, index) => {
-    console.log(educationSlot);
-    console.log('0-------')
-    console.log(Object.entries(educationSlot));
-    return Object.entries(educationSlot.educationSlot).map(([key, value]) => {
+const timeToDate = (time) => {
+  return time?.slice(0, 10);
+};
+
+const SlotsToForm = ({ slots, handleChange, handleRemove, slotkey }) => {
+  const DateInput = (props) => {
+    const { label, value, id, key, name, onChange } = { ...props };
+    return (
+      <TextField
+        margin="none"
+        label={label}
+        type="date"
+        name={name}
+        id={id}
+        key={key}
+        value={value}
+        variant="filled"
+        size="small"
+        onChange={onChange}
+        InputLabelProps={{
+          shrink: true,
+        }}
+      />
+    );
+  };
+
+  const Inputs = ({ slot, index }) => {
+    return Object.entries(slot).map(([key, value]) => {
       console.log(key, value);
+      if (key === '_id') return null;
+      if (key === 'duration') {
+        return (
+          <Grid item
+            width="100%"
+            key={`${slotkey}-${key}-${index}`}
+          >
+            <DateInput
+              label="Start Date"
+              id={`${slotkey}-startDate-${index}`}
+              key={`${slotkey}-startDate-${index}`}
+              name="startDate"
+              value={timeToDate(value.startDate)}
+              onChange={(event) => handleChange(event, index)}
+            />
+            <DateInput
+              label="End Date"
+              id={`${slotkey}-endDate-${index}`}
+              key={`${slotkey}-endDate-${index}`}
+              name="endDate"
+              value={timeToDate(value.endDate)}
+              onChange={(event) => handleChange(event, index)}
+            />
+          </Grid>
+        );
+      }
       return (
-        <Grid item
-          display="flex"
-          flexDirection="row"
-          alignItems="center"
-          width="100%"
-          key={key}
-        >
-          <TextField
-            margin="none"
-            id={key}
-            label={key}
-            name={key}
-            autoFocus
-            defaultValue={value}
-            variant="filled"
-            size="small"
-            onChange={(event) => handleEducationSlotChange(event, index)}
-          />
-        </Grid>
+        <TextField
+          margin="none"
+          id={`${slotkey}-${key}-${index}`}
+          key={`${slotkey}-${key}-${index}`}
+          label={key}
+          name={key}
+          defaultValue={value}
+          variant="filled"
+          size="small"
+          onChange={(event) => handleChange(event, index)}
+        />
       );
     });
   };
-  return educationSlots.map((educationSlot, index) => {
+  console.log(slots);
+  return slots.map((slot, index) => {
     return (
       <Grid item
+        key={`${slotkey}-${index}`}
         display="flex"
-        flexDirection="row"
+        flexDirection="column"
       >
-        <Inputs educationSlot={educationSlot} index={index} />
-        <IconButton onClick={() => removeEducationSlot(index)}>
+        {/* <Typography variant="h5" align="left">
+          {index + 1}
+        </Typography> */}
+        <Inputs slot={slot} index={index} />
+        <IconButton onClick={() => handleRemove(index)}>
           <RemoveIcon />
         </IconButton>
       </Grid>
@@ -135,16 +179,25 @@ const ResumeEditor = ({ outputResumeId }) => {
   }
 
   const handleEducationSlotChange = (event, index) => {
+    event.preventDefault();
     const { name, value } = event.target;
     const list = [...educationSlots];
-    list[index][name] = value;
+    if (name.includes('startDate') || name.includes('endDate')) {
+      list[index].duration[name] = value;
+    } else {
+      list[index][name] = value;
+    }
     setEducationSlots(list);
   }
 
-  const handleExperienceSlotChange = (event, index) => {
+  const handleExperienceSlotChange = (event, index, field) => {
     const { name, value } = event.target;
     const list = [...experienceSlots];
-    list[index][name] = value;
+    if (field.includes('startDate') || field.includes('endDate')) {
+      list[index].duration[field] = value;
+    } else {
+      list[index][field] = value;
+    }
     setExperienceSlots(list);
   }
 
@@ -180,6 +233,7 @@ const ResumeEditor = ({ outputResumeId }) => {
 
   const getResume = () => {
     const resume = {
+      _id: outputResumeId,
       header: resumeHeader,
       educations: educationSlots,
       experiences: experienceSlots,
@@ -190,110 +244,127 @@ const ResumeEditor = ({ outputResumeId }) => {
 
   const handleResumeSubmit = (event) => {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const data = Object.fromEntries(formData);
-    console.log(data);
+    const resume = getResume();
+    console.log(resume);
+    axios.post(`${baseUrl}/resume`, { resume: resume })
+      .then(response => {
+        if (response.status === 200) {
+          console.log(response.data);
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
   };
 
 
 
   return (
-    <Box component="form" onSubmit={handleResumeSubmit} noValidate>
-      <Grid
-        container
-        direction="column"
-        justifyContent="flex-start"
-        alignItems="center"
-        padding={0}
-        margin={0}
-        gap={1}
+    <Grid
+      container
+      direction="column"
+      justifyContent="flex-start"
+      alignItems="center"
+      padding={0}
+      margin={0}
+      gap={1}
 
+    >
+      <Grid item
+        component={EleItem}
+        display="flex"
+        flexDirection="row"
+        justifyContent="space-between"
+        alignItems="center"
+        width="100%"
       >
-        <Grid item
-          component={EleItem}
-          display="flex"
-          flexDirection="row"
-          justifyContent="space-between"
-          alignItems="center"
-          width="100%"
+        <Typography variant="body1"
+          align="left"
         >
-          <Typography variant="body1"
-            align="left"
-          >
-            Header
-          </Typography>
-          <IconButton>
-            <AddIcon />
-          </IconButton>
-        </Grid>
-        <Grid item
-          component={EleItem}
-          display="flex"
-          flexDirection="row"
-          justifyContent="space-between"
-          alignItems="center"
-          width="100%"
-        >
-          
-          <Typography variant="body1"
-            align="left"
-          >
-            Education
-          </Typography>
-          <IconButton
-            onClick={addEducationSlot}
-          >
-            <AddIcon />
-          </IconButton>
-        </Grid>
-        <Grid item
-          component={EleItem}
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-          width="100%"
-        >
-          {!loading && educationSlots && <EduSlotsToForm educationSlots={educationSlots} handleEducationSlotChange={handleEducationSlotChange} removeEducationSlot={removeEducationSlot} />}
-        </Grid>
-        <Grid item
-          component={EleItem}
-          display="flex"
-          flexDirection="row"
-          justifyContent="space-between"
-          alignItems="center"
-          width="100%"
-        >
-          <Typography variant="body1"
-            align="left"
-          >
-            Experience
-          </Typography>
-          <IconButton>
-            <AddIcon />
-          </IconButton>
-        </Grid>
-        <Grid item
-          component={EleItem}
-          display="flex"
-          flexDirection="row"
-          justifyContent="space-between"
-          alignItems="center"
-          width="100%"
-        >
-          <Typography variant="body1"
-            align="left"
-          >
-            Skills
-          </Typography>
-          <IconButton>
-            <AddIcon />
-          </IconButton>
-        </Grid>
-        <Button type="submit" variant="contained">
-          Save Resume
-        </Button>
+          Header
+        </Typography>
+        <IconButton>
+          <AddIcon />
+        </IconButton>
       </Grid>
-    </Box>
+      <Grid item
+        component={EleItem}
+        display="flex"
+        flexDirection="row"
+        justifyContent="space-between"
+        alignItems="center"
+        width="100%"
+      >
+
+        <Typography variant="body1"
+          align="left"
+        >
+          Education
+        </Typography>
+        <IconButton
+          onClick={addEducationSlot}
+        >
+          <AddIcon />
+        </IconButton>
+      </Grid>
+      <Grid item
+        component={EleItem}
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        width="100%"
+      >
+        {!loading &&
+          educationSlots &&
+          <SlotsToForm
+            slots={educationSlots}
+            handleChange={handleEducationSlotChange}
+            handleRemove={removeEducationSlot}
+            slotkey={"education"}
+          />
+        }
+      </Grid>
+      <Grid item
+        component={EleItem}
+        display="flex"
+        flexDirection="row"
+        justifyContent="space-between"
+        alignItems="center"
+        width="100%"
+      >
+        <Typography variant="body1"
+          align="left"
+        >
+          Experience
+        </Typography>
+        <IconButton>
+          <AddIcon />
+        </IconButton>
+      </Grid>
+      <Grid item
+        component={EleItem}
+        display="flex"
+        flexDirection="row"
+        justifyContent="space-between"
+        alignItems="center"
+        width="100%"
+      >
+        <Typography variant="body1"
+          align="left"
+        >
+          Skills
+        </Typography>
+        <IconButton>
+          <AddIcon />
+        </IconButton>
+      </Grid>
+      <Button type="submit" variant="contained"
+        onClick={handleResumeSubmit}
+      >
+        Save Resume
+      </Button>
+    </Grid>
+
   );
 };
 

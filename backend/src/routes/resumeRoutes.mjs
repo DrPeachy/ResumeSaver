@@ -23,10 +23,10 @@ router.post('/resume', auth.checkAuthenticated, async (req, res) => {
     const updatedResume = req.body.resume;
     const Resume = mongoose.model('Resume');
     const resume = await Resume.findById(updatedResume._id);
-    resume.name = updatedResume.name;
-    resume.description = updatedResume.description;
-    resume.dateOfCreation = Date.now();
-    resume.materials = updatedResume.materials;
+    resume.header = updatedResume.header;
+    resume.educations = updatedResume.educations;
+    resume.experiences = updatedResume.experiences;
+    resume.skills = updatedResume.skills;
     await resume.save();
     res.status(200).json({ resume: resume });
   }
