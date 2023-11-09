@@ -28,7 +28,7 @@ import registrationRoutes from "./routes/registrationRoutes.mjs";
 import loginRoutes from "./routes/loginRoutes.mjs";
 import logoutRoutes from "./routes/logoutRoutes.mjs";
 import workspaceRoutes from "./routes/workspaceRoutes.mjs";
-
+import resumeRoutes from "./routes/resumeRoutes.mjs";
 
 /// middleware
 app.use(express.static(path.join(__dirname, "public")));
@@ -84,6 +84,8 @@ app.use(registrationRoutes);
 app.use(loginRoutes);
 app.use(logoutRoutes);
 app.use(workspaceRoutes);
+app.use(resumeRoutes);
+
 
 app.listen(((process.env.NODE_ENV === 'prodoction') ? process.env.PROD_PORT : process.env.DEV_PORT) || 8080, () => {
   mongoose

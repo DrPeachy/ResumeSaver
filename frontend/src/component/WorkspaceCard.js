@@ -66,7 +66,6 @@ const WorkspaceCard = ({ workspace, handleEdit, handleDelete }) => {
         maxWidth: 220,
         maxHeight: 220,
         textAlign: "left",
-        backgroundColor: "#f5f5f5",
       }}
 
     >

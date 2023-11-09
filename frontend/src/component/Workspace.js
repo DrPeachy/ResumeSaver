@@ -16,12 +16,10 @@ import ResumeEditor from './ResumeEditor';
 
 
 const EleItem = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#f5f5f5',
   padding: theme.spacing(1),
   textAlign: 'center',
   alignItems: 'flex-start',
   justifyContent: 'center',
-  color: theme.palette.text.secondary,
 }));
 
 function TabItem(props) {
@@ -65,19 +63,24 @@ const Workspace = () => {
   const location = useLocation();
   let _id = location.state ? location.state.id ?? null : null;
   const [workspaceData, setWorkspaceData] = useState({});
+  const [loading, setLoading] = useState(true);
   const baseUrl = (process.env.NODE_ENV === 'production') ? process.env.REACT_APP_PROD_URL : process.env.REACT_APP_DEV_URL;
 
   useEffect(() => {
+    setLoading(true);
     // fetch workspace data from backend
     axios.get(`${baseUrl}/workspace?id=${_id ?? ''}`)
       .then(response => {
         if (response.status === 200) {
           // set workspace data
-          setWorkspaceData(response.data);
+          setWorkspaceData(response.data.workspace);
+          console.log(response.data);
+          console.log(response.data.workspace.outputResume);
+          setLoading(false);
         }
       })
       .catch(error => {
-        if(error.response.status === 401) {
+        if (error.response.status === 401) {
           navigate('/login', { state: { isWarning: "unauthorized" } });
         }
       });
@@ -85,18 +88,18 @@ const Workspace = () => {
 
   const [tabValue, setTabValue] = React.useState(0);
 
-  const fetchRecentWorkspace = () => {
-    axios.get(`${baseUrl}/workspace/get-recent`)
-      .then(response => {
-        if (response.status === 200) {
-          setWorkspaceData(response.data.workspace);
-          _id = response.data.workspace._id;
-        }
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  };
+  // const fetchRecentWorkspace = () => {
+  //   axios.get(`${baseUrl}/workspace/get-recent`)
+  //     .then(response => {
+  //       if (response.status === 200) {
+  //         setWorkspaceData(response.data.workspace);
+  //         _id = response.data.workspace._id;
+  //       }
+  //     })
+  //     .catch(error => {
+  //       console.log(error);
+  //     });
+  // };
 
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
@@ -168,7 +171,11 @@ const Workspace = () => {
               margin: 0,
             }}
           >
-            <ResumeEditor />
+            {!loading ? (
+              <ResumeEditor outputResumeId={workspaceData.outputResume} />
+            ) : (
+              <Typography>Loading...</Typography>
+            )}
           </TabItem>
           <TabItem
             value={tabValue}

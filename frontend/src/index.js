@@ -29,6 +29,10 @@ let lightTheme = createTheme({
     success: {
       main: '#13ea1b',
     },
+    background: {
+      paper: '#f7f2ec',
+      default: '#f9f9f6',
+    },
   },
   typography: {
     fontFamily: 'Lora',
@@ -56,6 +60,10 @@ const darkTheme = createTheme({
     },
     success: {
       main: '#13ea1b',
+    },
+    background: {
+      paper: '#160d01',
+      default: '#2b2014',
     },
   },
   typography: {

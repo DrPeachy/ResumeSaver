@@ -4,31 +4,31 @@ import mongoose from "mongoose";
 // import { Experience } from "./Experience.mjs";
 
 const skillSlotSchema = new mongoose.Schema({
-    name: { type: String, required: true },
-    list: { type: [String], required: true },
+    name: { type: String, required: false },
+    list: { type: [String], required: false },
   });
 
 const durationSchema = new mongoose.Schema({
-    startDate: { type: Date, required: true },
-    endDate: { type: Date, required: true }
+    startDate: { type: Date, required: false },
+    endDate: { type: Date, required: false }
 });
 
 const experienceSchema = new mongoose.Schema({
-    title: { type: String, required: true },
-    type: { type: String, required: true },
-    organization: { type: String, required: true },
+    title: { type: String, required: false },
+    type: { type: String, required: false },
+    organization: { type: String, required: false },
     location: { type: String, required: false },
-    duration: { type: durationSchema, required: true },
-    description: { type: [String], required: true }
+    duration: { type: durationSchema, required: false },
+    description: { type: [String], required: false }
 });
 
 const educationSchema = new mongoose.Schema({
-    institution: { type: String, required: true },
-    degree: { type: String, required: true },
-    major: { type: String, required: true },
+    institution: { type: String, required: false },
+    degree: { type: String, required: false },
+    major: { type: String, required: false },
     minor: { type: String, required: false },
-    gpa: { type: String, required: true },
-    duration: { type: durationSchema, required: true }
+    gpa: { type: String, required: false },
+    duration: { type: durationSchema, required: false }
 });
 
 const headerSchema = new mongoose.Schema({

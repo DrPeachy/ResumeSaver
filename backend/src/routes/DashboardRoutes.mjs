@@ -3,6 +3,7 @@ import * as auth from "../utils/auth.mjs";
 import mongoose from "mongoose";
 const User = mongoose.model("User");
 const Workspace = mongoose.model("Workspace");
+const Resume = mongoose.model("Resume");
 const router = express.Router();
 
 
@@ -30,14 +31,17 @@ router.post("/dashboard/create", auth.checkAuthenticated, async (req, res) => {
   const name = req.body.name;
   const description = req.body.description;
   const user = await User.findOne({ username: res.locals.currentUser });
+  const resume = new Resume({});
   const workspace = new Workspace({
     name: name,
     description: description,
     dateOfCreation: Date.now(),
+    outputResume: resume._id
   });
   await workspace.save();
   user.workspaces.push(workspace._id);
   await user.save();
+  await resume.save();
   res.status(200).json({ workspace: workspace });
 });
 

@@ -13,20 +13,20 @@ import { useState, useEffect } from "react";
 const Registration = () => {
   const navigate = useNavigate();
   const baseUrl = (process.env.NODE_ENV === 'production') ? process.env.REACT_APP_PROD_URL : process.env.REACT_APP_DEV_URL;
-  
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const data = Object.fromEntries(formData);
     axios.post(`${baseUrl}/signup`, data)
-    .then(response => {
-      if (response.status === 201) {
-        navigate('/login');
-      }
-    })
-    .catch(error => {
-      console.log(error);
-    });
+      .then(response => {
+        if (response.status === 201) {
+          navigate('/login');
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
   };
 
   return (
@@ -38,7 +38,7 @@ const Registration = () => {
           justifyContent="center"
           alignItems="center"
         >
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" variant="h3">
             Registration
           </Typography>
         </Grid>

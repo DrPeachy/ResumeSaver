@@ -9,6 +9,7 @@ import { Checkbox } from "@mui/material";
 import { Avatar } from "@mui/material";
 import { Typography } from "@mui/material";
 import { Alert } from "@mui/material";
+import Grow from '@mui/material/Grow';
 import Link from "@mui/material/Link";
 import { useState, useEffect } from "react";
 
@@ -65,12 +66,12 @@ const Login = () => {
           alignItems="center"
         >
           <Avatar
-            sx={{ width: 80, height: 80, bgcolor: 'secondary.main' }}
+            sx={{ width: 120, height: 120, bgcolor: 'secondary.main' }}
             src={isUsernameExisted ? `${baseUrl}/assets/logo.png` : ""}
             alt="n"
           >
           </Avatar>
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" variant="h3">
             Sign in
           </Typography>
         </Grid>
@@ -116,7 +117,8 @@ const Login = () => {
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         open={isWarning}
         autoHideDuration={3000}
-        onClose={() => setIsWarning(false)}
+        TransitionComponent={Grow}
+        // onClose={() => setIsWarning(false)}
       >
         <Alert severity="error">{WarningString[isWarning]}</Alert>
       </Snackbar>
