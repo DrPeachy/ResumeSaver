@@ -135,7 +135,7 @@ const Workspace = () => {
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
-            height: '90vh',
+            minHeight: '90vh',
           }}
         >
         </EleItem>
@@ -166,7 +166,7 @@ const Workspace = () => {
             value={tabValue}
             index={0}
             sx={{
-              height: '100vh',
+              minHeight: '100vh',
               padding: 0,
               margin: 0,
             }}

@@ -7,6 +7,7 @@ import { Paper } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 
 
 const resumeKey = ['header', 'educations', 'experiences', 'skills'];
@@ -142,6 +143,7 @@ const Test = () => {
     <Grid
       container
       flexDirection='column'
+      gap={1}
     >
       {
         !loading && resume &&
@@ -175,54 +177,86 @@ const Test = () => {
               {Object.entries(resume[key]).map(([name, value], index) => {
 
                 return (
-                  <Box key={name}>
-                    <Typography
-                      variant="body1"
-                    >
-                      {`${resumeKeyToTitle[key]}-${index + 1}`}
-                    </Typography>
-                    {
-                      Object.entries(value).map(([name, value]) => {
-                        if (name === '_id') return null;
-                        if (name === 'duration') {
+                  <Grid
+                    container
+                    justifyContent='space-between'
+                    key={name}
+                    component={EleItem}
+                  >
+                    <Grid item>
+                      <Typography
+                        variant="body1"
+                      >
+                        {`${resumeKeyToTitle[key]}-${index + 1}`}
+                      </Typography>
+
+                      {
+                        Object.entries(value).map(([name, value]) => {
+                          if (name === '_id') return null;
+                          if (name === 'duration') {
+                            return (
+                              <Box key={name}>
+                                <TextField
+                                  name='startDate'
+                                  label='Start Date'
+                                  type="date"
+                                  value={timeToDate(value.startDate)}
+                                  variant="filled"
+                                  size="small"
+                                  onChange={(event) => handleSlotChange(event, key, index)}
+                                />
+                                <TextField
+                                  name='endDate'
+                                  label='End Date'
+                                  type="date"
+                                  value={timeToDate(value.endDate)}
+                                  variant="filled"
+                                  size="small"
+                                  onChange={(event) => handleSlotChange(event, key, index)}
+                                />
+                              </Box>
+                            )
+                          }
+                          if (name === 'description') {
+                            return (
+                              <Box key={name}>
+                                <TextField
+                                  name={name}
+                                  label={name}
+                                  value={value}
+                                  variant="filled"
+                                  size="small"
+                                  onChange={(event) => handleSlotChange(event, key, index)}
+                                  multiline
+                                  maxRows={8}
+                                />
+                              </Box>
+                            )
+                          }
                           return (
                             <Box key={name}>
                               <TextField
-                                name='startDate'
-                                label='Start Date'
-                                type="date"
-                                value={timeToDate(value.startDate)}
-                                variant="filled"
-                                size="small"
-                                onChange={(event) => handleSlotChange(event, key, index)}
-                              />
-                              <TextField
-                                name='endDate'
-                                label='End Date'
-                                type="date"
-                                value={timeToDate(value.endDate)}
+                                name={name}
+                                label={name}
+                                value={value}
                                 variant="filled"
                                 size="small"
                                 onChange={(event) => handleSlotChange(event, key, index)}
                               />
                             </Box>
                           )
-                        }
-                        return (
-                          <Box key={name}>
-                            <TextField
-                              name={name}
-                              label={name}
-                              value={value}
-                              variant="filled"
-                              size="small"
-                              onChange={(event) => handleSlotChange(event, key, index)}
-                            />
-                          </Box>
-                        )
-                      })
-                    }
-                  </Box>
+                        })
+                      }
+                    </Grid>
+                    <Grid item>
+                      <IconButton
+                        onClick={() => removeSlot(key, index)}
+                      >
+                        <RemoveIcon />
+                      </IconButton>
+                    </Grid>
+                  </Grid>
+
                 );
 
               })}
