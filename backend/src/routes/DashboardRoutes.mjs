@@ -21,9 +21,16 @@ router.get("/dashboard", auth.checkAuthenticated, async (req, res) => {
 router.post("/dashboard/del", auth.checkAuthenticated, async (req, res) => {
   const id = req.body.id;
   const user = await User.findOne({ username: res.locals.currentUser });
-  user.workspaces.pull(id);
-  await user.save();
+  // delete the workspace's resume
+  const workspace = await Workspace.findById(id);
+  const resumeId = workspace.outputResume;
+  await Resume.findByIdAndDelete(resumeId);
+  // delete the workspace
   await Workspace.findByIdAndDelete(id);
+  // delete the workspace from user
+  const index = user.workspaces.indexOf(id);
+  user.workspaces.splice(index, 1);
+  await user.save();
   res.status(200).json({ message: "Workspace deleted" });
 });
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useState, useEffect } from "react";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -34,13 +34,23 @@ const timeToDate = (time) => {
 const ResumeEditor = ({ outputResumeId }) => {
   const [resume, setResume] = useState(null);
   const [loading, setLoading] = useState(false);
+  const focusRef = useRef(null);
   const baseUrl = (process.env.NODE_ENV === 'production') ? process.env.REACT_APP_PROD_URL : process.env.REACT_APP_DEV_URL;
   useEffect(() => {
     setLoading(true);
-    axios.get(`${baseUrl}/test?id=654c5eebb087689466f3644f`)
+    axios.get(`${baseUrl}/resume?id=${outputResumeId ?? ''}`)
       .then(response => {
         if (response.status === 200) {
-          const newestResume = response.data.resume;
+          let newestResume = response.data.resume;
+          if (newestResume == null) {
+            newestResume = {
+              _id: outputResumeId,
+              header: [],
+              educations: [],
+              experiences: [],
+              skills: []
+            };
+          }
           setResume({ ...resume, ...newestResume });
           setLoading(false);
         }
@@ -49,6 +59,19 @@ const ResumeEditor = ({ outputResumeId }) => {
         console.log(error);
       });
   }, []);
+
+  useEffect(() => {
+    // save resume to backend
+    axios.post(`${baseUrl}/resume`, { resume: resume })
+      .then(response => {
+        if (response.status === 200) {
+          console.log(response.data);
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, [focusRef.current]);
 
   const addSlot = (key) => {
     switch (key) {
@@ -138,6 +161,9 @@ const ResumeEditor = ({ outputResumeId }) => {
       list[index][name] = value;
     }
     setResume({ ...resume, [key]: list });
+    if (name != focusRef.current) {
+      focusRef.current = name;
+    }
   };
 
 
@@ -152,6 +178,7 @@ const ResumeEditor = ({ outputResumeId }) => {
       {
         !loading && resume &&
         resumeKey.map((key) => {
+          console.log(resume);
           console.log(resume[key]);
           return (
             <>
