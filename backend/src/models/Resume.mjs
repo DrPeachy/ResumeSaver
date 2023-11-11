@@ -34,12 +34,12 @@ const educationSchema = new mongoose.Schema({
 const headerSchema = new mongoose.Schema({
     name: { type: String, required: false },
     phone: { type: String, required: false },
-    email: { type: [String], required: false },
-    links: { type: [String], required: false }
+    email: { type: String, required: false },
+    link: { type: String, required: false }
 });
 
 const resumeSchema = new mongoose.Schema({
-    header: { type: headerSchema, required: false },
+    header: { type: [headerSchema], required: false },
     educations: { type: [educationSchema], required: false },
     experiences: { type: [experienceSchema], required: false },
     skills: { type: [skillSlotSchema], required: false }

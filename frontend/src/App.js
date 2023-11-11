@@ -6,6 +6,7 @@ import Registration from './component/Registration';
 import Login from './component/Login';
 import Logout from './component/Logout';
 import Workspace from './component/Workspace';
+import Test from './component/Test';
 import axios from 'axios';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { CssBaseline, ThemeProvider, useMediaQuery } from '@mui/material';
@@ -32,6 +33,7 @@ const App = ({ getTheme }) => {
               <Route path='/login' element={<Login />} />
               <Route path='/logout' element={<Logout />} />
               <Route path='/workspace' element={<Workspace />} />
+              <Route path='/test' element={<Test />} />
             </Route>
             <Route path='*' element={<Template />} />
           </Routes>
