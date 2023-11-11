@@ -61,6 +61,7 @@ const ResumeEditor = ({ outputResumeId }) => {
   }, []);
 
   useEffect(() => {
+    if (!focusRef.current) return;
     // save resume to backend
     axios.post(`${baseUrl}/resume`, { resume: resume })
       .then(response => {

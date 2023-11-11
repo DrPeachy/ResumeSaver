@@ -25,13 +25,13 @@ router.get('/workspace', auth.checkAuthenticated, async (req, res) => {
   console.log(`id: ${id}`);
   const user = await User.findOne({ username: res.locals.currentUser });
   if (id != '') {
-    user.recentWorspaceId = id;
+    user.recentWorkspaceId = id;
     await user.save();
     const workspace = await Workspace.findById(id);
     res.status(200).json({ workspace: workspace });
   } else {
-    const recentWorspaceId = user.recentWorspaceId;
-    const recentWorkspace = await Workspace.findById(recentWorspaceId);
+    const recentWorkspaceId = user.recentWorkspaceId;
+    const recentWorkspace = await Workspace.findById(recentWorkspaceId);
     res.status(200).json({ workspace: recentWorkspace });
   }
 });

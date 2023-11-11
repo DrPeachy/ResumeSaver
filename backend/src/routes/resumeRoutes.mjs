@@ -5,10 +5,21 @@ const router = express.Router();
 import * as auth from '../utils/auth.mjs';
 
 import mongoose from 'mongoose';
+const User = mongoose.model("User");
+
 
 router.get('/resume', auth.checkAuthenticated, async (req, res) => {
   try{
-    const id = req.query.id;
+
+    const user = await User.findOne({ username: res.locals.currentUser });
+    let id = null;
+    if(!req.query.id){
+      // get recent resume
+      id = user.recentResumeId;
+    }else{
+      id = req.query._id;
+      user.recentResumeId = id;
+    }
     const Resume = mongoose.model('Resume');
     const resume = await Resume.findById(id);
     res.status(200).json({ resume: resume });

@@ -49,6 +49,7 @@ router.post("/dashboard/create", auth.checkAuthenticated, async (req, res) => {
   user.workspaces.push(workspace._id);
   await user.save();
   await resume.save();
+  user.recentWorkspaceId = workspace._id;
   res.status(200).json({ workspace: workspace });
 });
 
