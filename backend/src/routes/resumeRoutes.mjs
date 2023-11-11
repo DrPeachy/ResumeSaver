@@ -6,6 +6,7 @@ import * as auth from '../utils/auth.mjs';
 
 import mongoose from 'mongoose';
 const User = mongoose.model("User");
+const Resume = mongoose.model('Resume');
 
 
 router.get('/resume', auth.checkAuthenticated, async (req, res) => {
@@ -17,10 +18,9 @@ router.get('/resume', auth.checkAuthenticated, async (req, res) => {
       // get recent resume
       id = user.recentResumeId;
     }else{
-      id = req.query._id;
+      id = req.query.id;
       user.recentResumeId = id;
     }
-    const Resume = mongoose.model('Resume');
     const resume = await Resume.findById(id);
     res.status(200).json({ resume: resume });
   }
