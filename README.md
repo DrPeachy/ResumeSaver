@@ -1,9 +1,9 @@
 # Resume Saver
 
 ## Overview
-Preparing difference resume for difference purpose is troublesome when you just want to change a specific content or style. Formating with Microsoft Word is annoying as you need to manually type in every spacing
+Preparing a different resume for different purposes is troublesome when you just want to change a specific content or style. Formatting with Microsoft Word is annoying as you need to manually type in every spacing
 
-Resume Maker is a webapp allow users to keep track and manipulate their resume's content, styling, layout easily, and to export brand new resume in desired format. They will be able to editing text or upload existed materials for convenience, and the web app can automatically decide the content for specific space.
+Resume Maker is a web app that allows users to keep track of and manipulate their resume's content, styling, and layout easily, and to export brand-new resumes in the desired format. They will be able to edit text or upload existing materials for convenience, and the web app can automatically decide the content for a specific space.
 
 ## Data Model
 
@@ -94,22 +94,27 @@ The application will have schemas: **Resume, User, Workspace, Experience, Durati
   hash: // a password hash,
   workspaces: 
   [
-    {
+    0:{
       name: // name of workspace
-      uploadedResumes: 
+      materials: 
       [
-        {...}, // uploaded resume#1
-        {...}, // uploaded resume#2
-        {...} // uploaded resume#3
+        "NYU School of Engineering",
+        "Computer Science",
+        "B.S.",
+        ...
       ]
       outputResume: {
-          name: "employeeFoo",
-          phone: "123-4567-8910",
-          links: ["123@github.com"],
-          email: "123@nyu.edu"
+          header:[
+            0:{
+              name: "employeeFoo",
+              phone: "123-4567-8910",
+              links: ["123@github.com"],
+              email: "123@nyu.edu"
+            }
+          ]
           experiences: 
           [
-            {
+            0:{
               title: "Software Engineering Intern",
               type: "working",
               organization: "Amazon",
@@ -120,22 +125,20 @@ The application will have schemas: **Resume, User, Workspace, Experience, Durati
                 endDate: "Sep 2021"
               }
             },
-            {...},
-            {...}
+            1:{...},
+            2:{...}
           ]
           skills: 
           [
-            { name: "Coding Language", list: ["C++", "Python", "Javascript"]},
-            { name: "Software", list: ["VSCode", "Photoshop", "Sourcetree"]}
+            0：{ name: "Coding Language", list: ["C++", "Python", "Javascript"]},
+            1：{ name: "Software", list: ["VSCode", "Photoshop", "Sourcetree"]}
           ]
           
       }
     },
-    {...}, // workspace#2
+    1:{...}, // workspace#2
     ...
   ]
-    
-  
 }
 ```
 
