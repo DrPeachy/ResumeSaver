@@ -7,7 +7,7 @@ Resume Maker is a webapp allow users to keep track and manipulate their resume's
 
 ## Data Model
 
-The application will **Resume, User, Workspace, Experience, Duration, Education, SkillSlot**
+The application will have schemas: **Resume, User, Workspace, Experience, Duration, Education, SkillSlot**
 
 * users can have multiple workspaces
 * Each workspace can have at most three resumes uploaded
@@ -18,16 +18,22 @@ The application will **Resume, User, Workspace, Experience, Duration, Education,
 
 ```javascript
 {
+  _id
   username: "employeeFoo",
+  salt:
   hash: // a password hash,
   workspaces: // an array of references to List documents
+  recentWorkspaceId: // the most recent workspace ID
 }
 ```
 **Workspace:**
 ```javascript
 {
+  _id
   name: // name of workspace
-  uploadedResumes: // an array of resume obj
+  description:
+  dateOfCreation: //
+  materials: // array of material for copyboard
   outputResume: // a single resume obj that will be exported
 }
 ```
@@ -58,7 +64,7 @@ The application will **Resume, User, Workspace, Experience, Duration, Education,
   organization: 
   location: // string for location
   duration: // a duration obj
-  descriptions: // an array of string of description
+  description: // an array of string of description
 }
 
 ```
@@ -73,13 +79,10 @@ The application will **Resume, User, Workspace, Experience, Duration, Education,
 **Resume:**
 ```javascript
 {
-  name: "employeeFoo",
-  phone: "123-4567-8910"
-  email: // email
-  links: // an array of links(personal website)
+  header: // an array of header(for it an array just ez for implementing)
   educations: // an array of Education
   experiences: // an array of Experience
-  skills: // an array of skill
+  skills: // an array of skillslot
 }
 ```
 
