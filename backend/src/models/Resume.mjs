@@ -24,6 +24,7 @@ const experienceSchema = new mongoose.Schema({
 
 const educationSchema = new mongoose.Schema({
     institution: { type: String, required: false },
+    location: { type: String, required: false },
     degree: { type: String, required: false },
     major: { type: String, required: false },
     minor: { type: String, required: false },

@@ -34,7 +34,7 @@ const timeToDate = (time) => {
 const ResumeEditor = ({ outputResumeId }) => {
   const [resume, setResume] = useState(null);
   const [loading, setLoading] = useState(false);
-  const focusRef = useRef(null);
+  // const focusRef = useRef(null);
   const baseUrl = (process.env.NODE_ENV === 'production') ? process.env.REACT_APP_PROD_URL : process.env.REACT_APP_DEV_URL;
   useEffect(() => {
     setLoading(true);
@@ -60,9 +60,23 @@ const ResumeEditor = ({ outputResumeId }) => {
       });
   }, []);
 
-  useEffect(() => {
-    if (!focusRef.current) return;
-    // save resume to backend
+  // useEffect(() => {
+  //   if (!focusRef.current) return;
+  //   // save resume to backend
+  //   axios.post(`${baseUrl}/resume`, { resume: resume })
+  //     .then(response => {
+  //       if (response.status === 200) {
+  //         console.log(response.data);
+  //       }
+  //     })
+  //     .catch(error => {
+  //       console.log(error);
+  //     });
+  // }, [focusRef.current]);
+
+  const handleOnBlur = (event) => {
+    event.preventDefault();
+        // save resume to backend
     axios.post(`${baseUrl}/resume`, { resume: resume })
       .then(response => {
         if (response.status === 200) {
@@ -72,7 +86,8 @@ const ResumeEditor = ({ outputResumeId }) => {
       .catch(error => {
         console.log(error);
       });
-  }, [focusRef.current]);
+  };
+
 
   const addSlot = (key) => {
     switch (key) {
@@ -88,6 +103,7 @@ const ResumeEditor = ({ outputResumeId }) => {
       case 'educations':
         const newEducationSlot = {
           institution: "",
+          location: "",
           degree: "",
           major: "",
           minor: "",
@@ -109,14 +125,14 @@ const ResumeEditor = ({ outputResumeId }) => {
             startDate: null,
             endDate: null
           },
-          description: []
+          description: ""
         };
         setResume({ ...resume, experiences: [...resume.experiences, newExperienceSlot] });
         break;
       case 'skills':
         const newSkillSlot = {
           name: "",
-          list: []
+          list: ""
         };
         setResume({ ...resume, skills: [...resume.skills, newSkillSlot] });
         break;
@@ -162,9 +178,9 @@ const ResumeEditor = ({ outputResumeId }) => {
       list[index][name] = value;
     }
     setResume({ ...resume, [key]: list });
-    if (name != focusRef.current) {
-      focusRef.current = name;
-    }
+    // if (name != focusRef.current) {
+    //   focusRef.current = name;
+    // }
   };
 
 
@@ -269,6 +285,7 @@ const ResumeEditor = ({ outputResumeId }) => {
                                   fullWidth
                                   lg={4}
                                   onChange={(event) => handleSlotChange(event, key, index)}
+                                  onBlur={handleOnBlur}
                                 />
                                 <Grid item
                                   component={TextField}
@@ -280,6 +297,7 @@ const ResumeEditor = ({ outputResumeId }) => {
                                   fullWidth
                                   lg={4}
                                   onChange={(event) => handleSlotChange(event, key, index)}
+                                  onBlur={handleOnBlur}
                                 />
                               </Grid>
                             )
@@ -300,6 +318,7 @@ const ResumeEditor = ({ outputResumeId }) => {
                                   size="small"
                                   fullWidth
                                   onChange={(event) => handleSlotChange(event, key, index)}
+                                  onBlur={handleOnBlur}
                                   multiline
                                   maxRows={8}
                                 />
@@ -321,6 +340,7 @@ const ResumeEditor = ({ outputResumeId }) => {
                                 variant="filled"
                                 size="small"
                                 onChange={(event) => handleSlotChange(event, key, index)}
+                                onBlur={handleOnBlur}
                               />
                             </Grid>
                           )

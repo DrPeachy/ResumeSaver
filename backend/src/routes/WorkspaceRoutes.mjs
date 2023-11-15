@@ -16,10 +16,10 @@ const Workspace = mongoose.model('Workspace');
 const Resume = mongoose.model('Resume');
 
 const dateToString = (date) => {
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
-  return `${year}-${month}-${day}`;
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short'
+  });
 }
 
 const formPDF = (doc, resume) => {
@@ -44,22 +44,34 @@ const formPDF = (doc, resume) => {
     doc
       .font('Times-Bold')
       .fontSize(12)
-      .text(`${education.institution}, `, { align: 'left' });
+      .text(`${education.institution}${education.location ? `, ${education.location}` : ''}`,
+        { align: 'left' });
+      // .font('Times-Roman')
+      // .fontSize(12)
+      // .text(education.location ? `, ${education.location}` : '',
+      //   { align: 'left' });
+    doc.moveUp();
+    // doc
+    // .font('Times-Roman')
+    // .fontSize(12)
+    // .text(education.location ? `, ${education.location}` : '',
+    //   { align: 'left' });
+
     doc
       .font('Times-Roman')
       .fontSize(12)
       .text(
-        `${dateToString(education.duration.startDate)} - ${dateToString(education.duration.endDate)}`,
+        `${dateToString(education.duration.startDate)}${education.duration.endDate ? `-${dateToString(education.duration.endDate)}` : ''}`,
         { align: 'right' }
       );
     doc.moveDown();
-    
+
     doc
       .font('Times-Roman')
       .fontSize(12)
-      .text(`${education.degree} in ${education.major} ${education.minor}`, {
-        align: 'left'
-      });
+      .text(`${education.degree} in ${education.major}${education.minor ? `, minor in ${education.minor}` : ''}`,
+        { align: 'left' }
+      );
     doc.moveDown();
     doc
       .font('Times-Roman')
@@ -79,18 +91,19 @@ const formPDF = (doc, resume) => {
       .font('Times-Bold')
       .fontSize(12)
       .text(`${experience.title}, ${experience.organization}, ${experience.location} `, { align: 'left' });
+    doc.moveUp();
     doc
       .font('Times-Roman')
       .fontSize(12)
       .text(
-        `${dateToString(experience.duration.startDate)} - ${dateToString(experience.duration.endDate)}`,
+        `${dateToString(experience.duration.startDate)}${experience.duration.endDate ? `-${dateToString(experience.duration.endDate)}` : ''}`,
         { align: 'right' }
       );
     doc.moveDown();
     // split description by newline
     const description = experience.description.split('\n');
     for (const line of description) {
-      doc.fontSize(12).text(line, {
+      doc.fontSize(12).text(`• ${line}`, {
         align: 'left'
       });
       doc.moveDown();
