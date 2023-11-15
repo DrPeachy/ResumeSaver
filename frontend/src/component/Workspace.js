@@ -125,6 +125,8 @@ const Workspace = () => {
         justifyContent="flex-start"
         gap={1}
         lg={2.7}
+        md={1}
+        sm={1}
       >
         <EleItem
           elevation={3}
@@ -150,6 +152,8 @@ const Workspace = () => {
       <Grid
         item
         lg={6}
+        md={10}
+        sm={10}
       >
         <EleItem
           elevation={3}
@@ -203,6 +207,8 @@ const Workspace = () => {
       <Grid
         item
         lg={2.7}
+        md={1}
+        sm={1}
       >
         <EleItem
           elevation={3}

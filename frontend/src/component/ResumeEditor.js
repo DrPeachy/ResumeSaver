@@ -211,62 +211,109 @@ const ResumeEditor = ({ outputResumeId }) => {
                 return (
                   <Grid
                     container
+                    flexDirection='column'
                     justifyContent='space-between'
                     key={name}
                     component={EleItem}
                   >
-                    <Grid item>
+                    <Grid item
+                      display='flex'
+                      flexDirection='row'
+                      justifyContent='space-between'
+                      alignItems='center'
+                      width='100%'
+                    >
                       <Typography
                         variant="body1"
                       >
                         {`${resumeKeyToTitle[key]}-${index + 1}`}
                       </Typography>
+                      <IconButton
+                        onClick={() => removeSlot(key, index)}
+                      >
+                        <RemoveIcon />
+                      </IconButton>
+                    </Grid>
+                    <Grid container
+                      flexDirection='row'
+                      justifyContent='flex-start'
+                      alignItems='flex-start'
+                      sm={12}
+                      md={12}
+                      lg={12}
+                      gap={1}
+                    >
 
                       {
                         Object.entries(value).map(([name, value]) => {
                           if (name === '_id') return null;
                           if (name === 'duration') {
                             return (
-                              <Box key={name}>
-                                <TextField
+                              <Grid container
+                                flexDirection='row'
+                                justifyContent='flex-start'
+                                alignItems='flex-start'
+                                gap={1}
+                                key={name}
+                                sm={12}
+                                md={12}
+                                lg={12}
+                              >
+                                <Grid item
+                                  component={TextField}
                                   name='startDate'
                                   label='Start Date'
                                   type="date"
                                   value={timeToDate(value.startDate)}
                                   variant="filled"
-                                  size="small"
+                                  fullWidth
+                                  lg={4}
                                   onChange={(event) => handleSlotChange(event, key, index)}
                                 />
-                                <TextField
+                                <Grid item
+                                  component={TextField}
                                   name='endDate'
                                   label='End Date'
                                   type="date"
                                   value={timeToDate(value.endDate)}
                                   variant="filled"
-                                  size="small"
+                                  fullWidth
+                                  lg={4}
                                   onChange={(event) => handleSlotChange(event, key, index)}
                                 />
-                              </Box>
+                              </Grid>
                             )
                           }
-                          if (name === 'description') {
+                          if (name === 'description' || name === 'list') {
                             return (
-                              <Box key={name}>
+                              <Grid item
+                                key={name}
+                                sm={12}
+                                md={12}
+                                lg={12}
+                              >
                                 <TextField
                                   name={name}
                                   label={name}
                                   value={value}
                                   variant="filled"
                                   size="small"
+                                  fullWidth
                                   onChange={(event) => handleSlotChange(event, key, index)}
                                   multiline
                                   maxRows={8}
                                 />
-                              </Box>
+                              </Grid>
                             )
                           }
+                          
                           return (
-                            <Box key={name}>
+                            <Grid item
+                              key={name}
+                              sm={5}
+                              md={5}
+                              lg={3.3}
+                            >
                               <TextField
                                 name={name}
                                 label={name}
@@ -275,17 +322,10 @@ const ResumeEditor = ({ outputResumeId }) => {
                                 size="small"
                                 onChange={(event) => handleSlotChange(event, key, index)}
                               />
-                            </Box>
+                            </Grid>
                           )
                         })
                       }
-                    </Grid>
-                    <Grid item>
-                      <IconButton
-                        onClick={() => removeSlot(key, index)}
-                      >
-                        <RemoveIcon />
-                      </IconButton>
                     </Grid>
                   </Grid>
 

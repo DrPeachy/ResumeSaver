@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 
 const skillSlotSchema = new mongoose.Schema({
     name: { type: String, required: false },
-    list: { type: [String], required: false },
+    list: { type: String, required: false },
   });
 
 const durationSchema = new mongoose.Schema({
@@ -19,7 +19,7 @@ const experienceSchema = new mongoose.Schema({
     organization: { type: String, required: false },
     location: { type: String, required: false },
     duration: { type: durationSchema, required: false },
-    description: { type: [String], required: false }
+    description: { type: String, required: false }
 });
 
 const educationSchema = new mongoose.Schema({
