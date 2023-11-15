@@ -1,4 +1,5 @@
 node_modules
+src/public/pdfs
 .env
 .vscode/
 .idea/
