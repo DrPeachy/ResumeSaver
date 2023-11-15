@@ -18,9 +18,8 @@ import passportConfig from "./passportConfig.mjs";
 import { fileURLToPath } from "url";
 import mongoose from "mongoose";
 const app = express();
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // import routes
 import dashboardRoutes from "./routes/dashboardRoutes.mjs";

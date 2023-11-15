@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { Container, Typography } from '@mui/material';
+import { Button, Container, Typography } from '@mui/material';
 import { Item } from '@mui/material/Box';
 import { Grid } from '@mui/material';
 import { Paper } from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress';
 import { styled } from '@mui/material/styles';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
@@ -65,7 +66,7 @@ const Workspace = () => {
   const [workspaceData, setWorkspaceData] = useState({});
   const [loading, setLoading] = useState(true);
   const baseUrl = (process.env.NODE_ENV === 'production') ? process.env.REACT_APP_PROD_URL : process.env.REACT_APP_DEV_URL;
-
+  const [pdfSrc, setPdfSrc] = useState(null);
   useEffect(() => {
     setLoading(true);
     // fetch workspace data from backend
@@ -88,18 +89,22 @@ const Workspace = () => {
 
   const [tabValue, setTabValue] = React.useState(0);
 
-  // const fetchRecentWorkspace = () => {
-  //   axios.get(`${baseUrl}/workspace/get-recent`)
-  //     .then(response => {
-  //       if (response.status === 200) {
-  //         setWorkspaceData(response.data.workspace);
-  //         _id = response.data.workspace._id;
-  //       }
-  //     })
-  //     .catch(error => {
-  //       console.log(error);
-  //     });
-  // };
+  useEffect(() => {
+    if (tabValue == 1) {
+      setLoading(true);
+      axios.get(`${baseUrl}/workspace/get-latest-pdf?id=${workspaceData._id ?? ''}`)
+        .then(response => {
+          if (response.status === 200) {
+            console.log(response.data);
+            setPdfSrc(response.data.url);
+            setLoading(false);
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
+  }, [tabValue]);
 
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
@@ -124,10 +129,11 @@ const Workspace = () => {
         <EleItem
           elevation={3}
           sx={{
-            height: '14vh',
+            // height: '14vh',
           }}
         >
-          <Typography variant="h4">Insert Material</Typography>
+          <Typography variant="h4">Workspace: {workspaceData.name}</Typography>
+          <Button>//Todo: Insert a pdf</Button>
         </EleItem>
         <EleItem
           elevation={3}
@@ -138,12 +144,12 @@ const Workspace = () => {
             minHeight: '90vh',
           }}
         >
+          <Typography variant="h5">//Todo: Copyboard</Typography>
         </EleItem>
       </Grid>
       <Grid
         item
         lg={6}
-      //backgroundColor="green"
       >
         <EleItem
           elevation={3}
@@ -174,7 +180,7 @@ const Workspace = () => {
             {!loading ? (
               <ResumeEditor outputResumeId={workspaceData.outputResume} />
             ) : (
-              <Typography>Loading...</Typography>
+              <CircularProgress />
             )}
           </TabItem>
           <TabItem
@@ -186,7 +192,11 @@ const Workspace = () => {
               margin: 0,
             }}
           >
-            <PDFViewer src="assets/resume.pdf" />
+            {!loading ? (
+              <PDFViewer src={pdfSrc} />
+            ) : (
+              <CircularProgress />
+            )}
           </TabItem>
         </EleItem>
       </Grid>
@@ -200,7 +210,7 @@ const Workspace = () => {
             height: '100%',
           }}
         >
-
+          <Typography variant="h5">//Todo: Inspector</Typography>
         </EleItem>
       </Grid>
     </Grid>

@@ -16,7 +16,7 @@ router.get('/resume', auth.checkAuthenticated, async (req, res) => {
     let id = null;
     if(!req.query.id){
       // get recent resume
-      id = user.recentResumeId;
+      res.status(404).json({ message: 'No resume found' });
     }else{
       id = req.query.id;
       user.recentResumeId = id;
@@ -32,7 +32,6 @@ router.get('/resume', auth.checkAuthenticated, async (req, res) => {
 router.post('/resume', auth.checkAuthenticated, async (req, res) => {
   try{
     const updatedResume = req.body.resume;
-    const Resume = mongoose.model('Resume');
     const resume = await Resume.findById(updatedResume._id);
     resume.header = updatedResume.header;
     resume.educations = updatedResume.educations;
@@ -45,6 +44,7 @@ router.post('/resume', auth.checkAuthenticated, async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+
 
 router.get('/test', async (req, res) => {
   try{
