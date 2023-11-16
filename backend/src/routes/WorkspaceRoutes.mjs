@@ -24,8 +24,8 @@ const dateToString = (date) => {
 
 function drawLine(doc) {
   doc.moveDown(0.0);
-  doc.moveTo(60, doc.y) // start of the line
-    .lineTo(540, doc.y) // end of the line
+  doc.moveTo(60, doc.y)
+    .lineTo(540, doc.y)
     .stroke();
   doc.moveDown(0.4);
 }
@@ -70,7 +70,6 @@ const formPDF = (doc, resume) => {
       .fontSize(12)
       .text(
         `${dateToString(education.duration.startDate)}${education.duration.endDate ? `-${dateToString(education.duration.endDate)}` : ''} `,
-        { align: 'right' }
       );
     //doc.moveDown();
 
