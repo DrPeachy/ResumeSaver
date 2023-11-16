@@ -167,7 +167,7 @@ const Workspace = () => {
               borderColor: 'divider',
             }}
           >
-            <Tabs variant="fullWidth" value={tabValue} onChange={handleTabChange} aria-label="basic tabs example">
+            <Tabs variant="fullWidth" value={tabValue} indicatorColor='secondary' textColor='secondary' onChange={handleTabChange}>
               <Tab label="Editor" {...allyProps(0)} />
               <Tab label="Preview" {...allyProps(1)} />
             </Tabs>

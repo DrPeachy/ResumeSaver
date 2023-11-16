@@ -282,6 +282,7 @@ const ResumeEditor = ({ outputResumeId }) => {
                                   type="date"
                                   value={timeToDate(value.startDate)}
                                   variant="filled"
+                                  color='secondary'
                                   fullWidth
                                   lg={4}
                                   onChange={(event) => handleSlotChange(event, key, index)}
@@ -294,6 +295,7 @@ const ResumeEditor = ({ outputResumeId }) => {
                                   type="date"
                                   value={timeToDate(value.endDate)}
                                   variant="filled"
+                                  color='secondary'
                                   fullWidth
                                   lg={4}
                                   onChange={(event) => handleSlotChange(event, key, index)}
@@ -315,6 +317,7 @@ const ResumeEditor = ({ outputResumeId }) => {
                                   label={name}
                                   value={value}
                                   variant="filled"
+                                  color="secondary"
                                   size="small"
                                   fullWidth
                                   onChange={(event) => handleSlotChange(event, key, index)}
@@ -338,6 +341,7 @@ const ResumeEditor = ({ outputResumeId }) => {
                                 label={name}
                                 value={value}
                                 variant="filled"
+                                color="secondary"
                                 size="small"
                                 onChange={(event) => handleSlotChange(event, key, index)}
                                 onBlur={handleOnBlur}

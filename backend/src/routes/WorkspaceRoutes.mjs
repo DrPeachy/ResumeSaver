@@ -22,126 +22,149 @@ const dateToString = (date) => {
   });
 }
 
+function drawLine(doc) {
+  doc.moveDown(0.0);
+  doc.moveTo(60, doc.y) // start of the line
+    .lineTo(540, doc.y) // end of the line
+    .stroke();
+  doc.moveDown(0.4);
+}
+
 const formPDF = (doc, resume) => {
-  const header = resume.header[0] ?? { phone: '', email: '', link: '' };
+  const header = resume.header[0] ?? { name: '', phone: '', email: '', link: '' };
   const { educations, experiences, skills } = resume;
   doc.font('Times-Roman');
 
   // header
   doc.fontSize(20).text(header.name, { align: 'center' });
-  doc.moveDown();
-  doc.fontSize(15).text(`${header.phone} • ${header.email} • ${header.link}`, {
+  doc.fontSize(12).text(`${header.phone}${header.email ? ` • ${header.email}` : ''}${header.link ? ` • ${header.link}` : ''}`, {
     align: 'center'
   });
   doc.moveDown();
 
   // education
-  doc.fontSize(15).text('Education', {
-    align: 'left'
-  });
-  doc.moveDown();
+  if (educations.length > 0) {
+    doc
+      .font('Times-Bold')
+      .fontSize(15)
+      .text('Education',
+        { align: 'left' }
+      );
+  }
+  drawLine(doc);
+  //doc.moveDown();
   for (const education of educations) {
     doc
       .font('Times-Bold')
       .fontSize(12)
-      .text(`${education.institution}${education.location ? `, ${education.location}` : ''}`,
+      .text(education.institution ? education.institution : '',
+        { align: 'left', continued: true })
+      .font('Times-Roman')
+      .fontSize(12)
+      .text(education.location ? `, ${education.location}` : '',
         { align: 'left' });
-      // .font('Times-Roman')
-      // .fontSize(12)
-      // .text(education.location ? `, ${education.location}` : '',
-      //   { align: 'left' });
     doc.moveUp();
-    // doc
-    // .font('Times-Roman')
-    // .fontSize(12)
-    // .text(education.location ? `, ${education.location}` : '',
-    //   { align: 'left' });
 
     doc
       .font('Times-Roman')
       .fontSize(12)
       .text(
-        `${dateToString(education.duration.startDate)}${education.duration.endDate ? `-${dateToString(education.duration.endDate)}` : ''}`,
+        `${dateToString(education.duration.startDate)}${education.duration.endDate ? `-${dateToString(education.duration.endDate)}` : ''} `,
         { align: 'right' }
       );
-    doc.moveDown();
+    //doc.moveDown();
 
     doc
       .font('Times-Roman')
       .fontSize(12)
-      .text(`${education.degree} in ${education.major}${education.minor ? `, minor in ${education.minor}` : ''}`,
+      .text(`${education.degree} in ${education.major}${education.minor ? `, minor in ${education.minor}` : ''} `,
         { align: 'left' }
       );
-    doc.moveDown();
+    //doc.moveDown();
     doc
       .font('Times-Roman')
       .fontSize(12)
-      .text(`GPA: ${education.gpa}`, { align: 'left' });
+      .text(`GPA: ${education.gpa} `, { align: 'left' });
     doc.moveDown();
 
   }
 
   // experience
-  doc.fontSize(15).text('Experience', {
-    align: 'left'
-  });
-  doc.moveDown();
+  doc
+    .font('Times-Bold')
+    .fontSize(15)
+    .text('Experience',
+      { align: 'left' }
+    );
+  drawLine(doc);
+  //doc.moveDown();
   for (const experience of experiences) {
     doc
       .font('Times-Bold')
       .fontSize(12)
-      .text(`${experience.title}, ${experience.organization}, ${experience.location} `, { align: 'left' });
+      .text(`${experience.title}`,
+        { align: 'left', continued: true })
+      .font('Times-Roman')
+      .fontSize(12)
+      .text(`${experience.organization ? `, ${experience.organization}` : ''}`,
+        { align: 'left', continued: true })
+      .font('Times-Roman')
+      .fontSize(12)
+      .text(`${experience.location ? `, ${experience.location}` : ''}`,
+        { align: 'left' });
+
+
+
     doc.moveUp();
     doc
       .font('Times-Roman')
       .fontSize(12)
       .text(
-        `${dateToString(experience.duration.startDate)}${experience.duration.endDate ? `-${dateToString(experience.duration.endDate)}` : ''}`,
+        `${dateToString(experience.duration.startDate)}${experience.duration.endDate ? `-${dateToString(experience.duration.endDate)}` : ''} `,
         { align: 'right' }
       );
-    doc.moveDown();
+    //doc.moveDown();
     // split description by newline
     const description = experience.description.split('\n');
     for (const line of description) {
-      doc.fontSize(12).text(`• ${line}`, {
+      doc.fontSize(12).text(`• ${line} `, {
         align: 'left'
       });
-      doc.moveDown();
+      //doc.moveDown();
     }
-  }
-
-  // skills
-  doc.fontSize(15).text('Skills', {
-    align: 'left'
-  });
-  doc.moveDown();
-  for (const skill of skills) {
-    doc.fontSize(12).text(`${skill.name}: ${skill.list}`, {
-      align: 'left'
-    });
     doc.moveDown();
   }
 
-
-
-
+  // skills
+  doc
+    .font('Times-Bold')
+    .fontSize(15)
+    .text('Skills', {
+      align: 'left'
+    });
+  drawLine(doc);
+  //doc.moveDown();
+  for (const skill of skills) {
+    doc
+      .font('Times-Bold')
+      .fontSize(12)
+      .text(`${skill.name}: `,
+        { align: 'left', continued: true }
+      )
+      .font('Times-Roman')
+      .fontSize(12)
+      .text(`${skill.list}`,
+        { align: 'right' }
+      );
+    doc.moveDown();
+  }
 }
 
-// router.get('/workspace/get-recent', auth.checkAuthenticated, async (req, res) => {
-//   try {
-//     const user = await User.findOne({ username: res.locals.currentUser });
-//     const recentWorspaceId = user.recentWorspaceId;
-//     const recentWorkspace = await Workspace.findById(recentWorspaceId);
-//     res.status(200).json({ recentWorkspace: recentWorkspace });
-//   }
-//   catch (err) {
-//     res.status(500).json({ message: err.message });
-//   }
-// });
+
 
 router.get('/workspace', auth.checkAuthenticated, async (req, res) => {
   const id = req.query.id;
-  console.log(`id: ${id}`);
+  console.log(`id: ${id} `);
   const user = await User.findOne({ username: res.locals.currentUser });
   if (id != '') {
     user.recentWorkspaceId = id;
