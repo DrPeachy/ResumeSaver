@@ -195,6 +195,18 @@ router.get('/workspace', auth.checkAuthenticated, async (req, res) => {
   }
 });
 
+router.post('/workspace/format', auth.checkAuthenticated, async (req, res) => {
+  try{
+    const id = req.body.id;
+    const format = req.body.format;
+    const workspace = await Workspace.findById(id);
+    workspace.format = format;
+    await workspace.save();
+    res.status(200).json({ message: 'Format updated' });
+  } catch(err){
+    res.status(500).json({ message: err.message });
+  }
+});
 
 
 router.get('/workspace/get-latest-pdf', auth.checkAuthenticated, async (req, res) => {

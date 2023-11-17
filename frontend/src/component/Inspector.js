@@ -53,8 +53,19 @@ const valueLabelFormat = function (value) {
 }
 
 const Inspector = ({ format, workspaceId }) => {
-  const [font, setFont] = useState(format.font);
   const [formatData, setFormatData] = useState(format);
+  const baseUrl = (process.env.NODE_ENV === 'production') ? process.env.REACT_APP_PROD_URL : process.env.REACT_APP_DEV_URL;
+  useEffect(() => {
+    axios.post(`${baseUrl}/workspace/format`, { id: workspaceId, format: formatData })
+      .then(response => {
+        if (response.status === 200) {
+          console.log(response.data);
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }, [formatData]);
 
   const handleFormatChange = (event) => {
     const { name, value, type, checked } = event.target;
@@ -99,6 +110,7 @@ const Inspector = ({ format, workspaceId }) => {
       >
         General
       </Typography>
+      {/* Font */}
       <FormControl
         size='small'
         margin="none"
@@ -107,7 +119,6 @@ const Inspector = ({ format, workspaceId }) => {
           gap: 1,
         }}
       >
-        {/* <InputLabel>Font</InputLabel> */}
         <Grid container
           gap={0.5}
           justifyContent="space-between"
@@ -121,8 +132,7 @@ const Inspector = ({ format, workspaceId }) => {
           <Grid item lg={7.5}>
             <Select
               name="font"
-              value={format.font}
-              defaultValue={format.font}
+              value={formatData.font}
               fullWidth
               onChange={handleFormatChange}
             >
@@ -141,6 +151,7 @@ const Inspector = ({ format, workspaceId }) => {
 
 
       </FormControl>
+      {/* Margin */}
       <Grid container
         gap={0.5}
         justifyContent="space-between"
@@ -182,7 +193,7 @@ const Inspector = ({ format, workspaceId }) => {
           />
         </Grid>
       </Grid>
-
+      {/* Line Spacing */}
       <Grid container
         gap={0.5}
         justifyContent="space-between"
@@ -212,7 +223,7 @@ const Inspector = ({ format, workspaceId }) => {
         </Grid>
 
       </Grid>
-
+      {/* Has Divider */}
       <Grid container
         gap={0.5}
         justifyContent="space-between"
@@ -232,6 +243,249 @@ const Inspector = ({ format, workspaceId }) => {
         />
 
       </Grid>
+      {/* Heading Size */}
+      <Grid container
+        gap={0.5}
+        justifyContent="space-between"
+        alignItems="center"
+      >
+        <Grid item lg={2}>
+          <Typography variant="body1" align="left">
+            Heading Size:
+          </Typography>
+        </Grid>
+        <Grid item lg={6.5}>
+          <Slider
+            aria-label="HeadingFontSize"
+            getAriaValueText={''}
+            name="headingFontSize"
+            value={formatData.headingFontSize}
+            color="secondary"
+            onChange={handleFormatChange}
+            valueLabelDisplay="auto"
+            step={0.5}
+            marks
+            min={11}
+            max={14}
+          />
+        </Grid>
+        <Grid item lg={2}>
+          <Input
+            value={formatData.headingFontSize}
+            size="small"
+            name="headingFontSize"
+            onChange={handleFormatChange}
+            inputProps={{
+              step: 0.5,
+              min: 11,
+              max: 14,
+              type: 'number',
+              'aria-labelledby': 'input-slider',
+            }}
+          />
+        </Grid>
+      </Grid>
+      {/* Heading Alignment */}
+      <Grid container
+        gap={0.5}
+        justifyContent="space-between"
+        alignItems="center"
+      >
+        <Grid item lg={2}>
+          <Typography variant="body1" align="left">
+            Heading Alignment:
+          </Typography>
+        </Grid>
+        <ToggleButtonGroup
+          justifyContent='flex-end'
+          color="secondary"
+          value={formatData.headingAlignment}
+          exclusive
+          onChange={handleToggleChange('headingAlignment')}
+        >
+          <ToggleButton
+            value="left"
+            size="small"
+          >
+            <FormatAlignLeftIcon />
+          </ToggleButton>
+          <ToggleButton
+            value="center"
+            size="small"
+          >
+            <FormatAlignCenterIcon />
+          </ToggleButton>
+          <ToggleButton
+            value="right"
+            size="small"
+          >
+            <FormatAlignRightIcon />
+          </ToggleButton>
+        </ToggleButtonGroup>
+      </Grid>
+      {/* Subheading Size */}
+      <Grid container
+        gap={0.5}
+        justifyContent="space-between"
+        alignItems="center"
+      >
+        <Grid item lg={2}>
+          <Typography variant="body1" align="left">
+            Subheading Size:
+          </Typography>
+        </Grid>
+        <Grid item lg={6.5}>
+          <Slider
+            aria-label="subheadingFontSize"
+            getAriaValueText={''}
+            name="subheadingFontSize"
+            value={formatData.subheadingFontSize}
+            color="secondary"
+            onChange={handleFormatChange}
+            valueLabelDisplay="auto"
+            step={0.5}
+            marks
+            min={11}
+            max={14}
+          />
+        </Grid>
+        <Grid item lg={2}>
+          <Input
+            value={formatData.subheadingFontSize}
+            size="small"
+            name="subheadingFontSize"
+            onChange={handleFormatChange}
+            inputProps={{
+              step: 0.5,
+              min: 11,
+              max: 14,
+              type: 'number',
+              'aria-labelledby': 'input-slider',
+            }}
+          />
+        </Grid>
+      </Grid>
+      {/* Subheading Alignment */}
+      <Grid container
+        gap={0.5}
+        justifyContent="space-between"
+        alignItems="center"
+      >
+        <Grid item lg={2}>
+          <Typography variant="body1" align="left">
+            Subheading Alignment:
+          </Typography>
+        </Grid>
+        <ToggleButtonGroup
+          justifyContent='flex-end'
+          color="secondary"
+          value={formatData.subheadingAlignment}
+          exclusive
+          onChange={handleToggleChange('subheadingAlignment')}
+        >
+          <ToggleButton
+            value="left"
+            size="small"
+          >
+            <FormatAlignLeftIcon />
+          </ToggleButton>
+          <ToggleButton
+            value="center"
+            size="small"
+          >
+            <FormatAlignCenterIcon />
+          </ToggleButton>
+          <ToggleButton
+            value="right"
+            size="small"
+          >
+            <FormatAlignRightIcon />
+          </ToggleButton>
+        </ToggleButtonGroup>
+      </Grid>
+      {/* Body Size */}
+      <Grid container
+        gap={0.5}
+        justifyContent="space-between"
+        alignItems="center"
+      >
+        <Grid item lg={2}>
+          <Typography variant="body1" align="left">
+            Body Size:
+          </Typography>
+        </Grid>
+        <Grid item lg={6.5}>
+          <Slider
+            aria-label="bodyFontSize"
+            getAriaValueText={''}
+            name="bodyFontSize"
+            value={formatData.bodyFontSize}
+            color="secondary"
+            onChange={handleFormatChange}
+            valueLabelDisplay="auto"
+            step={0.5}
+            marks
+            min={10}
+            max={12}
+          />
+        </Grid>
+        <Grid item lg={2}>
+          <Input
+            value={formatData.bodyFontSize}
+            size="small"
+            name="bodyFontSize"
+            onChange={handleFormatChange}
+            inputProps={{
+              step: 0.5,
+              min: 10,
+              max: 12,
+              type: 'number',
+              'aria-labelledby': 'input-slider',
+            }}
+          />
+        </Grid>
+      </Grid>
+      {/* Body Alignment */}
+      <Grid container
+        gap={0.5}
+        justifyContent="space-between"
+        alignItems="center"
+      >
+        <Grid item lg={4}>
+          <Typography variant="body1" align="left">
+            Body Alignment:
+          </Typography>
+        </Grid>
+        <ToggleButtonGroup
+          justifyContent='flex-end'
+          color="secondary"
+          value={formatData.bodyAlignment}
+          exclusive
+          onChange={handleToggleChange('bodyAlignment')}
+        >
+          <ToggleButton
+            value="left"
+            size="small"
+          >
+            <FormatAlignLeftIcon />
+          </ToggleButton>
+          <ToggleButton
+            value="center"
+            size="small"
+          >
+            <FormatAlignCenterIcon />
+          </ToggleButton>
+          <ToggleButton
+            value="right"
+            size="small"
+          >
+            <FormatAlignRightIcon />
+          </ToggleButton>
+        </ToggleButtonGroup>
+      </Grid>
+
+
+
 
       <Divider />
       <Typography variant="h6" align="left"
@@ -241,6 +495,7 @@ const Inspector = ({ format, workspaceId }) => {
       >
         Header
       </Typography>
+      {/* Name Size */}
       <Grid container
         gap={0.5}
         justifyContent="space-between"
@@ -282,7 +537,7 @@ const Inspector = ({ format, workspaceId }) => {
           />
         </Grid>
       </Grid>
-
+      {/* Name Alignment */}
       <Grid container
         gap={0.5}
         justifyContent="space-between"
@@ -320,6 +575,120 @@ const Inspector = ({ format, workspaceId }) => {
           </ToggleButton>
         </ToggleButtonGroup>
       </Grid>
+      {/* Info Size */}
+      <Grid container
+        gap={0.5}
+        justifyContent="space-between"
+        alignItems="center"
+      >
+        <Grid item lg={3}>
+          <Typography variant="body1" align="left">
+            Info Size:
+          </Typography>
+        </Grid>
+        <Grid item lg={6.5}>
+          <Slider
+            aria-label="InfoFontSize"
+            getAriaValueText={''}
+            name="infoFontSize"
+            value={formatData.infoFontSize}
+            color="secondary"
+            onChange={handleFormatChange}
+            valueLabelDisplay="auto"
+            step={0.5}
+            marks
+            min={10}
+            max={12}
+          />
+        </Grid>
+        <Grid item lg={2}>
+          <Input
+            value={formatData.infoFontSize}
+            size="small"
+            name="infoFontSize"
+            onChange={handleFormatChange}
+            inputProps={{
+              step: 0.5,
+              min: 10,
+              max: 12,
+              type: 'number',
+              'aria-labelledby': 'input-slider',
+            }}
+          />
+        </Grid>
+      </Grid>
+      {/* Info Alignment */}
+      <Grid container
+        gap={0.5}
+        justifyContent="space-between"
+        alignItems="center"
+      >
+        <Grid item lg={3}>
+          <Typography variant="body1" align="left">
+            Info Alignment:
+          </Typography>
+        </Grid>
+        <ToggleButtonGroup
+          justifyContent='flex-end'
+          color="secondary"
+          value={formatData.infoAlignment}
+          exclusive
+          onChange={handleToggleChange('infoAlignment')}
+        >
+          <ToggleButton
+            value="left"
+            size="small"
+          >
+            <FormatAlignLeftIcon />
+          </ToggleButton>
+          <ToggleButton
+            value="center"
+            size="small"
+          >
+            <FormatAlignCenterIcon />
+          </ToggleButton>
+          <ToggleButton
+            value="right"
+            size="small"
+          >
+            <FormatAlignRightIcon />
+          </ToggleButton>
+        </ToggleButtonGroup>
+      </Grid>
+      {/* Info Divider */}
+      <FormControl
+        size='small'
+        margin="none"
+        color="secondary"
+        sx={{
+          gap: 1,
+        }}
+      >
+        <Grid container
+          gap={0.5}
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <Grid item lg={2}>
+            <Typography variant="body1" align="left">
+              Info Divider:
+            </Typography>
+          </Grid>
+          <Grid item lg={3}>
+            <Select
+              name="infoDivider"
+              value={formatData.infoDivider}
+              fullWidth
+              onChange={handleFormatChange}
+            >
+              <MenuItem value={' • '}>•</MenuItem>
+              <MenuItem value={' | '}>|</MenuItem>
+            </Select>
+          </Grid>
+        </Grid>
+
+
+      </FormControl>
     </Grid>
   );
 };

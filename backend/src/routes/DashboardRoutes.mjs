@@ -23,13 +23,14 @@ const defaultFormat = {
   nameAlignment: 'center',
   infoFontSize: 12,
   infoAlignment: 'center',
+  infoDivider: ' • ',
   // education
   institutionFontStyle: 'Bold',
-  educationBulletPoint: '•',
+  educationBulletPoint: ' • ',
   // experience
   titleFontStyle: 'Italic',
   organizationFontStyle: 'Bold',
-  bulletPoint: ' • ',
+  experienceBulletPoint: ' • ',
   // skill
   skillTitleStyle: 'Bold'
 };

@@ -3,28 +3,32 @@ import mongoose from "mongoose";
 import { Resume } from "./Resume.mjs";
 
 const formatSchema = new mongoose.Schema({
+    // general
     font: { type: String, required: false },
     margin: { type: Number, required: false },
     lineSpacing: { type: Number, required: false },
     hasDivider: { type: Boolean, required: false },
+    headingFontSize: { type: Number, required: false },
+    headingAlignment: { type: String, required: false },
+    subheadingFontSize: { type: Number, required: false },
+    subheadingAlignment: { type: String, required: false },
+    bodyFontSize: { type: Number, required: false },
+    bodyAlignment: { type: String, required: false },
+    // header
     nameFontSize: { type: Number, required: false },
     nameAlignment: { type: String, required: false },
     infoFontSize: { type: Number, required: false },
     infoAlignment: { type: String, required: false },
-
-    sectionHeaderFontSize: { type: Number, required: false },
-    sectionHeaderAlignment: { type: String, required: false },
-    sectionContentFontSize: { type: Number, required: false },
-    sectionContentAlignment: { type: String, required: false },
-
+    infoDivider: { type: String, required: false },
+    // education
     institutionFontStyle: { type: String, required: false },
     educationBulletPoint: { type: String, required: false },
-
+    // experience
     titleFontStyle: { type: String, required: false },
     organizationFontStyle: { type: String, required: false },
-    bulletPoint: { type: String, required: false },
-
-    skillTitleStyle: { type: String, required: false },
+    experienceBulletPoint: { type: String, required: false },
+    // skill
+    skillTitleStyle: { type: String, required: false }
 });
 
 const workspaceSchema = new mongoose.Schema({
