@@ -14,6 +14,7 @@ import Tabs from '@mui/material/Tabs';
 import Box from '@mui/material/Box';
 import PDFViewer from './PDFViewer';
 import ResumeEditor from './ResumeEditor';
+import Inspector from './Inspector';
 
 
 const EleItem = styled(Paper)(({ theme }) => ({
@@ -213,10 +214,14 @@ const Workspace = () => {
         <EleItem
           elevation={3}
           sx={{
-            height: '100%',
+            minHeight: '100%',
           }}
         >
-          <Typography variant="h5">//Todo: Inspector</Typography>
+          {!loading ? (
+            <Inspector format={workspaceData.format} workspaceId={_id} />
+          ) : (
+            <CircularProgress />
+          )}
         </EleItem>
       </Grid>
     </Grid>

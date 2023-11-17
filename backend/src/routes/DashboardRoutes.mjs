@@ -6,6 +6,34 @@ const Workspace = mongoose.model("Workspace");
 const Resume = mongoose.model("Resume");
 const router = express.Router();
 
+const defaultFormat = {
+  // general
+  font: 'Times-Roman',
+  margin: 1,
+  lineSpacing: 1.15,
+  hasDivider: true,
+  headingFontSize: 14,
+  headingAlignment: 'left',
+  subheadingFontSize: 12,
+  subheadingAlignment: 'left',
+  bodyFontSize: 10,
+  bodyAlignment: 'left',
+  // header
+  nameFontSize: 16,
+  nameAlignment: 'center',
+  infoFontSize: 12,
+  infoAlignment: 'center',
+  // education
+  institutionFontStyle: 'Bold',
+  educationBulletPoint: '•',
+  // experience
+  titleFontStyle: 'Italic',
+  organizationFontStyle: 'Bold',
+  bulletPoint: ' • ',
+  // skill
+  skillTitleStyle: 'Bold'
+};
+
 
 router.get("/dashboard", auth.checkAuthenticated, async (req, res) => {
   const user = await User.findOne({ username: res.locals.currentUser });
@@ -39,10 +67,12 @@ router.post("/dashboard/create", auth.checkAuthenticated, async (req, res) => {
   const description = req.body.description;
   const user = await User.findOne({ username: res.locals.currentUser });
   const resume = new Resume({});
+
   const workspace = new Workspace({
     name: name,
     description: description,
     dateOfCreation: Date.now(),
+    format: defaultFormat,
     outputResume: resume._id
   });
   await workspace.save();

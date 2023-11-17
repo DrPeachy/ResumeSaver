@@ -10,12 +10,30 @@ const router = express.Router();
 import * as auth from '../utils/auth.mjs';
 
 import mongoose from 'mongoose';
-import exp from 'constants';
 const User = mongoose.model('User');
 const Workspace = mongoose.model('Workspace');
 const Resume = mongoose.model('Resume');
 
+const fonts = [
+  'Times-Roman',
+  'OpenSans',
+  'LibreBaskerville',
+  'Roboto',
+  'Lora',
+  'Tinos',
+  'EBGaramond',
+  'Carlito',
+  'Arimo'
+];
+
+const fontWeights = [
+  'Regular',
+  'Bold',
+  'Italic',
+];
+
 const dateToString = (date) => {
+  if (!date) return '';
   return date.toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'short'
@@ -192,6 +210,7 @@ router.get('/workspace/get-latest-pdf', auth.checkAuthenticated, async (req, res
     // config filename
     const filename = `${userId}_${workspaceId}_${resumeId}.pdf`;
     const filepath = path.join(__dirname, '..', 'public', 'pdfs', filename);
+    // const fontpath = path.join(__dirname, '..', 'public', 'fonts', );
 
     // form pdf
     const doc = new PDFDocument({ size: 'A4' });
