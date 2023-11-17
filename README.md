@@ -10,8 +10,8 @@ Resume Maker is a web app that allows users to keep track of and manipulate thei
 The application will have schemas: **Resume, User, Workspace, Experience, Duration, Education, SkillSlot**
 
 * users can have multiple workspaces
-* Each workspace can have at most three resumes uploaded
-* each resume can have multiple experiences
+* Each workspace have a format, a resume, etc
+* each resume can have multiple experiences, education, one header, and multiple skillslots
 * for more details, see the example class below
 
 **User:**
@@ -156,12 +156,13 @@ The application will have schemas: **Resume, User, Workspace, Experience, Durati
 
 ## User Stories or Use Cases
 
-
 1. as non-registered user, I can register a new account with the site
 2. as a user, I can log in to the site
 3. as a user, I can create a new workspace
-4. as a user, I can either 1. upload existed resume into workspace for content extraction, or 2. directly add content to workspace
-5. as a user, I can export resume in desired format and style after finishing
+4. as a user, I can either 1. upload existed resume into workspace for content extraction, or 2. directly add content to resume editor
+5. as a user, I can preview the resume pdf in the preview tab in almost realtime
+6. as a user, I can edit resume format in the Inspector panel
+7. as a user, I can export resume in desired format and style after finishing
 
 ## Research Topics
 
@@ -175,12 +176,18 @@ The application will have schemas: **Resume, User, Workspace, Experience, Durati
   * 2 points as indicated in the handout
   * it will include the front-end form validation
 * (3 points) dotenv
-  * for Configuration Management
+  * for Configuration Management including: 
+    1. URL config(host+port) for both ends in either production or development,
+    2. Database URL in either production or development,
+    3. Authentication Secret 
   * so that the DB URL won't be exposed
 * (1 points) React-Router-DOM
-  * for frontend routing
+  * for frontend SPA routing, state passing, and etc
   * in order to cooperate with the react component
   * 1 point as it is easy to learn
+* (1 point) axios (new added)
+  * for frontend AJAX handling
+  * easy to use, 1 point 
 * (5 points) NLP.js
   * for natural language processing
   * external lib that is used to recognize content and fit them into schema class(since I am not good at AI or ML stuff, this might be challenging for me)
@@ -189,10 +196,14 @@ The application will have schemas: **Resume, User, Workspace, Experience, Durati
   * library for pdf content extraction
   * external lib that is used to extract the content of PDF, which should not be very hard to use
   * so 3 points assigned
+* (3 points) PDFkit (new added)
+  * library for pdf forming
+  * external lib that is used to form a pdf file from the backend with info resume data, which should not be very hard to use
+  * so 3 points assigned
 
 
 
-20 points total out of 10 required points (addtional points will __not__ count for extra credit)
+24 points total out of 10 required points (addtional points will __not__ count for extra credit)
 
 
 ## [Link to Initial Main Project File](./backend/src/app.mjs) 
@@ -206,5 +217,6 @@ The application will have schemas: **Resume, User, Workspace, Experience, Durati
 3. [PDF.js](https://stackoverflow.com/questions/1554280/how-to-extract-text-from-a-pdf-in-javascript)
 4. [React Wiki](https://react.dev/learn)
 5. [NLP.js](https://github.com/axa-group/nlp.js/blob/master/docs/v3/README.md)
+6. [PDFkit](https://pdfkit.org/docs/getting_started.html)
 
 
