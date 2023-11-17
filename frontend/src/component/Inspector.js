@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect, useState, memo } from "react";
-import { Divider, Menu, Slide, Switch } from "@mui/material";
+import { Button, Divider, Menu, Slide, Switch } from "@mui/material";
 import { Grid } from "@mui/material";
 import { TextField } from "@mui/material";
 import { Typography } from "@mui/material";
@@ -55,7 +55,7 @@ const valueLabelFormat = function (value) {
 const Inspector = memo(({ format, workspaceId, updateWorkspaceCallback }) => {
   const [formatData, setFormatData] = useState(format);
   const baseUrl = (process.env.NODE_ENV === 'production') ? process.env.REACT_APP_PROD_URL : process.env.REACT_APP_DEV_URL;
-  
+
   useEffect(() => {
     setFormatData(format);
   }, [format]);
@@ -67,7 +67,7 @@ const Inspector = memo(({ format, workspaceId, updateWorkspaceCallback }) => {
       .then(response => {
         if (response.status === 200) {
           console.log(response.data);
-          updateWorkspaceCallback();
+          // updateWorkspaceCallback();
         }
       })
       .catch(error => {
@@ -98,14 +98,34 @@ const Inspector = memo(({ format, workspaceId, updateWorkspaceCallback }) => {
       flexDirection='column'
       gap={1}
     >
-      <Grid item xs={12}>
+      <Grid item
+        display='flex'
+        flexDirection='row'
+        justifyContent='space-around'
+        alignItems='flex-end'
+        xs={12}
+      >
         <Typography variant="h6" align="center"
           sx={{
-            pt: 1
+            p: 0,
+            m: 0,
           }}
         >
-          Inspector
+          INSPECTOR
         </Typography>
+        <Button
+          onClick={updateWorkspaceCallback}
+          sx={{
+            p: 0,
+            m: 0,
+          }}
+        >
+          <Typography variant="h6" align="center"
+            color="secondary"
+          >
+            Apply
+          </Typography>
+        </Button>
 
       </Grid>
       <Divider />
