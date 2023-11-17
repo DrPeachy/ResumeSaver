@@ -68,7 +68,8 @@ const Workspace = () => {
   const [loading, setLoading] = useState(true);
   const baseUrl = (process.env.NODE_ENV === 'production') ? process.env.REACT_APP_PROD_URL : process.env.REACT_APP_DEV_URL;
   const [pdfSrc, setPdfSrc] = useState(null);
-  useEffect(() => {
+
+  const fetchLatestWorkspaceData = () => {
     setLoading(true);
     // fetch workspace data from backend
     axios.get(`${baseUrl}/workspace?id=${_id ?? ''}`)
@@ -78,7 +79,11 @@ const Workspace = () => {
           setWorkspaceData(response.data.workspace);
           console.log(response.data);
           console.log(response.data.workspace.outputResume);
-          setLoading(false);
+          // fetch latest pdf
+          fetchLatestPdf();
+          setTimeout(() => {
+            setLoading(false);
+          }, 1000);
         }
       })
       .catch(error => {
@@ -86,12 +91,31 @@ const Workspace = () => {
           navigate('/login', { state: { isWarning: "unauthorized" } });
         }
       });
-  }, []);
-
-  const [tabValue, setTabValue] = React.useState(0);
+  };
 
   useEffect(() => {
-    if (tabValue == 1) {
+    fetchLatestWorkspaceData();
+  }, []);
+
+  const [tabValue, setTabValue] = useState(0);
+
+  const fetchLatestPdf = () => {
+    setLoading(true);
+    axios.get(`${baseUrl}/workspace/get-latest-pdf?id=${workspaceData._id ?? ''}`)
+      .then(response => {
+        if (response.status === 200) {
+          console.log(response.data);
+          setPdfSrc(response.data.url);
+          setLoading(false);
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    if (tabValue === 1) {
       setLoading(true);
       axios.get(`${baseUrl}/workspace/get-latest-pdf?id=${workspaceData._id ?? ''}`)
         .then(response => {
@@ -105,6 +129,7 @@ const Workspace = () => {
           console.log(error);
         });
     }
+
   }, [tabValue]);
 
   const handleTabChange = (event, newValue) => {
@@ -218,7 +243,7 @@ const Workspace = () => {
           }}
         >
           {!loading ? (
-            <Inspector format={workspaceData.format} workspaceId={_id} />
+            <Inspector format={workspaceData.format} workspaceId={_id} updateWorkspaceCallback={fetchLatestWorkspaceData} />
           ) : (
             <CircularProgress />
           )}

@@ -10,6 +10,8 @@ const router = express.Router();
 import * as auth from '../utils/auth.mjs';
 
 import mongoose from 'mongoose';
+import { formatSchema } from '../models/Workspace.mjs';
+import { get } from 'http';
 const User = mongoose.model('User');
 const Workspace = mongoose.model('Workspace');
 const Resume = mongoose.model('Resume');
@@ -48,94 +50,104 @@ function drawLine(doc) {
   doc.moveDown(0.4);
 }
 
-const formPDF = (doc, resume) => {
+function getFontPath(cfg, key) {
+  return cfg[key.toLowerCase()];
+}
+
+const formPDF = (doc, resume, fontCfg, format) => {
   const header = resume.header[0] ?? { name: '', phone: '', email: '', link: '' };
   const { educations, experiences, skills } = resume;
-  doc.font('Times-Roman');
+  doc.font(fontCfg.regular);
 
-  // header
-  doc.fontSize(20).text(header.name, { align: 'center' });
-  doc.fontSize(12).text(`${header.phone}${header.email ? ` • ${header.email}` : ''}${header.link ? ` • ${header.link}` : ''}`, {
-    align: 'center'
-  });
+  /// header
+  // name
+  doc.fontSize(format.nameFontSize).text(header.name,
+    { align: format.nameAlignment }
+  );
+  // info
+  doc.fontSize(format.infoFontSize).text(`${header.phone}${header.email ? ` • ${header.email}` : ''}${header.link ? ` • ${header.link}` : ''}`,
+    { align: format.infoAlignment }
+  );
   doc.moveDown();
 
   // education
   if (educations.length > 0) {
     doc
-      .font('Times-Bold')
-      .fontSize(15)
+      .font(fontCfg.bold)
+      .fontSize(format.headingFontSize)
       .text('Education',
-        { align: 'left' }
+        { align: format.headingAlignment }
       );
   }
   drawLine(doc);
   //doc.moveDown();
   for (const education of educations) {
     doc
-      .font('Times-Bold')
-      .fontSize(12)
+      .font(getFontPath(fontCfg, format.institutionFontStyle))
+      .fontSize(format.subheadingFontSize)
       .text(education.institution ? education.institution : '',
-        { align: 'left', continued: true })
-      .font('Times-Roman')
-      .fontSize(12)
+        { align: format.subheadingAlignment, continued: true })
+      .font(fontCfg.regular)
+      .fontSize(format.subheadingFontSize)
       .text(education.location ? `, ${education.location}` : '',
-        { align: 'left' });
+        { align: format.subheadingAlignment });
     doc.moveUp();
 
     doc
-      .font('Times-Roman')
-      .fontSize(12)
+      .font(fontCfg.regular)
+      .fontSize(format.bodyFontSize)
       .text(
         `${dateToString(education.duration.startDate)}${education.duration.endDate ? `-${dateToString(education.duration.endDate)}` : ''} `,
+        { align: 'right' }
       );
     //doc.moveDown();
 
     doc
-      .font('Times-Roman')
-      .fontSize(12)
-      .text(`${education.degree} in ${education.major}${education.minor ? `, minor in ${education.minor}` : ''} `,
-        { align: 'left' }
+      .font(fontCfg.regular)
+      .fontSize(format.bodyFontSize)
+      .text(`${format.educationBulletPoint}${education.degree} in ${education.major}${education.minor ? `, minor in ${education.minor}` : ''} `,
+        { align: format.bodyAlignment }
       );
     //doc.moveDown();
     doc
-      .font('Times-Roman')
-      .fontSize(12)
-      .text(`GPA: ${education.gpa} `, { align: 'left' });
+      .font(fontCfg.regular)
+      .fontSize(format.bodyFontSize)
+      .text(`${format.educationBulletPoint}GPA: ${education.gpa} `,
+        { align: format.bodyAlignment }
+      );
     doc.moveDown();
 
   }
 
   // experience
   doc
-    .font('Times-Bold')
-    .fontSize(15)
+    .font(fontCfg.bold)
+    .fontSize(format.headingFontSize)
     .text('Experience',
-      { align: 'left' }
+      { align: format.headingAlignment }
     );
   drawLine(doc);
   //doc.moveDown();
   for (const experience of experiences) {
     doc
-      .font('Times-Bold')
-      .fontSize(12)
+      .font(getFontPath(fontCfg, format.titleFontStyle))
+      .fontSize(format.subheadingFontSize)
       .text(`${experience.title}`,
-        { align: 'left', continued: true })
-      .font('Times-Roman')
-      .fontSize(12)
+        { align: format.subheadingAlignment, continued: true })
+      .font(getFontPath(fontCfg, format.organizationFontStyle))
+      .fontSize(format.subheadingFontSize)
       .text(`${experience.organization ? `, ${experience.organization}` : ''}`,
-        { align: 'left', continued: true })
-      .font('Times-Roman')
-      .fontSize(12)
+        { align: format.subheadingAlignment, continued: true })
+      .font(fontCfg.regular)
+      .fontSize(format.subheadingFontSize)
       .text(`${experience.location ? `, ${experience.location}` : ''}`,
-        { align: 'left' });
+        { align: format.subheadingAlignment });
 
-
-
+    // date
     doc.moveUp();
     doc
-      .font('Times-Roman')
-      .fontSize(12)
+      .font(fontCfg.regular)
+      .fontSize(format.bodyFontSize)
       .text(
         `${dateToString(experience.duration.startDate)}${experience.duration.endDate ? `-${dateToString(experience.duration.endDate)}` : ''} `,
         { align: 'right' }
@@ -144,7 +156,7 @@ const formPDF = (doc, resume) => {
     // split description by newline
     const description = experience.description.split('\n');
     for (const line of description) {
-      doc.fontSize(12).text(`• ${line} `, {
+      doc.fontSize(format.bodyFontSize).text(`${format.experienceBulletPoint}${line} `, {
         align: 'left'
       });
       //doc.moveDown();
@@ -154,22 +166,22 @@ const formPDF = (doc, resume) => {
 
   // skills
   doc
-    .font('Times-Bold')
-    .fontSize(15)
-    .text('Skills', {
-      align: 'left'
-    });
+    .font(fontCfg.bold)
+    .fontSize(format.headingFontSize)
+    .text('Skills',
+      { align: format.headingAlignment }
+    );
   drawLine(doc);
   //doc.moveDown();
   for (const skill of skills) {
     doc
-      .font('Times-Bold')
-      .fontSize(12)
+      .font(getFontPath(fontCfg, format.skillTitleStyle))
+      .fontSize(format.bodyFontSize)
       .text(`${skill.name}: `,
         { align: 'left', continued: true }
       )
-      .font('Times-Roman')
-      .fontSize(12)
+      .font(fontCfg.regular)
+      .fontSize(format.bodyFontSize)
       .text(`${skill.list}`,
         { align: 'right' }
       );
@@ -196,14 +208,14 @@ router.get('/workspace', auth.checkAuthenticated, async (req, res) => {
 });
 
 router.post('/workspace/format', auth.checkAuthenticated, async (req, res) => {
-  try{
+  try {
     const id = req.body.id;
     const format = req.body.format;
     const workspace = await Workspace.findById(id);
     workspace.format = format;
     await workspace.save();
     res.status(200).json({ message: 'Format updated' });
-  } catch(err){
+  } catch (err) {
     res.status(500).json({ message: err.message });
   }
 });
@@ -217,17 +229,31 @@ router.get('/workspace/get-latest-pdf', auth.checkAuthenticated, async (req, res
     // get resume
     const resumeId = workspace.outputResume;
     const resume = await Resume.findById(resumeId);
+    // get format
+    const format = workspace.format;
     //get user id
     const userId = res.locals.currentUser;
     // config filename
     const filename = `${userId}_${workspaceId}_${resumeId}.pdf`;
     const filepath = path.join(__dirname, '..', 'public', 'pdfs', filename);
-    // const fontpath = path.join(__dirname, '..', 'public', 'fonts', );
+    const fontCfg = {};
+    // config font
+    if (format.font == 'Times-Roman') {
+      fontCfg.regular = 'Times-Roman';
+      fontCfg.bold = 'Times-Bold';
+      fontCfg.italic = 'Times-Italic';
+    } else {
+      const fontPath = path.join(__dirname, '..', 'public', 'fonts');
+      fontCfg.regular = path.join(fontPath, `${format.font}-Regular.ttf`);
+      fontCfg.bold = path.join(fontPath, `${format.font}-Bold.ttf`);
+      fontCfg.italic = path.join(fontPath, `${format.font}-Italic.ttf`);
+    }
+
 
     // form pdf
-    const doc = new PDFDocument({ size: 'A4' });
+    const doc = new PDFDocument({ size: 'A4', margin: format.margin * 72 });
     doc.pipe(fs.createWriteStream(filepath));
-    formPDF(doc, resume);
+    formPDF(doc, resume, fontCfg, format);
     doc.end();
 
     // return url

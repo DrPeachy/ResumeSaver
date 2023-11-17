@@ -52,27 +52,33 @@ const valueLabelFormat = function (value) {
   return mark ? mark.label : '';
 }
 
-const Inspector = ({ format, workspaceId }) => {
+const Inspector = ({ format, workspaceId, updateWorkspaceCallback }) => {
   const [formatData, setFormatData] = useState(format);
   const baseUrl = (process.env.NODE_ENV === 'production') ? process.env.REACT_APP_PROD_URL : process.env.REACT_APP_DEV_URL;
+  
   useEffect(() => {
-    axios.post(`${baseUrl}/workspace/format`, { id: workspaceId, format: formatData })
+    setFormatData(format);
+  }, [format]);
+
+  // Update format data and send to server
+  const handleFormatUpdate = (newFormatData) => {
+    setFormatData(newFormatData);
+    axios.post(`${baseUrl}/workspace/format`, { id: workspaceId, format: newFormatData })
       .then(response => {
         if (response.status === 200) {
           console.log(response.data);
+          updateWorkspaceCallback();
         }
       })
       .catch(error => {
         console.log(error);
       });
-  }, [formatData]);
+  };
 
   const handleFormatChange = (event) => {
     const { name, value, type, checked } = event.target;
-
     const newValue = type === 'checkbox' ? checked : value;
-
-    setFormatData({
+    handleFormatUpdate({
       ...formatData,
       [name]: newValue
     });
@@ -80,7 +86,7 @@ const Inspector = ({ format, workspaceId }) => {
 
   const handleToggleChange = (name) => (event, newValue) => {
     if (newValue !== null) {
-      setFormatData({
+      handleFormatUpdate({
         ...formatData,
         [name]: newValue
       });
