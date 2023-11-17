@@ -1,5 +1,5 @@
 import React from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo } from "react";
 import { Divider, Menu, Slide, Switch } from "@mui/material";
 import { Grid } from "@mui/material";
 import { TextField } from "@mui/material";
@@ -52,7 +52,7 @@ const valueLabelFormat = function (value) {
   return mark ? mark.label : '';
 }
 
-const Inspector = ({ format, workspaceId, updateWorkspaceCallback }) => {
+const Inspector = memo(({ format, workspaceId, updateWorkspaceCallback }) => {
   const [formatData, setFormatData] = useState(format);
   const baseUrl = (process.env.NODE_ENV === 'production') ? process.env.REACT_APP_PROD_URL : process.env.REACT_APP_DEV_URL;
   
@@ -697,6 +697,6 @@ const Inspector = ({ format, workspaceId, updateWorkspaceCallback }) => {
       </FormControl>
     </Grid>
   );
-};
+});
 
 export default Inspector;
