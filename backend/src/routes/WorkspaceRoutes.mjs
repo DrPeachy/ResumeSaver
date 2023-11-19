@@ -59,16 +59,25 @@ function getFontPath(cfg, key) {
 const formPDF = (doc, resume, fontCfg, format) => {
   const header = resume.header[0] ?? { name: '', phone: '', email: '', link: '' };
   const { educations, experiences, skills } = resume;
+  const getLineGap = (fontSize) => {
+    return (fontSize * format.lineSpacing) - fontSize;
+  };
+
   doc.font(fontCfg.regular);
 
   /// header
   // name
-  doc.fontSize(format.nameFontSize).text(header.name,
-    { align: format.nameAlignment }
-  );
+  doc
+    .fontSize(format.nameFontSize)
+    .lineGap(getLineGap(format.nameFontSize))
+    .text(header.name,
+      { align: format.nameAlignment }
+    );
   // info
   doc
-    .fontSize(format.infoFontSize).text(
+    .fontSize(format.infoFontSize)
+    .lineGap(getLineGap(format.infoFontSize))
+    .text(
       `${header.phone}${header.email ? `${format.infoDivider}${header.email}` : ''}${header.link ? `${format.infoDivider}${header.link}` : ''}`,
       { align: format.infoAlignment }
     )
@@ -80,6 +89,7 @@ const formPDF = (doc, resume, fontCfg, format) => {
     doc
       .font(fontCfg.bold)
       .fontSize(format.headingFontSize)
+      .lineGap(0)
       .text('Education',
         { align: format.headingAlignment }
       );
@@ -89,6 +99,7 @@ const formPDF = (doc, resume, fontCfg, format) => {
     doc
       .font(getFontPath(fontCfg, format.institutionFontStyle))
       .fontSize(format.subheadingFontSize)
+      .lineGap(getLineGap(format.subheadingFontSize))
       .text(
         education.institution ? education.institution : '',
         { align: format.subheadingAlignment, continued: true })
@@ -102,6 +113,7 @@ const formPDF = (doc, resume, fontCfg, format) => {
     doc
       .font(fontCfg.regular)
       .fontSize(format.bodyFontSize)
+      .lineGap(getLineGap(format.bodyFontSize))
       .text(
         `${dateToString(education.duration.startDate)}${education.duration.endDate ? `-${dateToString(education.duration.endDate)}` : ''} `,
         { align: 'right' }
@@ -111,6 +123,7 @@ const formPDF = (doc, resume, fontCfg, format) => {
     doc
       .font(fontCfg.regular)
       .fontSize(format.bodyFontSize)
+      .lineGap(getLineGap(format.bodyFontSize))
       .text(
         `${format.educationBulletPoint}${education.degree} in ${education.major}${education.minor ? `, minor in ${education.minor}` : ''} `,
         { align: format.bodyAlignment }
@@ -119,6 +132,7 @@ const formPDF = (doc, resume, fontCfg, format) => {
     doc
       .font(fontCfg.regular)
       .fontSize(format.bodyFontSize)
+      .lineGap(getLineGap(format.bodyFontSize))
       .text(
         `${format.educationBulletPoint}GPA: ${education.gpa} `,
         { align: format.bodyAlignment }
@@ -131,6 +145,7 @@ const formPDF = (doc, resume, fontCfg, format) => {
   doc
     .font(fontCfg.bold)
     .fontSize(format.headingFontSize)
+    .lineGap(0)
     .text('Experience',
       { align: format.headingAlignment }
     );
@@ -139,14 +154,17 @@ const formPDF = (doc, resume, fontCfg, format) => {
     doc
       .font(getFontPath(fontCfg, format.titleFontStyle))
       .fontSize(format.subheadingFontSize)
+      .lineGap(getLineGap(format.subheadingFontSize))
       .text(`${experience.title}`,
         { align: format.subheadingAlignment, continued: true })
       .font(getFontPath(fontCfg, format.organizationFontStyle))
       .fontSize(format.subheadingFontSize)
+      .lineGap(getLineGap(format.subheadingFontSize))
       .text(`${experience.organization ? `, ${experience.organization}` : ''}`,
         { align: format.subheadingAlignment, continued: true })
       .font(fontCfg.regular)
       .fontSize(format.subheadingFontSize)
+      .lineGap(getLineGap(format.subheadingFontSize))
       .text(`${experience.location ? `, ${experience.location}` : ''}`,
         { align: format.subheadingAlignment });
 
@@ -155,6 +173,7 @@ const formPDF = (doc, resume, fontCfg, format) => {
     doc
       .font(fontCfg.regular)
       .fontSize(format.bodyFontSize)
+      .lineGap(getLineGap(format.bodyFontSize))
       .text(
         `${dateToString(experience.duration.startDate)}${experience.duration.endDate ? `-${dateToString(experience.duration.endDate)}` : ''} `,
         { align: 'right' }
@@ -162,9 +181,12 @@ const formPDF = (doc, resume, fontCfg, format) => {
     // split description by newline
     const description = experience.description.split('\n');
     for (const line of description) {
-      doc.fontSize(format.bodyFontSize).text(`${format.experienceBulletPoint}${line} `, {
-        align: 'left'
-      });
+      doc
+      .fontSize(format.bodyFontSize)
+      .lineGap(getLineGap(format.bodyFontSize))  
+      .text(`${format.experienceBulletPoint}${line} `, {
+          align: 'left'
+        });
     }
     doc.moveDown();
   }
@@ -173,6 +195,7 @@ const formPDF = (doc, resume, fontCfg, format) => {
   doc
     .font(fontCfg.bold)
     .fontSize(format.headingFontSize)
+    .lineGap(0)
     .text('Skills',
       { align: format.headingAlignment }
     );
@@ -180,12 +203,14 @@ const formPDF = (doc, resume, fontCfg, format) => {
   for (const skill of skills) {
     doc
       .font(getFontPath(fontCfg, format.skillTitleStyle))
-      .fontSize(format.bodyFontSize)
+      .fontSize(format.subheadingFontSize)
+      .lineGap(getLineGap(format.subheadingFontSize))
       .text(`${skill.name}: `,
         { align: 'left', continued: true }
       )
       .font(fontCfg.regular)
       .fontSize(format.bodyFontSize)
+      .lineGap(getLineGap(format.bodyFontSize))
       .text(`${skill.list}`,
         { align: 'right' }
       );
@@ -255,7 +280,7 @@ router.get('/workspace/get-latest-pdf', auth.checkAuthenticated, async (req, res
 
 
     // form pdf
-    const doc = new PDFDocument({ size: 'A4', margin: format.margin * 72 });
+    const doc = new PDFDocument({ size: 'A4', margin: format.margin * 72, lineGap: format.lineSpacing * 72 });
     doc.pipe(fs.createWriteStream(filepath));
     formPDF(doc, resume, fontCfg, format);
     doc.end();
