@@ -7,7 +7,7 @@ const PDFViewer = ({ src }) => {
     <Box
       sx={{
         width: "100%",
-        height: "100vh",
+        height: "140vh",
         borderColor: "divider",
       }}
     >

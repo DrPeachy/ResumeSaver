@@ -60,20 +60,6 @@ const ResumeEditor = ({ outputResumeId }) => {
       });
   }, []);
 
-  // useEffect(() => {
-  //   if (!focusRef.current) return;
-  //   // save resume to backend
-  //   axios.post(`${baseUrl}/resume`, { resume: resume })
-  //     .then(response => {
-  //       if (response.status === 200) {
-  //         console.log(response.data);
-  //       }
-  //     })
-  //     .catch(error => {
-  //       console.log(error);
-  //     });
-  // }, [focusRef.current]);
-
   const handleOnBlur = (event) => {
     event.preventDefault();
         // save resume to backend

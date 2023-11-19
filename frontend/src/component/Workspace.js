@@ -81,9 +81,7 @@ const Workspace = () => {
           console.log(response.data.workspace.outputResume);
           // fetch latest pdf
           fetchLatestPdf();
-          setTimeout(() => {
-            setLoading(false);
-          }, 2000);
+          setLoading(false);
         }
       })
       .catch(error => {
@@ -217,7 +215,7 @@ const Workspace = () => {
             value={tabValue}
             index={1}
             sx={{
-              height: '100vh',
+              minHeight: '100vh',
               padding: 0,
               margin: 0,
             }}
