@@ -93,8 +93,8 @@ const formPDF = (doc, resume, fontCfg, format) => {
       .text('Education',
         { align: format.headingAlignment }
       );
+    if (format.hasDivider) drawLine(doc, format.margin);
   }
-  if (format.hasDivider) drawLine(doc, format.margin);
   for (const education of educations) {
     doc
       .font(getFontPath(fontCfg, format.institutionFontStyle))
@@ -142,14 +142,16 @@ const formPDF = (doc, resume, fontCfg, format) => {
   }
 
   // experience
-  doc
-    .font(fontCfg.bold)
-    .fontSize(format.headingFontSize)
-    .lineGap(0)
-    .text('Experience',
-      { align: format.headingAlignment }
-    );
-  if (format.hasDivider) drawLine(doc, format.margin);
+  if (experiences.length > 0) {
+    doc
+      .font(fontCfg.bold)
+      .fontSize(format.headingFontSize)
+      .lineGap(0)
+      .text('Experience',
+        { align: format.headingAlignment }
+      );
+    if (format.hasDivider) drawLine(doc, format.margin);
+  }
   for (const experience of experiences) {
     doc
       .font(getFontPath(fontCfg, format.titleFontStyle))
@@ -182,9 +184,9 @@ const formPDF = (doc, resume, fontCfg, format) => {
     const description = experience.description.split('\n');
     for (const line of description) {
       doc
-      .fontSize(format.bodyFontSize)
-      .lineGap(getLineGap(format.bodyFontSize))  
-      .text(`${format.experienceBulletPoint}${line} `, {
+        .fontSize(format.bodyFontSize)
+        .lineGap(getLineGap(format.bodyFontSize))
+        .text(`${format.experienceBulletPoint}${line} `, {
           align: 'left'
         });
     }
@@ -192,14 +194,16 @@ const formPDF = (doc, resume, fontCfg, format) => {
   }
 
   // skills
-  doc
-    .font(fontCfg.bold)
-    .fontSize(format.headingFontSize)
-    .lineGap(0)
-    .text('Skills',
-      { align: format.headingAlignment }
-    );
-  if (format.hasDivider) drawLine(doc, format.margin);
+  if (skills.length > 0) {
+    doc
+      .font(fontCfg.bold)
+      .fontSize(format.headingFontSize)
+      .lineGap(0)
+      .text('Skills',
+        { align: format.headingAlignment }
+      );
+    if (format.hasDivider) drawLine(doc, format.margin);
+  }
   for (const skill of skills) {
     doc
       .font(getFontPath(fontCfg, format.skillTitleStyle))

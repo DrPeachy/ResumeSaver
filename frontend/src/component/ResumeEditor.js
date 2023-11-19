@@ -58,11 +58,12 @@ const ResumeEditor = ({ outputResumeId }) => {
       .catch(error => {
         console.log(error);
       });
+
   }, []);
 
   const handleOnBlur = (event) => {
-    event.preventDefault();
-        // save resume to backend
+    event?.preventDefault();
+    // save resume to backend
     axios.post(`${baseUrl}/resume`, { resume: resume })
       .then(response => {
         if (response.status === 200) {
@@ -211,9 +212,9 @@ const ResumeEditor = ({ outputResumeId }) => {
                 >
                   {
                     (key === 'header' && resume[key].length > 0) ||
-                    (resume[key].length > 2) ?
-                    <AddIcon /> :
-                    <AddIcon style={{ color: 'grey' }}/>
+                      (resume[key].length > 2) ?
+                      <AddIcon /> :
+                      <AddIcon style={{ color: 'grey' }} />
                   }
                 </IconButton>
               </Grid>
@@ -323,7 +324,7 @@ const ResumeEditor = ({ outputResumeId }) => {
                               </Grid>
                             )
                           }
-                          
+
                           return (
                             <Grid item
                               key={name}
