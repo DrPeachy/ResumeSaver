@@ -204,8 +204,17 @@ const ResumeEditor = ({ outputResumeId }) => {
                 </Typography>
                 <IconButton
                   onClick={() => addSlot(key)}
+                  disabled={
+                    (key === 'header' && resume[key].length > 0) ||
+                    (resume[key].length > 2)
+                  }
                 >
-                  <AddIcon />
+                  {
+                    (key === 'header' && resume[key].length > 0) ||
+                    (resume[key].length > 2) ?
+                    <AddIcon /> :
+                    <AddIcon style={{ color: 'grey' }}/>
+                  }
                 </IconButton>
               </Grid>
               {Object.entries(resume[key]).map(([name, value], index) => {
