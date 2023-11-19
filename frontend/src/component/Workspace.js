@@ -81,7 +81,10 @@ const Workspace = () => {
           console.log(response.data.workspace.outputResume);
           // fetch latest pdf
           fetchLatestPdf();
-          setLoading(false);
+          // setLoading(false);
+          setTimeout(() => {
+            setLoading(false);
+          }, 1000);
         }
       })
       .catch(error => {

@@ -42,10 +42,12 @@ const dateToString = (date) => {
   });
 }
 
-function drawLine(doc) {
+function drawLine(doc, margin = 1) {
+  const marginToPos = margin * 72;
+
   doc.moveDown(0.0);
-  doc.moveTo(60, doc.y)
-    .lineTo(540, doc.y)
+  doc.moveTo(marginToPos, doc.y)
+    .lineTo(595.28 - marginToPos, doc.y)
     .stroke();
   doc.moveDown(0.4);
 }
@@ -65,9 +67,12 @@ const formPDF = (doc, resume, fontCfg, format) => {
     { align: format.nameAlignment }
   );
   // info
-  doc.fontSize(format.infoFontSize).text(`${header.phone}${header.email ? ` • ${header.email}` : ''}${header.link ? ` • ${header.link}` : ''}`,
-    { align: format.infoAlignment }
-  );
+  doc
+    .fontSize(format.infoFontSize).text(
+      `${header.phone}${header.email ? `${format.infoDivider}${header.email}` : ''}${header.link ? `${format.infoDivider}${header.link}` : ''}`,
+      { align: format.infoAlignment }
+    )
+
   doc.moveDown();
 
   // education
@@ -79,17 +84,18 @@ const formPDF = (doc, resume, fontCfg, format) => {
         { align: format.headingAlignment }
       );
   }
-  drawLine(doc);
-  //doc.moveDown();
+  if (format.hasDivider) drawLine(doc, format.margin);
   for (const education of educations) {
     doc
       .font(getFontPath(fontCfg, format.institutionFontStyle))
       .fontSize(format.subheadingFontSize)
-      .text(education.institution ? education.institution : '',
+      .text(
+        education.institution ? education.institution : '',
         { align: format.subheadingAlignment, continued: true })
       .font(fontCfg.regular)
       .fontSize(format.subheadingFontSize)
-      .text(education.location ? `, ${education.location}` : '',
+      .text(
+        education.location ? `, ${education.location}` : '',
         { align: format.subheadingAlignment });
     doc.moveUp();
 
@@ -105,14 +111,16 @@ const formPDF = (doc, resume, fontCfg, format) => {
     doc
       .font(fontCfg.regular)
       .fontSize(format.bodyFontSize)
-      .text(`${format.educationBulletPoint}${education.degree} in ${education.major}${education.minor ? `, minor in ${education.minor}` : ''} `,
+      .text(
+        `${format.educationBulletPoint}${education.degree} in ${education.major}${education.minor ? `, minor in ${education.minor}` : ''} `,
         { align: format.bodyAlignment }
       );
     //doc.moveDown();
     doc
       .font(fontCfg.regular)
       .fontSize(format.bodyFontSize)
-      .text(`${format.educationBulletPoint}GPA: ${education.gpa} `,
+      .text(
+        `${format.educationBulletPoint}GPA: ${education.gpa} `,
         { align: format.bodyAlignment }
       );
     doc.moveDown();
@@ -126,8 +134,7 @@ const formPDF = (doc, resume, fontCfg, format) => {
     .text('Experience',
       { align: format.headingAlignment }
     );
-  drawLine(doc);
-  //doc.moveDown();
+  if (format.hasDivider) drawLine(doc, format.margin);
   for (const experience of experiences) {
     doc
       .font(getFontPath(fontCfg, format.titleFontStyle))
@@ -152,14 +159,12 @@ const formPDF = (doc, resume, fontCfg, format) => {
         `${dateToString(experience.duration.startDate)}${experience.duration.endDate ? `-${dateToString(experience.duration.endDate)}` : ''} `,
         { align: 'right' }
       );
-    //doc.moveDown();
     // split description by newline
     const description = experience.description.split('\n');
     for (const line of description) {
       doc.fontSize(format.bodyFontSize).text(`${format.experienceBulletPoint}${line} `, {
         align: 'left'
       });
-      //doc.moveDown();
     }
     doc.moveDown();
   }
@@ -171,8 +176,7 @@ const formPDF = (doc, resume, fontCfg, format) => {
     .text('Skills',
       { align: format.headingAlignment }
     );
-  drawLine(doc);
-  //doc.moveDown();
+  if (format.hasDivider) drawLine(doc, format.margin);
   for (const skill of skills) {
     doc
       .font(getFontPath(fontCfg, format.skillTitleStyle))

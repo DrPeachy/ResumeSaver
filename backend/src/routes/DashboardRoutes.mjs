@@ -19,20 +19,20 @@ const defaultFormat = {
   bodyFontSize: 10,
   bodyAlignment: 'left',
   // header
-  nameFontSize: 16,
+  nameFontSize: 18,
   nameAlignment: 'center',
   infoFontSize: 12,
   infoAlignment: 'center',
   infoDivider: ' • ',
   // education
-  institutionFontStyle: 'Bold',
+  institutionFontStyle: 'bold',
   educationBulletPoint: ' • ',
   // experience
-  titleFontStyle: 'Italic',
-  organizationFontStyle: 'Bold',
+  titleFontStyle: 'italic',
+  organizationFontStyle: 'bold',
   experienceBulletPoint: ' • ',
   // skill
-  skillTitleStyle: 'Bold'
+  skillTitleStyle: 'bold'
 };
 
 

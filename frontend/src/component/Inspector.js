@@ -13,6 +13,10 @@ import Input from '@mui/material/Input';
 import FormatAlignLeftIcon from '@mui/icons-material/FormatAlignLeft';
 import FormatAlignCenterIcon from '@mui/icons-material/FormatAlignCenter';
 import FormatAlignRightIcon from '@mui/icons-material/FormatAlignRight';
+
+import FormatBoldIcon from '@mui/icons-material/FormatBold';
+import FormatItalicIcon from '@mui/icons-material/FormatItalic';
+import DoNotDisturbIcon from '@mui/icons-material/DoNotDisturb';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
@@ -392,7 +396,7 @@ const Inspector = memo(({ format, workspaceId, updateWorkspaceCallback }) => {
         </Grid>
       </Grid>
       {/* Subheading Alignment */}
-      <Grid container
+      {/* <Grid container
         gap={0.5}
         justifyContent="space-between"
         alignItems="center"
@@ -428,7 +432,7 @@ const Inspector = memo(({ format, workspaceId, updateWorkspaceCallback }) => {
             <FormatAlignRightIcon />
           </ToggleButton>
         </ToggleButtonGroup>
-      </Grid>
+      </Grid> */}
       {/* Body Size */}
       <Grid container
         gap={0.5}
@@ -472,7 +476,7 @@ const Inspector = memo(({ format, workspaceId, updateWorkspaceCallback }) => {
         </Grid>
       </Grid>
       {/* Body Alignment */}
-      <Grid container
+      {/* <Grid container
         gap={0.5}
         justifyContent="space-between"
         alignItems="center"
@@ -508,11 +512,11 @@ const Inspector = memo(({ format, workspaceId, updateWorkspaceCallback }) => {
             <FormatAlignRightIcon />
           </ToggleButton>
         </ToggleButtonGroup>
-      </Grid>
+      </Grid> */}
 
 
 
-
+      {/* Header */}
       <Divider />
       <Typography variant="h6" align="left"
         sx={{
@@ -715,6 +719,260 @@ const Inspector = memo(({ format, workspaceId, updateWorkspaceCallback }) => {
 
 
       </FormControl>
+
+
+      {/* Education */}
+      <Divider />
+      <Typography variant="h6" align="left"
+        sx={{
+          fontWeight: 'bold',
+        }}
+      >
+        Education
+      </Typography>
+      {/* Institution Font Style */}
+      <Grid container
+        gap={0.5}
+        justifyContent="space-between"
+        alignItems="center"
+      >
+        <Grid item lg={4}>
+          <Typography variant="body1" align="left">
+            Institution Font Style:
+          </Typography>
+        </Grid>
+        <ToggleButtonGroup
+          justifyContent='flex-end'
+          color="secondary"
+          value={formatData.institutionFontStyle}
+          exclusive
+          onChange={handleToggleChange('institutionFontStyle')}
+        >
+          <ToggleButton
+            value="regular"
+            size="small"
+          >
+            <DoNotDisturbIcon />
+          </ToggleButton>
+          <ToggleButton
+            value="bold"
+            size="small"
+          >
+            <FormatBoldIcon />
+          </ToggleButton>
+          <ToggleButton
+            value="italic"
+            size="small"
+          >
+            <FormatItalicIcon />
+          </ToggleButton>
+        </ToggleButtonGroup>
+      </Grid>
+      {/* Education Bullet Point */}
+      <FormControl
+        size='small'
+        margin="none"
+        color="secondary"
+        sx={{
+          gap: 1,
+        }}
+      >
+        <Grid container
+          gap={0.5}
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <Grid item lg={4}>
+            <Typography variant="body1" align="left">
+              Education Bullet Point:
+            </Typography>
+          </Grid>
+          <Grid item lg={3}>
+            <Select
+              name="educationBulletPoint"
+              value={formatData.educationBulletPoint}
+              fullWidth
+              onChange={handleFormatChange}
+            >
+              <MenuItem value={'   '}>None</MenuItem>
+              <MenuItem value={' • '}>•</MenuItem>
+              <MenuItem value={' - '}>-</MenuItem>
+            </Select>
+          </Grid>
+        </Grid>
+
+
+      </FormControl>
+
+
+      {/* Experience */}
+      <Divider />
+      <Typography variant="h6" align="left"
+        sx={{
+          fontWeight: 'bold',
+        }}
+      >
+        Experience
+      </Typography>
+      {/* Title Font Style */}
+      <Grid container
+        gap={0.5}
+        justifyContent="space-between"
+        alignItems="center"
+      >
+        <Grid item lg={4}>
+          <Typography variant="body1" align="left">
+            Title Font Style:
+          </Typography>
+        </Grid>
+        <ToggleButtonGroup
+          justifyContent='flex-end'
+          color="secondary"
+          value={formatData.titleFontStyle}
+          exclusive
+          onChange={handleToggleChange('titleFontStyle')}
+        >
+          <ToggleButton
+            value="regular"
+            size="small"
+          >
+            <DoNotDisturbIcon />
+          </ToggleButton>
+          <ToggleButton
+            value="bold"
+            size="small"
+          >
+            <FormatBoldIcon />
+          </ToggleButton>
+          <ToggleButton
+            value="italic"
+            size="small"
+          >
+            <FormatItalicIcon />
+          </ToggleButton>
+        </ToggleButtonGroup>
+      </Grid>
+      {/* Organization Font Style */}
+      <Grid container
+        gap={0.5}
+        justifyContent="space-between"
+        alignItems="center"
+      >
+        <Grid item lg={4}>
+          <Typography variant="body1" align="left">
+            Organization Font Style:
+          </Typography>
+        </Grid>
+        <ToggleButtonGroup
+          justifyContent='flex-end'
+          color="secondary"
+          value={formatData.organizationFontStyle}
+          exclusive
+          onChange={handleToggleChange('organizationFontStyle')}
+        >
+          <ToggleButton
+            value="regular"
+            size="small"
+          >
+            <DoNotDisturbIcon />
+          </ToggleButton>
+          <ToggleButton
+            value="bold"
+            size="small"
+          >
+            <FormatBoldIcon />
+          </ToggleButton>
+          <ToggleButton
+            value="italic"
+            size="small"
+          >
+            <FormatItalicIcon />
+          </ToggleButton>
+        </ToggleButtonGroup>
+      </Grid>
+      {/* Experience Bullet Point */}
+      <FormControl
+        size='small'
+        margin="none"
+        color="secondary"
+        sx={{
+          gap: 1,
+          p: 0,
+          m: 0,
+        }}
+      >
+        <Grid container
+          gap={0.5}
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <Grid item lg={4}>
+            <Typography variant="body1" align="left">
+              Experience Bullet Point:
+            </Typography>
+          </Grid>
+          <Grid item lg={3}>
+            <Select
+              name="experienceBulletPoint"
+              value={formatData.experienceBulletPoint}
+              fullWidth
+              onChange={handleFormatChange}
+            >
+              <MenuItem value={'   '}>None</MenuItem>
+              <MenuItem value={' • '}>•</MenuItem>
+              <MenuItem value={' - '}>-</MenuItem>
+            </Select>
+          </Grid>
+        </Grid>
+      </FormControl>
+
+      {/* Skill */}
+      <Divider />
+      <Typography variant="h6" align="left"
+        sx={{
+          fontWeight: 'bold',
+        }}
+      >
+        Skill
+      </Typography>
+      {/* Skill Title Style */}
+      <Grid container
+        gap={0.5}
+        justifyContent="space-between"
+        alignItems="center"
+      >
+        <Grid item lg={4}>
+          <Typography variant="body1" align="left">
+            Skill Title Style:
+          </Typography>
+        </Grid>
+        <ToggleButtonGroup
+          justifyContent='flex-end'
+          color="secondary"
+          value={formatData.skillTitleStyle}
+          exclusive
+          onChange={handleToggleChange('skillTitleStyle')}
+        >
+          <ToggleButton
+            value="regular"
+            size="small"
+          >
+            <DoNotDisturbIcon />
+          </ToggleButton>
+          <ToggleButton
+            value="bold"
+            size="small"
+          >
+            <FormatBoldIcon />
+          </ToggleButton>
+          <ToggleButton
+            value="italic"
+            size="small"
+          >
+            <FormatItalicIcon />
+          </ToggleButton>
+        </ToggleButtonGroup>
+      </Grid>
     </Grid>
   );
 });
