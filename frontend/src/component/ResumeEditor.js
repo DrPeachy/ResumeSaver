@@ -165,9 +165,6 @@ const ResumeEditor = ({ outputResumeId }) => {
       list[index][name] = value;
     }
     setResume({ ...resume, [key]: list });
-    // if (name != focusRef.current) {
-    //   focusRef.current = name;
-    // }
   };
 
 

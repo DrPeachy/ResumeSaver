@@ -253,6 +253,19 @@ router.post('/workspace/format', auth.checkAuthenticated, async (req, res) => {
   }
 });
 
+router.post('/workspace/material', auth.checkAuthenticated, async (req, res) => {
+  try {
+    const id = req.body.id;
+    const material = req.body.material;
+    const workspace = await Workspace.findById(id);
+    workspace.materials = material;
+    await workspace.save();
+    res.status(200).json({ message: 'Material added' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 
 router.get('/workspace/get-latest-pdf', auth.checkAuthenticated, async (req, res) => {
   try {

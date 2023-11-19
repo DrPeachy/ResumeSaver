@@ -15,6 +15,7 @@ import Box from '@mui/material/Box';
 import PDFViewer from './PDFViewer';
 import ResumeEditor from './ResumeEditor';
 import Inspector from './Inspector';
+import Copyboard from './Copyboard';
 
 
 const EleItem = styled(Paper)(({ theme }) => ({
@@ -162,7 +163,6 @@ const Workspace = () => {
           }}
         >
           <Typography variant="h4">Workspace: {workspaceData.name}</Typography>
-          <Button>//Todo: Insert a pdf</Button>
         </EleItem>
         <EleItem
           elevation={3}
@@ -173,7 +173,7 @@ const Workspace = () => {
             minHeight: '90vh',
           }}
         >
-          <Typography variant="h5">//Todo: Copyboard</Typography>
+          <Copyboard />
         </EleItem>
       </Grid>
       <Grid
