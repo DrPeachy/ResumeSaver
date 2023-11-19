@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect, useState, memo } from "react";
-import { Button, Divider, Menu, Slide, Switch } from "@mui/material";
+import { Button, Divider, Menu, Slide, Switch, Tooltip } from "@mui/material";
 import { Grid } from "@mui/material";
 import { TextField } from "@mui/material";
 import { Typography } from "@mui/material";
@@ -17,6 +17,7 @@ import FormatAlignRightIcon from '@mui/icons-material/FormatAlignRight';
 import FormatBoldIcon from '@mui/icons-material/FormatBold';
 import FormatItalicIcon from '@mui/icons-material/FormatItalic';
 import DoNotDisturbIcon from '@mui/icons-material/DoNotDisturb';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
@@ -63,6 +64,20 @@ const Inspector = memo(({ format, workspaceId, updateWorkspaceCallback }) => {
   useEffect(() => {
     setFormatData(format);
   }, [format]);
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.ctrlKey && event.shiftKey && event.key === 'S') {
+        updateWorkspaceCallback();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
 
   // Update format data and send to server
   const handleFormatUpdate = (newFormatData) => {
@@ -129,6 +144,9 @@ const Inspector = memo(({ format, workspaceId, updateWorkspaceCallback }) => {
           >
             Apply
           </Typography>
+          <Tooltip title="Apply the current format to your resume! (You can also do this by pressing Shift+Ctrl+S)">
+            <HelpOutlineIcon style={{ fontSize: 20, cursor: 'pointer' }} />
+          </Tooltip>
         </Button>
 
       </Grid>
