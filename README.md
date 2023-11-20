@@ -34,9 +34,42 @@ The application will have schemas: **Resume, User, Workspace, Experience, Durati
   description:
   dateOfCreation: //
   materials: // array of material for copyboard
+  format: // a format json to store format
   outputResume: // a single resume obj that will be exported
 }
 ```
+**Format**
+```javascript
+{
+  // general
+  font: 'Times-Roman',
+  margin: 1,
+  lineSpacing: 1.15,
+  hasDivider: true,
+  headingFontSize: 14,
+  headingAlignment: 'left',
+  subheadingFontSize: 12,
+  subheadingAlignment: 'left',
+  bodyFontSize: 10,
+  bodyAlignment: 'left',
+  // header
+  nameFontSize: 18,
+  nameAlignment: 'center',
+  infoFontSize: 12,
+  infoAlignment: 'center',
+  infoDivider: ' • ',
+  // education
+  institutionFontStyle: 'bold',
+  educationBulletPoint: ' • ',
+  // experience
+  titleFontStyle: 'italic',
+  organizationFontStyle: 'bold',
+  experienceBulletPoint: ' • ',
+  // skill
+  skillTitleStyle: 'bold'
+};
+```
+
 **Duration:**
 ```javascript
 {
@@ -48,7 +81,8 @@ The application will have schemas: **Resume, User, Workspace, Experience, Durati
 ```javascript
 {
   institution: // string for institution
-  duration: // a duration obj
+  location:
+  degree:
   gpa: // gpa
   major: // major
   minor: // minor
@@ -64,7 +98,7 @@ The application will have schemas: **Resume, User, Workspace, Experience, Durati
   organization: 
   location: // string for location
   duration: // a duration obj
-  description: // an array of string of description
+  description: // a string separated by /n
 }
 
 ```
@@ -73,6 +107,16 @@ The application will have schemas: **Resume, User, Workspace, Experience, Durati
 {
   name: // type of skill, e.g. Coding Language/Software
   list: // array of this skill
+}
+
+```
+**Header:**
+```javascript
+{
+    name:  
+    phone:
+    email:
+    link:
 }
 
 ```
