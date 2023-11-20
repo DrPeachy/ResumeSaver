@@ -134,55 +134,158 @@ The application will have schemas: **Resume, User, Workspace, Experience, Durati
 
 ```javascript
 {
-  username: "employeeFoo",
-  hash: // a password hash,
-  workspaces: 
-  [
-    0:{
-      name: // name of workspace
-      materials: 
-      [
-        "NYU School of Engineering",
-        "Computer Science",
-        "B.S.",
-        ...
-      ]
-      outputResume: {
-          header:[
-            0:{
-              name: "employeeFoo",
-              phone: "123-4567-8910",
-              links: ["123@github.com"],
-              email: "123@nyu.edu"
-            }
-          ]
-          experiences: 
-          [
-            0:{
-              title: "Software Engineering Intern",
-              type: "working",
-              organization: "Amazon",
-              location: "US",
-              duration: 
-              {
-                startDate: "May 2021",
-                endDate: "Sep 2021"
-              }
-            },
-            1:{...},
-            2:{...}
-          ]
-          skills: 
-          [
-            0：{ name: "Coding Language", list: ["C++", "Python", "Javascript"]},
-            1：{ name: "Software", list: ["VSCode", "Photoshop", "Sourcetree"]}
-          ]
-          
+  "workspaces": [
+    {
+      "$oid": "6559621f2aac7b2763fd45e1"
+    }
+  ],
+  "username": "",
+  "salt": "",
+  "hash": "",
+  "__v": 31,
+  "recentWorkspaceId": {
+    "$oid": "a workspace id"
+  }
+}
+```
+
+**An Example Workspace:**
+```javascript
+{
+  "name": "Cheng Pan",
+  "description": "123123",
+  "dateOfCreation": {
+    "$date": "2023-11-19T01:17:19.689Z"
+  },
+  "materials": [],
+  "format": {
+    "font": "Times-Roman",
+    "margin": 1,
+    "lineSpacing": 1.15,
+    "hasDivider": true,
+    "headingFontSize": 14,
+    "headingAlignment": "left",
+    "subheadingFontSize": 12,
+    "subheadingAlignment": "left",
+    "bodyFontSize": 10,
+    "bodyAlignment": "left",
+    "nameFontSize": 18,
+    "nameAlignment": "left",
+    "infoFontSize": 12,
+    "infoAlignment": "left",
+    "infoDivider": " • ",
+    "institutionFontStyle": "bold",
+    "educationBulletPoint": " • ",
+    "titleFontStyle": "italic",
+    "organizationFontStyle": "bold",
+    "experienceBulletPoint": " - ",
+    "skillTitleStyle": "bold",
+    "_id": {
+      "$oid": "6559621f2aac7b2763fd45e2"
+    }
+  },
+  "outputResume": {
+    "$oid": "6559621f2aac7b2763fd45e0"
+  },
+  "__v": 0
+}
+```
+
+**An Example Resume:**
+```javascript
+{
+  "header": [
+    {
+      "name": "Cheng Pan",
+      "phone": "9178033848",
+      "email": "p1067838263@gmail.com",
+      "link": "github.com/DrPeachy",
+      "_id": {
+        "$oid": "65596b10933182f8d193d7fa"
+      }
+    }
+  ],
+  "educations": [
+    {
+      "institution": "New York University",
+      "location": "New York, NY",
+      "degree": "Bachelor",
+      "major": "Computer Science",
+      "minor": "dd",
+      "gpa": "3.783",
+      "duration": {
+        "startDate": {
+          "$date": "2023-12-31T00:00:00.000Z"
+        },
+        "endDate": {
+          "$date": "2023-12-31T00:00:00.000Z"
+        },
+        "_id": {
+          "$oid": "65597d456aeb2eaa72f95442"
+        }
+      },
+      "_id": {
+        "$oid": "65597d456aeb2eaa72f95441"
+      }
+    }
+  ],
+  "experiences": [
+    {
+      "title": "Client Development Intern",
+      "type": "Working",
+      "organization": "Yorha",
+      "location": "Shanghai",
+      "duration": {
+        "startDate": {
+          "$date": "2023-11-24T00:00:00.000Z"
+        },
+        "endDate": {
+          "$date": "2023-12-31T00:00:00.000Z"
+        },
+        "_id": {
+          "$oid": "6559647a2aac7b2763fd4731"
+        }
+      },
+      "description": "1. a\n2. b\n3. cf\n4. d",
+      "_id": {
+        "$oid": "6559647a2aac7b2763fd4730"
       }
     },
-    1:{...}, // workspace#2
-    ...
-  ]
+    {
+      "title": "Client Development Intern",
+      "type": "Working",
+      "organization": "aaaaa",
+      "location": "New York, NY",
+      "duration": {
+        "startDate": null,
+        "endDate": null,
+        "_id": {
+          "$oid": "65599a547c7015d75522e94a"
+        }
+      },
+      "description": "",
+      "_id": {
+        "$oid": "65599a547c7015d75522e949"
+      }
+    }
+  ],
+  "skills": [
+    {
+      "name": "Software",
+      "list": "Maya, Photoshop, Zbrush, VSCode, Unity3D",
+      "_id": {
+        "$oid": "65597c356aeb2eaa72f95351"
+      }
+    },
+    {
+      "name": "Coding Languate",
+      "list": "C/C#/C++, Python, Lua, Javascript, HTML, CSS",
+      "_id": {
+        "$oid": "65597c356aeb2eaa72f95352"
+      }
+    }
+  ],
+  "__v": 46
 }
 ```
 
