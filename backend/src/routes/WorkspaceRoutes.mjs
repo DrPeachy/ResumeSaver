@@ -1,6 +1,7 @@
 import express from 'express';
 import PDFDocument from 'pdfkit';
 import multer from 'multer';
+import pdfParse from 'pdf-parse/lib/pdf-parse.js'
 //import PDFParser from "pdf2json";
 //import textract from 'textract';
 
@@ -294,7 +295,7 @@ router.post('/workspace/upload', auth.checkAuthenticated, upload.single('file'),
     let extractedText = '';
 
     if (file.mimetype === 'application/pdf') {
-      extractedText = await extractTextFromPDF(file.buffer);
+      extractedText = await pdfParse(file.buffer);
     } else {
       extractedText = file.buffer.toString();
     }
