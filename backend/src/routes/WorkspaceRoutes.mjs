@@ -1,5 +1,9 @@
 import express from 'express';
 import PDFDocument from 'pdfkit';
+import multer from 'multer';
+//import PDFParser from "pdf2json";
+//import textract from 'textract';
+
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -15,6 +19,8 @@ import { get } from 'http';
 const User = mongoose.model('User');
 const Workspace = mongoose.model('Workspace');
 const Resume = mongoose.model('Resume');
+
+const upload = multer({ storage: multer.memoryStorage() });
 
 const fonts = [
   'Times-Roman',
@@ -253,12 +259,61 @@ router.post('/workspace/format', auth.checkAuthenticated, async (req, res) => {
   }
 });
 
+async function extractTextFromPDF(buffer) {
+  // return new Promise((resolve, reject) => {
+  //   const pdfParser = new PDFParser();
+
+  //   pdfParser.on("pdfParser_dataError", err => reject(err.parserError));
+  //   pdfParser.on("pdfParser_dataReady", pdfData => {
+  //     console.log(pdfData);
+  //     console.log('raw text content')
+  //     console.log(pdfParser.getRawTextContent());
+  //     // const textPages = pdfData.Pages.map(page => {
+  //     //   return page.Texts.map(textItem => {
+  //     //     // Decode the text items (they are in encoded URI component format)
+  //     //     return decodeURIComponent(textItem.R[0].T);
+  //     //   }).join(' ');
+  //     // });
+
+  //     // const extractedText = textPages.join('\n');
+  //     // resolve(extractedText);
+  //   });
+
+  //   pdfParser.parseBuffer(buffer);
+  // });
+}
+
+router.post('/workspace/upload', auth.checkAuthenticated, upload.single('file'), async (req, res) => {
+  try {
+    const id = req.body.id;
+    const file = req.file;
+    console.log(file);
+    const workspace = await Workspace.findById(id);
+    const materials = workspace.materials;
+
+    let extractedText = '';
+
+    if (file.mimetype === 'application/pdf') {
+      extractedText = await extractTextFromPDF(file.buffer);
+    } else {
+      extractedText = file.buffer.toString();
+    }
+
+    // Respond with extracted text or other relevant information
+    res.status(200).json({ message: 'File processed successfully', extractedText });
+
+
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 router.post('/workspace/material', auth.checkAuthenticated, async (req, res) => {
   try {
     const id = req.body.id;
-    const material = req.body.material;
+    const materials = req.body.materials;
     const workspace = await Workspace.findById(id);
-    workspace.materials = material;
+    workspace.materials = materials;
     await workspace.save();
     res.status(200).json({ message: 'Material added' });
   } catch (err) {

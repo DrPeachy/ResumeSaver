@@ -33,13 +33,14 @@ import resumeRoutes from "./routes/resumeRoutes.mjs";
 app.use(express.static(path.join(__dirname, "public")));
 
 // cors
-app.use(cors(
-  {
-    origin: (process.env.NODE_ENV === 'production') ? process.env.PROD_FRONTEND_URL : process.env.DEV_FRONTEND_URL,
-    credentials: true,
-    optionsSuccessStatus: 200
-  }
-));
+const corsOptions = {
+  origin: (process.env.NODE_ENV === 'production') ? process.env.PROD_FRONTEND_URL : process.env.DEV_FRONTEND_URL,
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
+console.log(corsOptions);
 
 // body parser (req.body)
 app.use(express.urlencoded({ extended: false }));
@@ -86,11 +87,12 @@ app.use(workspaceRoutes);
 app.use(resumeRoutes);
 
 
-app.listen(((process.env.NODE_ENV === 'prodoction') ? process.env.PROD_PORT : process.env.DEV_PORT) || 8080, () => {
+app.listen(((process.env.NODE_ENV === 'production') ? process.env.PROD_PORT : process.env.DEV_PORT) || 8080, () => {
   mongoose
     .connect((process.env.NODE_ENV === 'production') ? process.env.PROD_DSN : process.env.DEV_DSN)
     .then(() => {
       console.log("Successfully connected to MongoDB.");
+
     })
     .catch((error) => {
       console.error("Connection error: ", error);

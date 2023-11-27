@@ -35,6 +35,12 @@ const defaultFormat = {
   skillTitleStyle: 'bold'
 };
 
+const defaultMaterials = [
+  'You can add materials to your workspace by uploading files',
+  'By clicking on us, you can copy the content and paste it into your resume',
+  'You can delete us by clicking on the delete icon on the right'
+];
+
 
 router.get("/dashboard", auth.checkAuthenticated, async (req, res) => {
   const user = await User.findOne({ username: res.locals.currentUser });
@@ -74,6 +80,7 @@ router.post("/dashboard/create", auth.checkAuthenticated, async (req, res) => {
     description: description,
     dateOfCreation: Date.now(),
     format: defaultFormat,
+    materials: defaultMaterials,
     outputResume: resume._id
   });
   await workspace.save();

@@ -1,10 +1,31 @@
 import React from "react";
-import { useEffect, useState, memo } from "react";
+import { useEffect, useState, useCallback, memo } from "react";
+import { useDropzone } from "react-dropzone";
 import axios from "axios";
 
 import { ButtonGroup, Chip, Grid } from "@mui/material";
 import { Button } from "@mui/material";
 import { Container, Typography } from "@mui/material";
+import DeleteIcon from '@mui/icons-material/Delete';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+
+const FileUploadButton = ({ onUpload }) => {
+  const onDrop = useCallback(acceptedFiles => {
+    // Do something with the files
+    onUpload(acceptedFiles[0]);
+  }, [onUpload]);
+
+  const { getRootProps, getInputProps } = useDropzone({ onDrop });
+
+  return (
+    <div {...getRootProps()}>
+      <input {...getInputProps()} />
+      <Button variant="outlined" color="secondary" startIcon={<CloudUploadIcon />}>
+        Upload File(.pdf, .docx, .doc)
+      </Button>
+    </div>
+  );
+};
 
 
 const Copyboard = memo(({ chips, workspaceId }) => {
@@ -16,13 +37,34 @@ const Copyboard = memo(({ chips, workspaceId }) => {
     setChipsData(chips);
   }, [chips]);
 
+  const handleFileUpload = (file) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('id', workspaceId);
+    
+    // Upload file to the server
+    axios.post(`${baseUrl}/workspace/upload`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+    .then(response => {
+      if (response.status === 200) {
+        console.log(response.data);
+      }
+    })
+    .catch(error => {
+      console.error(error);
+    });
+  };
 
   const handleMaterialUpdate = (newMaterial) => {
     setLoading(true);
-    axios.post(`${baseUrl}/workspace/material`, { id: workspaceId, materal: newMaterial })
+    axios.post(`${baseUrl}/workspace/material`, { id: workspaceId, materials: newMaterial })
       .then(response => {
         if (response.status === 200) {
-
+          console.log(response.data);
+          setLoading(false);
         }
       })
       .catch(error => {
@@ -32,6 +74,14 @@ const Copyboard = memo(({ chips, workspaceId }) => {
 
   const handleClick = (info) => {
     navigator.clipboard.writeText(info);
+  };
+
+  const handleDelete = (index) => {
+    const newChips = [...chipsData];
+    newChips.splice(index, 1);
+    setChipsData(newChips);
+    handleMaterialUpdate(newChips);
+
   };
 
 
@@ -49,14 +99,9 @@ const Copyboard = memo(({ chips, workspaceId }) => {
         alignItems="center"
         gap={1}
       >
-        {/* <ButtonGroup color='secondary'> */}
-        <Button variant="outlined">
-          Insert PDF
-        </Button>
-        <Button variant="outlined">
-          Insert WORD
-        </Button>
-        {/* </ButtonGroup> */}
+        <ButtonGroup color='secondary'>
+          <FileUploadButton onUpload={handleFileUpload} />
+        </ButtonGroup>
       </Grid>
 
       <Grid item
@@ -66,10 +111,23 @@ const Copyboard = memo(({ chips, workspaceId }) => {
         alignItems="flex-start"
         gap={1}
       >
-        <Chip label='ssssssssssssssssssssssssssssssssssssssssssssssssssss'></Chip>
-        <Chip label='ssssssssssssssssssssssssssssssssssssss'></Chip>
-        <Chip label='sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss'></Chip>
-        <Chip label='ssssssssssssssssssssssssssssssssssssss'></Chip>
+        {chipsData.map((chip, index) => (
+          <Chip
+            sx={{
+              height: 'auto',
+              '& .MuiChip-label': {
+                display: 'block',
+                whiteSpace: 'normal',
+              },
+              textAlign: 'left',
+            }}
+            key={index}
+            label={chip}
+            onClick={() => handleClick(chip)}
+            onDelete={() => handleDelete(index)}
+            deleteIcon={<DeleteIcon />}
+          />
+        ))}
       </Grid>
 
     </Grid>

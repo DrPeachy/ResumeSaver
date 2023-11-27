@@ -173,7 +173,12 @@ const Workspace = () => {
             minHeight: '90vh',
           }}
         >
-          <Copyboard />
+          {!loading ? (
+            <Copyboard chips={workspaceData.materials} workspaceId={_id} />
+          ) : (
+            <CircularProgress />
+          )}
+          
         </EleItem>
       </Grid>
       <Grid
