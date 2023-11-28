@@ -2,12 +2,13 @@ import React, { useRef } from "react";
 import { useState, useEffect } from "react";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { Button, Grid, Icon, Typography } from "@mui/material";
+import { Button, Collapse, Grid, Icon, Typography } from "@mui/material";
 import { Paper } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 
@@ -34,6 +35,12 @@ const timeToDate = (time) => {
 const ResumeEditor = ({ outputResumeId }) => {
   const [resume, setResume] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [collapseFlag, setCollapseFlag] = useState({
+    header: false,
+    educations: false,
+    experiences: false,
+    skills: false
+  });
   // const focusRef = useRef(null);
   const baseUrl = (process.env.NODE_ENV === 'production') ? process.env.REACT_APP_PROD_URL : process.env.REACT_APP_DEV_URL;
   useEffect(() => {
@@ -167,6 +174,12 @@ const ResumeEditor = ({ outputResumeId }) => {
     setResume({ ...resume, [key]: list });
   };
 
+  const toggleCollapse = (key) => {
+    setCollapseFlag(prevState => ({
+      ...prevState,
+      [key]: !prevState[key]
+    }));
+  };
 
 
 
@@ -191,15 +204,20 @@ const ResumeEditor = ({ outputResumeId }) => {
                 flexDirection='row'
                 component={EleItem}
               >
+                <IconButton onClick={() => toggleCollapse(key)}>
+                  <ExpandMoreIcon style={{ transform: collapseFlag[key] ? 'rotate(0deg)' : 'rotate(180deg)' }} />
+                </IconButton>
                 <Typography
                   variant='body'
                   align="left"
                   sx={{
                     fontWeight: 'bold',
+                    flexGrow: 1,
                   }}
                 >
                   {resumeKeyToTitle[key]}
                 </Typography>
+
                 <IconButton
                   onClick={() => addSlot(key)}
                   disabled={
@@ -215,95 +233,123 @@ const ResumeEditor = ({ outputResumeId }) => {
                   }
                 </IconButton>
               </Grid>
-              {Object.entries(resume[key]).map(([name, value], index) => {
+              <Collapse in={!collapseFlag[key]}>
 
-                return (
-                  <Grid
-                    container
-                    flexDirection='column'
-                    justifyContent='space-between'
-                    key={name}
-                    component={EleItem}
-                  >
-                    <Grid item
-                      display='flex'
-                      flexDirection='row'
+                {Object.entries(resume[key]).map(([name, value], index) => {
+
+                  return (
+                    <Grid
+                      container
+                      flexDirection='column'
                       justifyContent='space-between'
-                      alignItems='center'
-                      width='100%'
+                      key={name}
+                      component={EleItem}
                     >
-                      <Typography
-                        variant="body1"
+                      <Grid item
+                        display='flex'
+                        flexDirection='row'
+                        justifyContent='space-between'
+                        alignItems='center'
+                        width='100%'
                       >
-                        {`${resumeKeyToTitle[key]}-${index + 1}`}
-                      </Typography>
-                      <IconButton
-                        onClick={() => removeSlot(key, index)}
+                        <Typography
+                          variant="body1"
+                        >
+                          {`${resumeKeyToTitle[key]}-${index + 1}`}
+                        </Typography>
+                        <IconButton
+                          onClick={() => removeSlot(key, index)}
+                        >
+                          <RemoveIcon />
+                        </IconButton>
+                      </Grid>
+                      <Grid container
+                        flexDirection='row'
+                        justifyContent='flex-start'
+                        alignItems='flex-start'
+                        sm={12}
+                        md={12}
+                        lg={12}
+                        gap={1}
                       >
-                        <RemoveIcon />
-                      </IconButton>
-                    </Grid>
-                    <Grid container
-                      flexDirection='row'
-                      justifyContent='flex-start'
-                      alignItems='flex-start'
-                      sm={12}
-                      md={12}
-                      lg={12}
-                      gap={1}
-                    >
 
-                      {
-                        Object.entries(value).map(([name, value]) => {
-                          if (name === '_id') return null;
-                          if (name === 'duration') {
-                            return (
-                              <Grid container
-                                flexDirection='row'
-                                justifyContent='flex-start'
-                                alignItems='flex-start'
-                                gap={1}
-                                key={name}
-                                sm={12}
-                                md={12}
-                                lg={12}
-                              >
+                        {
+                          Object.entries(value).map(([name, value]) => {
+                            if (name === '_id') return null;
+                            if (name === 'duration') {
+                              return (
+                                <Grid container
+                                  flexDirection='row'
+                                  justifyContent='flex-start'
+                                  alignItems='flex-start'
+                                  gap={1}
+                                  key={name}
+                                  sm={12}
+                                  md={12}
+                                  lg={12}
+                                >
+                                  <Grid item
+                                    component={TextField}
+                                    InputLabelProps={{ shrink: true }}
+                                    name='startDate'
+                                    label='Start Date'
+                                    type="date"
+                                    value={timeToDate(value.startDate)}
+                                    variant="filled"
+                                    color='secondary'
+                                    fullWidth
+                                    lg={4}
+                                    onChange={(event) => handleSlotChange(event, key, index)}
+                                    onBlur={handleOnBlur}
+                                  />
+                                  <Grid item
+                                    component={TextField}
+                                    InputLabelProps={{ shrink: true }}
+                                    name='endDate'
+                                    label='End Date'
+                                    type="date"
+                                    value={timeToDate(value.endDate)}
+                                    variant="filled"
+                                    color='secondary'
+                                    fullWidth
+                                    lg={4}
+                                    onChange={(event) => handleSlotChange(event, key, index)}
+                                    onBlur={handleOnBlur}
+                                  />
+                                </Grid>
+                              )
+                            }
+                            if (name === 'description' || name === 'list') {
+                              return (
                                 <Grid item
-                                  component={TextField}
-                                  name='startDate'
-                                  label='Start Date'
-                                  type="date"
-                                  value={timeToDate(value.startDate)}
-                                  variant="filled"
-                                  color='secondary'
-                                  fullWidth
-                                  lg={4}
-                                  onChange={(event) => handleSlotChange(event, key, index)}
-                                  onBlur={handleOnBlur}
-                                />
-                                <Grid item
-                                  component={TextField}
-                                  name='endDate'
-                                  label='End Date'
-                                  type="date"
-                                  value={timeToDate(value.endDate)}
-                                  variant="filled"
-                                  color='secondary'
-                                  fullWidth
-                                  lg={4}
-                                  onChange={(event) => handleSlotChange(event, key, index)}
-                                  onBlur={handleOnBlur}
-                                />
-                              </Grid>
-                            )
-                          }
-                          if (name === 'description' || name === 'list') {
+                                  key={name}
+                                  sm={12}
+                                  md={12}
+                                  lg={12}
+                                >
+                                  <TextField
+                                    name={name}
+                                    label={name}
+                                    value={value}
+                                    variant="filled"
+                                    color="secondary"
+                                    size="small"
+                                    fullWidth
+                                    onChange={(event) => handleSlotChange(event, key, index)}
+                                    onBlur={handleOnBlur}
+                                    multiline
+                                    maxRows={8}
+                                  />
+                                </Grid>
+                              )
+                            }
+
                             return (
                               <Grid item
                                 key={name}
-                                sm={12}
-                                md={12}
-                                lg={12}
+                                sm={5}
+                                md={5}
+                                lg={3.3}
                               >
                                 <TextField
                                   name={name}
@@ -312,43 +358,20 @@ const ResumeEditor = ({ outputResumeId }) => {
                                   variant="filled"
                                   color="secondary"
                                   size="small"
-                                  fullWidth
                                   onChange={(event) => handleSlotChange(event, key, index)}
                                   onBlur={handleOnBlur}
-                                  multiline
-                                  maxRows={8}
                                 />
                               </Grid>
                             )
-                          }
-
-                          return (
-                            <Grid item
-                              key={name}
-                              sm={5}
-                              md={5}
-                              lg={3.3}
-                            >
-                              <TextField
-                                name={name}
-                                label={name}
-                                value={value}
-                                variant="filled"
-                                color="secondary"
-                                size="small"
-                                onChange={(event) => handleSlotChange(event, key, index)}
-                                onBlur={handleOnBlur}
-                              />
-                            </Grid>
-                          )
-                        })
-                      }
+                          })
+                        }
+                      </Grid>
                     </Grid>
-                  </Grid>
 
-                );
+                  );
 
-              })}
+                })}
+              </Collapse>
             </>
           );
         })
