@@ -174,7 +174,7 @@ const Workspace = () => {
           }}
         >
           {!loading ? (
-            <Copyboard chips={workspaceData.materials} workspaceId={_id} />
+            <Copyboard workspaceId={_id} />
           ) : (
             <CircularProgress />
           )}

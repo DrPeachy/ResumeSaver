@@ -6,7 +6,7 @@ import pdfParse from 'pdf-parse/lib/pdf-parse.js'
 //import textract from 'textract';
 
 import fs from 'fs';
-import path from 'path';
+import path, { sep } from 'path';
 import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -39,6 +39,17 @@ const fontWeights = [
   'Regular',
   'Bold',
   'Italic',
+];
+
+const possibleBulletPoints = [
+  '∙',
+  '•',
+  '◦',
+  '▪',
+  '▫',
+  '▸',
+  '▹',
+  '-',
 ];
 
 const dateToString = (date) => {
@@ -260,30 +271,33 @@ router.post('/workspace/format', auth.checkAuthenticated, async (req, res) => {
   }
 });
 
-async function extractTextFromPDF(buffer) {
-  // return new Promise((resolve, reject) => {
-  //   const pdfParser = new PDFParser();
-
-  //   pdfParser.on("pdfParser_dataError", err => reject(err.parserError));
-  //   pdfParser.on("pdfParser_dataReady", pdfData => {
-  //     console.log(pdfData);
-  //     console.log('raw text content')
-  //     console.log(pdfParser.getRawTextContent());
-  //     // const textPages = pdfData.Pages.map(page => {
-  //     //   return page.Texts.map(textItem => {
-  //     //     // Decode the text items (they are in encoded URI component format)
-  //     //     return decodeURIComponent(textItem.R[0].T);
-  //     //   }).join(' ');
-  //     // });
-
-  //     // const extractedText = textPages.join('\n');
-  //     // resolve(extractedText);
-  //   });
-
-  //   pdfParser.parseBuffer(buffer);
-  // });
-}
-
+const processText = (text) => {
+  let sepLine = text.split('\n');
+  let lineLength = sepLine.length;
+  const isTitle = (line) => {
+    return line.length > 0 && line.length < 20;
+  };
+  const isBulletPoint = (line) => {
+    line = line.trimStart();
+    return line.length > 0 && possibleBulletPoints.includes(line[0]);
+  };
+  for (let i = 0; i < lineLength; i++) {
+    // if this line has bullet point and the next is not and is not a title, merge them
+    if ((i + 1) < lineLength && isBulletPoint(sepLine[i]) && !isBulletPoint(sepLine[i + 1]) && !isTitle(sepLine[i + 1])) {
+      sepLine[i] = sepLine[i] + sepLine[i + 1];
+      sepLine.splice(i + 1, 1);
+      lineLength--;
+    }
+  }
+  for (let i = 0; i < lineLength; i++) {
+    // if the line is all spaces, or if it's a title, remove it
+    if (sepLine[i].trim() === '' || isTitle(sepLine[i])) {
+      sepLine.splice(i, 1);
+      lineLength--;
+    }
+  }
+  return sepLine;
+};
 router.post('/workspace/upload', auth.checkAuthenticated, upload.single('file'), async (req, res) => {
   try {
     const id = req.body.id;
@@ -291,7 +305,6 @@ router.post('/workspace/upload', auth.checkAuthenticated, upload.single('file'),
     console.log(file);
     const workspace = await Workspace.findById(id);
     const materials = workspace.materials;
-
     let extractedText = '';
 
     if (file.mimetype === 'application/pdf') {
@@ -300,10 +313,24 @@ router.post('/workspace/upload', auth.checkAuthenticated, upload.single('file'),
       extractedText = file.buffer.toString();
     }
 
-    // Respond with extracted text or other relevant information
-    res.status(200).json({ message: 'File processed successfully', extractedText });
+    let sepLine = processText(extractedText.text);
+    // store the text into materials
+    materials.push(...sepLine);
+    workspace.materials = materials;
+    await workspace.save();
 
+    res.status(200).json({ message: 'File processed successfully', text: sepLine });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 
+router.get('/workspace/material', auth.checkAuthenticated, async (req, res) => {
+  try {
+    const id = req.query.id;
+    const workspace = await Workspace.findById(id);
+    const materials = workspace.materials;
+    res.status(200).json({ materials: materials });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

@@ -6,8 +6,10 @@ import axios from "axios";
 import { ButtonGroup, Chip, Grid } from "@mui/material";
 import { Button } from "@mui/material";
 import { Container, Typography } from "@mui/material";
+import Popover from "@mui/material/Popover";
 import DeleteIcon from '@mui/icons-material/Delete';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
 
 const FileUploadButton = ({ onUpload }) => {
   const onDrop = useCallback(acceptedFiles => {
@@ -28,34 +30,71 @@ const FileUploadButton = ({ onUpload }) => {
 };
 
 
-const Copyboard = memo(({ chips, workspaceId }) => {
-  const [chipsData, setChipsData] = useState(chips);
+const Copyboard = memo(({ workspaceId }) => {
+  const [chipsData, setChipsData] = useState([]);
   const [loading, setLoading] = useState(false);
   const baseUrl = (process.env.NODE_ENV === 'production') ? process.env.REACT_APP_PROD_URL : process.env.REACT_APP_DEV_URL;
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [popoverContent, setPopoverContent] = useState('');
+  const previewOpen = Boolean(anchorEl);
+  const [popoverIndex, setPopoverIndex] = useState(-1);
 
   useEffect(() => {
-    setChipsData(chips);
-  }, [chips]);
+    fetchChips();
+  }, []);
+
+
+  const handlePopoverOpen = (event, chipContent, index) => {
+    setAnchorEl(event.currentTarget);
+    setPopoverContent(chipContent);
+    setPopoverIndex(index);
+  };
+
+  const handlePopoverClose = (e, index) => {
+    if (index !== popoverIndex) {
+      return;
+    }
+    setPopoverIndex(-1);
+    setAnchorEl(null);
+    setPopoverContent('');
+  };
+
+
+  const fetchChips = () => {
+    setLoading(true);
+    axios.get(`${baseUrl}/workspace/material?id=${workspaceId}`)
+      .then(response => {
+        if (response.status === 200) {
+          console.log(response.data);
+          setChipsData(response.data.materials);
+          setLoading(false);
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
 
   const handleFileUpload = (file) => {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('id', workspaceId);
-    
+
     // Upload file to the server
     axios.post(`${baseUrl}/workspace/upload`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
     })
-    .then(response => {
-      if (response.status === 200) {
-        console.log(response.data);
-      }
-    })
-    .catch(error => {
-      console.error(error);
-    });
+      .then(response => {
+        if (response.status === 200) {
+          console.log(response.data);
+          fetchChips();
+        }
+      })
+      .catch(error => {
+        console.error(error);
+      });
   };
 
   const handleMaterialUpdate = (newMaterial) => {
@@ -84,6 +123,11 @@ const Copyboard = memo(({ chips, workspaceId }) => {
 
   };
 
+  const handleDeleteAll = () => {
+    setChipsData([]);
+    handleMaterialUpdate([]);
+  };
+
 
   return (
     <Grid Container
@@ -101,6 +145,11 @@ const Copyboard = memo(({ chips, workspaceId }) => {
       >
         <ButtonGroup color='secondary'>
           <FileUploadButton onUpload={handleFileUpload} />
+          <Button variant="outlined" color="secondary"
+            onClick={handleDeleteAll}
+          >
+            <DeleteSweepIcon />
+          </Button>
         </ButtonGroup>
       </Grid>
 
@@ -114,21 +163,46 @@ const Copyboard = memo(({ chips, workspaceId }) => {
         {chipsData.map((chip, index) => (
           <Chip
             sx={{
-              height: 'auto',
-              '& .MuiChip-label': {
-                display: 'block',
-                whiteSpace: 'normal',
-              },
+              // height: 'auto',
+              // '& .MuiChip-label': {
+              //   display: 'block',
+              //   whiteSpace: 'normal',
+              // },
+              textOverflow: 'ellipsis',
+              overflow: 'hidden',
               textAlign: 'left',
             }}
             key={index}
             label={chip}
             onClick={() => handleClick(chip)}
             onDelete={() => handleDelete(index)}
+            onMouseEnter={(e) => handlePopoverOpen(e, chip, index)}
+            onMouseLeave={(e) => handlePopoverClose(e, index)}
             deleteIcon={<DeleteIcon />}
           />
         ))}
       </Grid>
+
+      <Popover
+        sx={{
+          pointerEvents: 'none',
+        }}
+        open={previewOpen}
+        anchorEl={anchorEl}
+        onClose={handlePopoverClose}
+        anchorReference="anchorPosition"
+        anchorPosition={{
+          top: window.innerHeight / 2,
+          left: window.innerWidth / 2
+        }}
+        transformOrigin={{
+          vertical: 'center',
+          horizontal: 'center',
+        }}
+        disableRestoreFocus
+      >
+        <Typography sx={{ p: 2 }}>{popoverContent}</Typography>
+      </Popover>
 
     </Grid>
   );
