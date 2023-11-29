@@ -32,6 +32,22 @@ const educationSchema = new mongoose.Schema({
     duration: { type: durationSchema, required: false }
 });
 
+const projectSchema = new mongoose.Schema({
+    name: { type: String, required: false },
+    skillset: { type: String, required: false },
+    duration: { type: durationSchema, required: false },
+    description: { type: String, required: false },
+});
+
+
+const achievementSchema = new mongoose.Schema({
+    name: { type: String, required: false },
+    organization: { type: String, required: false },
+    duration: { type: durationSchema, required: false },
+    description: { type: String, required: false }
+});
+
+
 const headerSchema = new mongoose.Schema({
     name: { type: String, required: false },
     phone: { type: String, required: false },
@@ -43,6 +59,8 @@ const resumeSchema = new mongoose.Schema({
     header: { type: [headerSchema], required: false },
     educations: { type: [educationSchema], required: false },
     experiences: { type: [experienceSchema], required: false },
+    projects: { type: [projectSchema], required: false },
+    achievements: { type: [achievementSchema], required: false },
     skills: { type: [skillSlotSchema], required: false }
 });
 

@@ -211,6 +211,100 @@ const formPDF = (doc, resume, fontCfg, format) => {
     doc.moveDown();
   }
 
+  // projects
+  if (resume.projects.length > 0) {
+    doc
+      .font(fontCfg.bold)
+      .fontSize(format.headingFontSize)
+      .lineGap(0)
+      .text('Projects',
+        { align: format.headingAlignment }
+      );
+    if (format.hasDivider) drawLine(doc, format.margin);
+  }
+  for (const project of resume.projects) {
+    doc
+      .font(getFontPath(fontCfg, format.titleFontStyle))
+      .fontSize(format.subheadingFontSize)
+      .lineGap(getLineGap(format.subheadingFontSize))
+      .text(`${project.name}`,
+        { align: format.subheadingAlignment, continued: true })
+      .font(fontCfg.regular)
+      .fontSize(format.subheadingFontSize)
+      .lineGap(getLineGap(format.subheadingFontSize))
+      .text(`${project.skillset ? `(${project.skillset})` : ''}`,
+        { align: format.subheadingAlignment });
+
+    // date
+    doc.moveUp();
+    doc
+      .font(fontCfg.regular)
+      .fontSize(format.bodyFontSize)
+      .lineGap(getLineGap(format.bodyFontSize))
+      .text(
+        `${dateToString(project.duration.startDate)}${project.duration.endDate ? `-${dateToString(project.duration.endDate)}` : ''} `,
+        { align: 'right' }
+      );
+    // split description by newline
+    const description = project.description.split('\n');
+    for (const line of description) {
+      doc
+        .fontSize(format.bodyFontSize)
+        .lineGap(getLineGap(format.bodyFontSize))
+        .text(`${format.experienceBulletPoint}${line} `, {
+          align: 'left'
+        });
+    }
+    doc.moveDown();
+  }
+
+  // achievements
+  if (resume.achievements.length > 0) {
+    doc
+      .font(fontCfg.bold)
+      .fontSize(format.headingFontSize)
+      .lineGap(0)
+      .text('Achievements',
+        { align: format.headingAlignment }
+      );
+    if (format.hasDivider) drawLine(doc, format.margin);
+  }
+  for (const achievement of resume.achievements) {
+    doc
+      .font(getFontPath(fontCfg, format.titleFontStyle))
+      .fontSize(format.subheadingFontSize)
+      .lineGap(getLineGap(format.subheadingFontSize))
+      .text(`${achievement.name}`,
+        { align: format.subheadingAlignment, continued: true })
+      .font(getFontPath(fontCfg, format.organizationFontStyle))
+      .fontSize(format.subheadingFontSize)
+      .lineGap(getLineGap(format.subheadingFontSize))
+      .text(`${achievement.organization ? `, ${achievement.organization}` : ''}`,
+        { align: format.subheadingAlignment });
+
+    // date
+    doc.moveUp();
+    doc
+      .font(fontCfg.regular)
+      .fontSize(format.bodyFontSize)
+      .lineGap(getLineGap(format.bodyFontSize))
+      .text(
+        `${dateToString(achievement.duration.startDate)}${achievement.duration.endDate ? `-${dateToString(achievement.duration.endDate)}` : ''} `,
+        { align: 'right' }
+      );
+    // split description by newline
+    const description = achievement.description.split('\n');
+    for (const line of description) {
+      doc
+        .fontSize(format.bodyFontSize)
+        .lineGap(getLineGap(format.bodyFontSize))
+        .text(`${format.experienceBulletPoint}${line} `, {
+          align: 'left'
+        });
+    }
+    doc.moveDown();
+  }
+
   // skills
   if (skills.length > 0) {
     doc

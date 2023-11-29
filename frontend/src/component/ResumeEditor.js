@@ -13,11 +13,13 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 
 
-const resumeKey = ['header', 'educations', 'experiences', 'skills'];
+const resumeKey = ['header', 'educations', 'experiences', 'projects', 'achievements', 'skills'];
 const resumeKeyToTitle = {
   'header': 'Header',
   'educations': 'Education',
   'experiences': 'Experience',
+  'projects': 'Project',
+  'achievements': 'Achievement',
   'skills': 'Skill'
 };
 
@@ -123,6 +125,30 @@ const ResumeEditor = ({ outputResumeId }) => {
         };
         setResume({ ...resume, experiences: [...resume.experiences, newExperienceSlot] });
         break;
+      case 'projects':
+        const newProjectSlot = {
+          name: "",
+          skillset: "",
+          duration: {
+            startDate: null,
+            endDate: null
+          },
+          description: ""
+        };
+        setResume({ ...resume, projects: [...resume.projects, newProjectSlot] });
+        break;
+      case 'achievements':
+        const newAchievementSlot = {
+          name: "",
+          organization: "",
+          duration: {
+            startDate: null,
+            endDate: null
+          },
+          description: ""
+        };
+        setResume({ ...resume, achievements: [...resume.achievements, newAchievementSlot] });
+        break;
       case 'skills':
         const newSkillSlot = {
           name: "",
@@ -151,6 +177,16 @@ const ResumeEditor = ({ outputResumeId }) => {
         const experiences = [...resume.experiences];
         experiences.splice(index, 1);
         setResume({ ...resume, experiences: experiences });
+        break;
+      case 'projects':
+        const projects = [...resume.projects];
+        projects.splice(index, 1);
+        setResume({ ...resume, projects: projects });
+        break;
+      case 'achievements':
+        const achievements = [...resume.achievements];
+        achievements.splice(index, 1);
+        setResume({ ...resume, achievements: achievements });
         break;
       case 'skills':
         const skills = [...resume.skills];

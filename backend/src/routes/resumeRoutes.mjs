@@ -36,6 +36,8 @@ router.post('/resume', auth.checkAuthenticated, async (req, res) => {
     resume.header = updatedResume.header;
     resume.educations = updatedResume.educations;
     resume.experiences = updatedResume.experiences;
+    resume.projects = updatedResume.projects;
+    resume.achievements = updatedResume.achievements;
     resume.skills = updatedResume.skills;
     await resume.save();
     res.status(200).json({ resume: resume });
