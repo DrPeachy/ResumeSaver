@@ -310,6 +310,8 @@ The application will have schemas: **Resume, User, Workspace, Experience, Durati
 5. as a user, I can preview the resume pdf in the preview tab in almost realtime
 6. as a user, I can edit resume format in the Inspector panel
 7. as a user, I can export resume in desired format and style after finishing
+8. as a user, I can upload a pdf file, and the content of the file will be shown as copyable chip on the copyboard
+9. as a user, I can delete specific chip or all the chips by hitting 'delete all' button
 
 ## Research Topics
 
@@ -335,14 +337,17 @@ The application will have schemas: **Resume, User, Workspace, Experience, Durati
 * (1 point) axios (new added)
   * for frontend AJAX handling
   * easy to use, 1 point 
-* (5 points) NLP.js
-  * for natural language processing
-  * external lib that is used to recognize content and fit them into schema class(since I am not good at AI or ML stuff, this might be challenging for me)
-  * e.g. after the user uploads a PDF resume, I will extract its content and use NLP to fit them inside different sections
-* (3 points) PDF.js
-  * library for pdf content extraction
-  * external lib that is used to extract the content of PDF, which should not be very hard to use
-  * so 3 points assigned
+* ~~(5 points) NLP.js~~
+  * ~~for natural language processing~~
+  * ~~external lib that is used to recognize content and fit them into schema class(since I am not good at AI or ML stuff, this might be challenging for me)~~
+  * ~~e.g. after the user uploads a PDF resume, I will extract its content and use NLP to fit them inside different sections~~
+* ~~(3 points) PDF.js~~
+  * ~~library for pdf content extraction~~
+  * ~~external lib that is used to extract the content of PDF, which should not be very hard to use~~
+  * ~~so 3 points assigned~~
+* (3 point) pdf-parse & multer (new added)
+  * library for handling and parsing pdf type file upload from the frontend
+  * 2 points assigned
 * (3 points) PDFkit (new added)
   * library for pdf forming
   * external lib that is used to form a pdf file from the backend with info resume data, which should not be very hard to use
@@ -350,7 +355,7 @@ The application will have schemas: **Resume, User, Workspace, Experience, Durati
 
 
 
-24 points total out of 10 required points (addtional points will __not__ count for extra credit)
+20 points total out of 10 required points (addtional points will __not__ count for extra credit)
 
 
 ## [Link to Initial Main Project File](./backend/src/app.mjs) 
@@ -363,7 +368,10 @@ The application will have schemas: **Resume, User, Workspace, Experience, Durati
 2. [Material UI Wiki](https://mui.com/material-ui/getting-started/)
 3. [PDF.js](https://stackoverflow.com/questions/1554280/how-to-extract-text-from-a-pdf-in-javascript)
 4. [React Wiki](https://react.dev/learn)
-5. [NLP.js](https://github.com/axa-group/nlp.js/blob/master/docs/v3/README.md)
+5. ~~[NLP.js](https://github.com/axa-group/nlp.js/blob/master/docs/v3/README.md)~~
 6. [PDFkit](https://pdfkit.org/docs/getting_started.html)
+7. [pdf-parse](https://www.npmjs.com/package/pdf-parse)
+8. [multer](https://www.npmjs.com/package/multer)
+9. [Module Import Issue](https://gitlab.com/autokent/pdf-parse/-/issues/30)
 
 
