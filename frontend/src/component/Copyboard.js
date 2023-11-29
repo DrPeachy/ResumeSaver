@@ -7,6 +7,9 @@ import { ButtonGroup, Chip, Grid } from "@mui/material";
 import { Button } from "@mui/material";
 import { Container, Typography } from "@mui/material";
 import Popover from "@mui/material/Popover";
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
+import Grow from '@mui/material/Grow';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
@@ -38,6 +41,7 @@ const Copyboard = memo(({ workspaceId }) => {
   const [popoverContent, setPopoverContent] = useState('');
   const previewOpen = Boolean(anchorEl);
   const [popoverIndex, setPopoverIndex] = useState(-1);
+  const [showCopyAlert, setShowCopyAlert] = useState(false);
 
   useEffect(() => {
     fetchChips();
@@ -113,6 +117,7 @@ const Copyboard = memo(({ workspaceId }) => {
 
   const handleClick = (info) => {
     navigator.clipboard.writeText(info);
+    setShowCopyAlert(true);
   };
 
   const handleDelete = (index) => {
@@ -136,6 +141,8 @@ const Copyboard = memo(({ workspaceId }) => {
       justifyContent='space-between'
       alignItems='flex-start'
     >
+
+
       <Grid item
         display='flex'
         flexDirection="row"
@@ -204,6 +211,19 @@ const Copyboard = memo(({ workspaceId }) => {
         <Typography sx={{ p: 2 }}>{popoverContent}</Typography>
       </Popover>
 
+      {showCopyAlert && (
+        <Snackbar
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+          open={showCopyAlert}
+          autoHideDuration={3000}
+          TransitionComponent={Grow}
+          onClose={() => setShowCopyAlert(false)}
+        >
+          <Alert severity="success" sx={{ width: '100%', mb: 2 }}>
+            Content copied to clipboard!
+          </Alert>
+        </Snackbar>
+      )}
     </Grid>
   );
 

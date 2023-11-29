@@ -118,7 +118,7 @@ const Login = () => {
         open={isWarning}
         autoHideDuration={3000}
         TransitionComponent={Grow}
-        // onClose={() => setIsWarning(false)}
+        onClose={() => setIsWarning(false)}
       >
         <Alert severity="error">{WarningString[isWarning]}</Alert>
       </Snackbar>
