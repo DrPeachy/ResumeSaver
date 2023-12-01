@@ -2,6 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import Dashboard from './component/Dashboard';
 import Template from './component/Template';
+import Home from './component/Home';
 import Registration from './component/Registration';
 import Login from './component/Login';
 import Logout from './component/Logout';
@@ -26,7 +27,7 @@ const App = ({ getTheme }) => {
         <Router>
           <Routes>
             <Route path="/" element={<Template />}>
-              <Route index element={<h1>hello</h1>} />
+              <Route index element={<Home />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/registration" element={<Registration />} />
               <Route path='/signup' element={<Registration />} />
