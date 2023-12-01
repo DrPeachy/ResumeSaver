@@ -388,10 +388,20 @@ const processText = (text) => {
     if (sepLine[i].trim() === '' || isTitle(sepLine[i])) {
       sepLine.splice(i, 1);
       lineLength--;
+      i--;
+    }
+  }
+  for (let i = 0; i < lineLength; i++) {
+    if ((i + 1) < lineLength && isBulletPoint(sepLine[i]) && isBulletPoint(sepLine[i + 1]) ) {
+      sepLine[i] = sepLine[i] + '\n' + sepLine[i + 1];
+      sepLine.splice(i + 1, 1);
+      lineLength--;
+      i--;
     }
   }
   return sepLine;
 };
+
 router.post('/workspace/upload', auth.checkAuthenticated, upload.single('file'), async (req, res) => {
   try {
     const id = req.body.id;

@@ -26,7 +26,7 @@ const FileUploadButton = ({ onUpload }) => {
     <div {...getRootProps()}>
       <input {...getInputProps()} />
       <Button variant="outlined" color="secondary" startIcon={<CloudUploadIcon />}>
-        Upload File(.pdf, .docx, .doc)
+        Upload .pdf File
       </Button>
     </div>
   );
@@ -141,12 +141,10 @@ const Copyboard = memo(({ workspaceId }) => {
       justifyContent='space-between'
       alignItems='flex-start'
     >
-
-
       <Grid item
         display='flex'
         flexDirection="row"
-        justifyContent="space-between"
+        justifyContent="center"
         alignItems="center"
         gap={1}
       >
