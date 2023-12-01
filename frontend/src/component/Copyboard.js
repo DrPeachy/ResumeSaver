@@ -1,5 +1,5 @@
 import React from "react";
-import { useEffect, useState, useCallback, memo } from "react";
+import { useEffect, useState, useCallback, memo, Fragment } from "react";
 import { useDropzone } from "react-dropzone";
 import axios from "axios";
 
@@ -11,6 +11,8 @@ import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import Grow from '@mui/material/Grow';
 import DeleteIcon from '@mui/icons-material/Delete';
+import Tooltip from '@mui/material/Tooltip';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
 
@@ -156,6 +158,20 @@ const Copyboard = memo(({ workspaceId }) => {
             <DeleteSweepIcon />
           </Button>
         </ButtonGroup>
+        <Tooltip
+          title={
+            <Fragment>
+              1. Add materials to Copyboard below by hitting 'UPLOAD .PDF FILE' and select the existing PDF file you have<br />
+              2. Delete one or all material by hitting the trash bin button<br />
+              3. Click on the material to copy it to your clipboard!<br />
+            </Fragment>
+          }
+        >
+          <HelpOutlineIcon
+            color="secondary"
+            style={{ fontSize: 20, cursor: 'pointer' }}
+          />
+        </Tooltip>
       </Grid>
 
       <Grid item

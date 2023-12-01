@@ -161,7 +161,10 @@ const Inspector = memo(({ format, workspaceId, updateWorkspaceCallback }) => {
             Apply
           </Typography>
           <Tooltip title="Apply the current format to your resume! (You can also do this by pressing Shift+Ctrl+S)">
-            <HelpOutlineIcon style={{ fontSize: 20, cursor: 'pointer' }} />
+            <HelpOutlineIcon 
+              color="secondary"
+              style={{ fontSize: 20, cursor: 'pointer' }} 
+            />
           </Tooltip>
         </Button>
 
