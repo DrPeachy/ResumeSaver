@@ -174,7 +174,7 @@ const Workspace = () => {
           }}
         >
           {!loading ? (
-            <Copyboard workspaceId={_id} />
+            <Copyboard workspaceId={workspaceData._id} />
           ) : (
             <CircularProgress />
           )}
@@ -249,7 +249,7 @@ const Workspace = () => {
           }}
         >
           {!loading ? (
-            <Inspector format={workspaceData.format} workspaceId={_id} updateWorkspaceCallback={fetchLatestWorkspaceData} />
+            <Inspector format={workspaceData.format} workspaceId={workspaceData._id} updateWorkspaceCallback={fetchLatestWorkspaceData} />
           ) : (
             <CircularProgress />
           )}
