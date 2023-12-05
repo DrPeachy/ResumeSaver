@@ -81,7 +81,7 @@ const Workspace = () => {
           console.log(response.data);
           console.log(response.data.workspace.outputResume);
           // fetch latest pdf
-          fetchLatestPdf();
+          //fetchLatestPdf();
           // setLoading(false);
           setTimeout(() => {
             setLoading(false);
@@ -178,7 +178,7 @@ const Workspace = () => {
           ) : (
             <CircularProgress />
           )}
-          
+
         </EleItem>
       </Grid>
       <Grid

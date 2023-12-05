@@ -49,6 +49,8 @@ const Registration = () => {
           id="username"
           label="Username"
           name="username"
+          inputProps={{ maxLength: 20, minLength: 6 }}
+          helperText="The username must be between 6-20 characters."
           autoFocus
         />
         <TextField
@@ -59,6 +61,8 @@ const Registration = () => {
           label="Password"
           type="password"
           id="password"
+          inputProps={{ maxLength: 16, minLength: 6 }}
+          helperText="The password must be between 6-16 characters."
         />
         <Grid
           container
