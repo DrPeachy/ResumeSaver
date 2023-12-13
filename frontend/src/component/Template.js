@@ -14,7 +14,7 @@ import { Link } from 'react-router-dom';
 import { Outlet } from "react-router-dom";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
-
+import MenuIcon from '@mui/icons-material/Menu';
 
 
 const pages = ['Home', 'Dashboard', 'Workspace'];
@@ -116,6 +116,7 @@ const Template = () => {
                 onClick={handleOpenNavMenu}
                 color="inherit"
               >
+                <MenuIcon />
               </IconButton>
               <Menu
                 id="menu-appbar"
