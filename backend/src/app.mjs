@@ -92,6 +92,7 @@ app.listen(((process.env.NODE_ENV === 'production') ? process.env.PROD_PORT : pr
     .connect((process.env.NODE_ENV === 'production') ? process.env.PROD_DSN : process.env.DEV_DSN)
     .then(() => {
       console.log("Successfully connected to MongoDB.");
+      console.log(`DSN: ${(process.env.NODE_ENV === 'production') ? process.env.PROD_DSN : process.env.DEV_DSN}`);
 
     })
     .catch((error) => {
