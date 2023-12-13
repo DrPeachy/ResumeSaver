@@ -87,7 +87,7 @@ app.use(workspaceRoutes);
 app.use(resumeRoutes);
 
 
-app.listen(((process.env.NODE_ENV === 'production') ? process.env.PROD_PORT : process.env.DEV_PORT) || 8080, () => {
+app.listen(((process.env.NODE_ENV === 'production') ? process.env.PORT : process.env.DEV_PORT) || 8080, () => {
   mongoose
     .connect((process.env.NODE_ENV === 'production') ? process.env.PROD_DSN : process.env.DEV_DSN)
     .then(() => {
