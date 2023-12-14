@@ -56,7 +56,7 @@ const sessionOptions = {
     domain: (process.env.NODE_ENV === 'production') ? process.env.PROD_FRONTEND_URL : process.env.DEV_FRONTEND_URL,
     httpOnly: true,
     maxAge: 1000 * 60 * 60,
-    secure: false,
+    secure: true,
   }
 };
 app.use(session(sessionOptions));
